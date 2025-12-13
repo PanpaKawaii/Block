@@ -1,0 +1,135 @@
+#root {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+}
+
+img {
+  object-fit: cover;
+  object-position: center;
+}
+
+input,
+textarea,
+select {
+  outline: none;
+  height: 100%;
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+select {
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  font-family: 'Inter', Arial, sans-serif;
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #007bff80;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0068d8;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+input[type='file']::-webkit-file-upload-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #eee;
+}
+
+progress::-webkit-progress-value {
+  background-color: #4caf50;
+}
+
+::selection {
+  background: #007bff;
+  color: white;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #007bff;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+video::-webkit-media-controls-play-button {
+  display: none;
+}
