@@ -1,5 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
 import ScrollToTop from '../hooks/ScrollToTop/useScrollToTop.jsx'
+
+import GenerateObjectController from '../pages/GenerateObject/GenerateObjectController.jsx'
 
 export default function MainRoutes() {
     return (
@@ -7,7 +10,7 @@ export default function MainRoutes() {
             <ScrollToTop />
             <></>
             <Routes>
-                <Route path='/' element={<></>} />
+                <Route path='/' element={<GenerateObjectController />} />
                 <Route path='*' element={<></>} />
             </Routes>
             <></>

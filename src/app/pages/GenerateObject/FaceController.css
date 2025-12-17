@@ -1,0 +1,95 @@
+.facecontroller-container {
+    overflow-y: scroll;
+    width: 400px;
+    max-width: 400px;
+    height: 600px;
+    margin: auto;
+    padding: 20px;
+    position: absolute;
+    top: 100px;
+    right: 0;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+
+    .add-btn {
+        padding: 8px 12px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        background: #4f46e5;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+    }
+
+    .faces-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .face-card {
+            padding: 12px;
+            background: #f3f3f3;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+
+            .face-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .remove-face {
+                    background: transparent;
+                    border: none;
+                    font-size: 20px;
+                    cursor: pointer;
+                    color: #900;
+                }
+            }
+
+            .steps {
+                margin-top: 10px;
+
+                .step-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 8px;
+
+                    select {
+                        height: 40px;
+                    }
+
+                    input {
+                        width: 60px;
+                        text-align: center;
+
+                        &.clipPath {
+                            width: 160px;
+                        }
+                    }
+
+                    .remove-step {
+                        background: transparent;
+                        border: none;
+                        font-size: 20px;
+                        color: #c00;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .add-step-box {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+
+                button {
+                    background: #2563eb;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
