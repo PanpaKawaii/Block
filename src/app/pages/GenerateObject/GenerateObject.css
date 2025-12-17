@@ -1,6 +1,6 @@
 .scene-object {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     min-height: 800px;
     perspective: 600px;
 
@@ -27,7 +27,7 @@
             position: absolute;
             width: 100px;
             height: 100px;
-            background: #007bff80;
+            background: #00aaff80;
             transition: all 1s ease;
 
             border: 1px solid #000;

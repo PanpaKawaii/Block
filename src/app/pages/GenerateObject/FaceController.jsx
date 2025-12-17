@@ -64,16 +64,16 @@ export default function FaceController({ faces, setFaces , setSelectedFace }) {
     };
 
     return (
-        <div className='face-controller-container'>
+        <div className='face-controller-container card'>
             <h2>Face Controller Panel</h2>
-            <button className='add-btn' onClick={addFace}>Add Face</button>
+            <button className='btn add-btn' onClick={addFace}>Add Face</button>
 
             <div className='faces-list'>
                 {faces.map((face) => (
-                    <div key={face.id} className='face-card'>
+                    <div key={face.id} className='face-card card'>
                         <div className='face-header'>
                             <h3>{face.name}</h3>
-                            <button className='remove-face' onClick={() => removeFace(face.id)}>×</button>
+                            <button className='remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-xmark'/></button>
                         </div>
 
                         <div className='steps'>
@@ -82,31 +82,32 @@ export default function FaceController({ faces, setFaces , setSelectedFace }) {
                                     <select
                                         value={step.type}
                                         onChange={(e) => updateStep(face.id, step.id, e.target.value, step.value)}
+                                        className='select'
                                     >
-                                        <option value='translateX'>translateX</option>
-                                        <option value='translateY'>translateY</option>
-                                        <option value='translateZ'>translateZ</option>
-                                        <option value='rotateX'>rotateX</option>
-                                        <option value='rotateY'>rotateY</option>
-                                        <option value='rotateZ'>rotateZ</option>
-                                        <option value='scale'>scale</option>
-                                        <option value='clipPath'>clip-path</option>
+                                        <option value='translateX' className='option'>translateX</option>
+                                        <option value='translateY' className='option'>translateY</option>
+                                        <option value='translateZ' className='option'>translateZ</option>
+                                        <option value='rotateX' className='option'>rotateX</option>
+                                        <option value='rotateY' className='option'>rotateY</option>
+                                        <option value='rotateZ' className='option'>rotateZ</option>
+                                        <option value='scale' className='option'>scale</option>
+                                        <option value='clipPath' className='option'>clip-path</option>
                                     </select>
 
                                     <input
                                         type='text'
                                         value={step.value}
                                         onChange={(e) => updateStep(face.id, step.id, step.type, e.target.value)}
-                                        className={`${step.type}`}
+                                        className={`input ${step.type}`}
                                     />
 
-                                    <button className='remove-step' onClick={() => removeStep(face.id, step.id)}>×</button>
+                                    <button className='remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-xmark'/></button>
                                 </div>
                             ))}
                         </div>
 
                         <div className='add-step-box'>
-                            <button onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
+                            <button className='btn' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
                             {/* <button onClick={() => addStep(face.id, 'translateX')}>translateX</button>
                             <button onClick={() => addStep(face.id, 'translateY')}>translateY</button>
                             <button onClick={() => addStep(face.id, 'translateZ')}>translateZ</button>

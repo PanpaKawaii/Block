@@ -24,9 +24,9 @@ export default function NavigationBar() {
         <>
             <div className={`navigation-bar-container ${toggleMenu ? '' : 'collapsed'}`}>
                 <Link to='/'>
-                    <div className='logo'>BLOCK</div>
+                    <div className='logo glow'>BLOCK</div>
                 </Link>
-                <button className='btn-collapsed' onClick={() => setToggleMenu(p => !p)}><i className='fa-solid fa-chevron-left' /></button>
+                <button className='btn btn-collapsed' onClick={() => setToggleMenu(p => !p)}><i className='fa-solid fa-chevron-left' /></button>
                 <ul>
                     {menuItems.map((item, index) => (
                         <li key={index}>

@@ -6,19 +6,12 @@
     scrollbar-width: none;
     transition: all 0.5s ease;
     user-select: none;
-    font-family: 'Inter', Arial, sans-serif;
     z-index: 2;
 
     a {
         .logo {
             padding: 16px;
             margin: 16px 0;
-            color: #cfe6ff;
-            text-shadow:
-                2px 2px 4px #dc3545,
-                -2px 2px 4px #007bff,
-                -2px -2px 4px #28a745,
-                2px -2px 4px #ffc107;
             font-size: 36px;
             font-weight: bold;
             text-align: center;
@@ -28,6 +21,7 @@
     .btn-collapsed {
         padding: 4px;
         width: 40px;
+        background: rgba(4, 20, 58, 1);
         position: absolute;
         right: -20px;
         transform: rotateZ(0deg);
