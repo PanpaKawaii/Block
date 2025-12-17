@@ -64,7 +64,7 @@ export default function FaceController({ faces, setFaces , setSelectedFace }) {
     };
 
     return (
-        <div className='facecontroller-container'>
+        <div className='face-controller-container'>
             <h2>Face Controller Panel</h2>
             <button className='add-btn' onClick={addFace}>Add Face</button>
 
