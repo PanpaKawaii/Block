@@ -195,7 +195,7 @@ video::-webkit-media-controls-play-button {
 }
 
 .glow {
-  color: var(--primary);
+  color: var(--accent);
   text-shadow: 0 0 8px #38bdf8cc, 0 0 20px #22d3ee99;
 }
 
