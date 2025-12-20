@@ -1,6 +1,28 @@
+import { useState } from 'react';
 import './FaceController.css';
 
-export default function FaceController({ faces, setFaces , setSelectedFace }) {
+export default function FaceController({ faces, setFaces }) {
+
+    const [selectedFace, setSelectedFace] = useState(null);
+    const toggleSelectFace = (face) => {
+        setSelectedFace(prev => {
+            if (prev && prev.id == face.id) {
+                return null;
+            } else {
+                return face;
+            }
+        })
+    }
+    const [opennedFaceId, setOpennedFaceId] = useState([]);
+    const toggleOpenFace = (faceId) => {
+        setOpennedFaceId(prev => {
+            if (prev.includes(faceId)) {
+                return prev.filter(id => id != faceId);
+            } else {
+                return [...prev, faceId];
+            }
+        })
+    }
 
     const addFace = () => {
         setFaces((prev) => [
@@ -64,62 +86,80 @@ export default function FaceController({ faces, setFaces , setSelectedFace }) {
     };
 
     return (
-        <div className='face-controller-container card'>
-            <h2>Face Controller Panel</h2>
-            <button className='btn add-btn' onClick={addFace}>Add Face</button>
+        <>
+            <div className={`face-controller-container card ${selectedFace ? 'size2' : 'size1'}`}>
+                <h2>Face Controller Panel</h2>
+                <button className='btn add-btn' onClick={addFace}>Add Face</button>
 
-            <div className='faces-list'>
-                {faces.map((face) => (
-                    <div key={face.id} className='face-card card'>
-                        <div className='face-header'>
-                            <h3>{face.name}</h3>
-                            <button className='remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-xmark'/></button>
-                        </div>
-
-                        <div className='steps'>
-                            {face.steps.map((step) => (
-                                <div key={step.id} className='step-row'>
-                                    <select
-                                        value={step.type}
-                                        onChange={(e) => updateStep(face.id, step.id, e.target.value, step.value)}
-                                        className='select'
-                                    >
-                                        <option value='translateX' className='option'>translateX</option>
-                                        <option value='translateY' className='option'>translateY</option>
-                                        <option value='translateZ' className='option'>translateZ</option>
-                                        <option value='rotateX' className='option'>rotateX</option>
-                                        <option value='rotateY' className='option'>rotateY</option>
-                                        <option value='rotateZ' className='option'>rotateZ</option>
-                                        <option value='scale' className='option'>scale</option>
-                                        <option value='clipPath' className='option'>clip-path</option>
-                                    </select>
-
-                                    <input
-                                        type='text'
-                                        value={step.value}
-                                        onChange={(e) => updateStep(face.id, step.id, step.type, e.target.value)}
-                                        className={`input ${step.type}`}
-                                    />
-
-                                    <button className='remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-xmark'/></button>
+                <div className='faces-list'>
+                    {faces.map((face) => (
+                        <div key={face.id} className='face-card card'>
+                            <div className='face-header'>
+                                <h3>{face.name}</h3>
+                                <div className='btns'>
+                                    <button className={`btn-face ${selectedFace?.id == face.id && 'selected-face'}`} onClick={() => toggleSelectFace(face)}><i className='fa-solid fa-gear' /></button>
+                                    <button className={`btn-face ${opennedFaceId.includes(face.id) && 'openned-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
+                                    <button className={`btn-face ${opennedFaceId.includes(face.id) && 'visible-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-eye' /></button>
+                                    <button className='btn-face remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-xmark' /></button>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
 
-                        <div className='add-step-box'>
-                            <button className='btn' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
-                            {/* <button onClick={() => addStep(face.id, 'translateX')}>translateX</button>
-                            <button onClick={() => addStep(face.id, 'translateY')}>translateY</button>
-                            <button onClick={() => addStep(face.id, 'translateZ')}>translateZ</button>
-                            <button onClick={() => addStep(face.id, 'rotateX')}>rotateX</button>
-                            <button onClick={() => addStep(face.id, 'rotateY')}>rotateY</button>
-                            <button onClick={() => addStep(face.id, 'rotateZ')}>rotateZ</button>
-                            <button onClick={() => addStep(face.id, 'scale')}>scale</button>
-                            <button onClick={() => addStep(face.id, 'clipPath')}>clip-path</button> */}
+                            {opennedFaceId.includes(face.id) &&
+                                <>
+                                    <div className='steps'>
+                                        {face.steps.map((step) => (
+                                            <div key={step.id} className='step-row'>
+                                                <select
+                                                    value={step.type}
+                                                    onChange={(e) => updateStep(face.id, step.id, e.target.value, step.value)}
+                                                    className='select'
+                                                >
+                                                    <option value='translateX' className='option'>translateX</option>
+                                                    <option value='translateY' className='option'>translateY</option>
+                                                    <option value='translateZ' className='option'>translateZ</option>
+                                                    <option value='rotateX' className='option'>rotateX</option>
+                                                    <option value='rotateY' className='option'>rotateY</option>
+                                                    <option value='rotateZ' className='option'>rotateZ</option>
+                                                    <option value='scale' className='option'>scale</option>
+                                                    <option value='clipPath' className='option'>clip-path</option>
+                                                </select>
+
+                                                <input
+                                                    type='text'
+                                                    value={step.value}
+                                                    onChange={(e) => updateStep(face.id, step.id, step.type, e.target.value)}
+                                                    className={`input ${step.type}`}
+                                                />
+
+                                                <div className='btns'>
+                                                    <button className={`btn-step ${true && 'visible-step'}`} onClick={() => { }}><i className='fa-solid fa-eye' /></button>
+                                                    <button className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-xmark' /></button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className='add-step-box'>
+                                        <button className='btn' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
+                                        {/* <button onClick={() => addStep(face.id, 'translateX')}>translateX</button>
+                                        <button onClick={() => addStep(face.id, 'translateY')}>translateY</button>
+                                        <button onClick={() => addStep(face.id, 'translateZ')}>translateZ</button>
+                                        <button onClick={() => addStep(face.id, 'rotateX')}>rotateX</button>
+                                        <button onClick={() => addStep(face.id, 'rotateY')}>rotateY</button>
+                                        <button onClick={() => addStep(face.id, 'rotateZ')}>rotateZ</button>
+                                        <button onClick={() => addStep(face.id, 'scale')}>scale</button>
+                                        <button onClick={() => addStep(face.id, 'clipPath')}>clip-path</button> */}
+                                    </div>
+                                </>
+                            }
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
+
+            <div className={`sub-face-controller-container card ${selectedFace ? 'size3' : 'size4'}`}>
+                {selectedFace?.name}
+            </div>
+        </>
     );
 }

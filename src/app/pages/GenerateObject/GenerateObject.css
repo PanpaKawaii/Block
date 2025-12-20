@@ -9,7 +9,6 @@
     align-items: center;
     justify-self: center;
 
-    /* filter: drop-shadow(0 0 20px #007bff); */
     user-select: none;
 
     .object {
@@ -21,20 +20,34 @@
         align-items: center;
         transform-style: preserve-3d;
         transition: all 0.1s ease;
-        /* animation: rotate_1x_2y 10s linear infinite; */
 
-        .face {
+        /* .face {
             position: absolute;
             width: 100px;
             height: 100px;
-            background: #00aaff80;
+            background: var(--face);
+            opacity: 0.8;
             transition: all 1s ease;
 
-            border: 1px solid #000;
+            border: 1px solid var(--border);
+            box-shadow: 0 0 8px 1px var(--border-glow);
 
             display: flex;
             justify-content: center;
             align-items: center;
+        } */
+
+        .face-svg {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+
+            opacity: 0.85;
+            transform-style: preserve-3d;
+            transition: all 1s ease;
+
+            pointer-events: none;
         }
+
     }
 }

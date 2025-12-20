@@ -1,19 +1,19 @@
-.face-controller-container {
+.face-controller-container,
+.sub-face-controller-container {
     overflow-y: scroll;
     scrollbar-width: none;
     width: 400px;
     max-width: 400px;
-    height: 600px;
     margin: auto;
     padding: 20px;
+    box-sizing: border-box;
     position: absolute;
-    top: 100px;
-    right: 20px;
     border-radius: 20px;
+    transition: all 0.5s ease;
 
     h2 {
         margin: 0 0 16px;
-        color: var(--accent);
+        color: var(--text);
         font-weight: 500;
     }
 
@@ -37,54 +37,125 @@
                 justify-content: space-between;
                 align-items: center;
 
-                .remove-face {
-                    background: transparent;
-                    border: none;
-                    font-size: 20px;
-                    cursor: pointer;
-                    color: #900;
+                .btns {
+                    display: flex;
+                    gap: 4px;
+
+                    .btn-face {
+                        min-width: 32px;
+                        padding: 2px;
+                        background: transparent;
+                        font-size: 20px;
+                        color: var(--secondary);
+
+                        &.selected-face {
+                            color: var(--text);
+                            text-shadow: 0 0 8px var(--border-glow);
+                        }
+
+                        &.openned-face {
+                            color: var(--text);
+                            text-shadow: 0 0 8px var(--border-glow);
+                        }
+
+                        &.visible-face {
+                            color: var(--text);
+                            text-shadow: 0 0 8px var(--border-glow);
+                            color: #dc3545;
+                            text-shadow: 0 0 8px #dc354599;
+                        }
+
+                        &.remove-face {
+                            color: #dc3545;
+                            text-shadow: 0 0 8px #dc354599;
+                        }
+                    }
                 }
             }
 
             .steps {
-                margin-top: 10px;
+                margin: 12px 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
 
                 .step-row {
+                    width: 100%;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     gap: 8px;
-                    margin-bottom: 8px;
 
                     select {
                         height: 40px;
                     }
 
                     input {
-                        width: 60px;
+                        width: 0;
+                        flex: 1;
                         text-align: center;
-
-                        &.clipPath {
-                            width: 160px;
-                        }
                     }
 
-                    .remove-step {
-                        background: transparent;
-                        border: none;
-                        font-size: 20px;
-                        color: #c00;
-                        cursor: pointer;
+                    .btns {
+                        display: flex;
+                        gap: 4px;
+
+                        .btn-step {
+                            min-width: 32px;
+                            padding: 2px;
+                            background: transparent;
+                            font-size: 20px;
+
+                            &.visible-step {
+                                color: #dc3545;
+                                text-shadow: 0 0 8px #dc354599;
+                            }
+
+                            &.remove-step {
+                                color: #dc3545;
+                                text-shadow: 0 0 8px #dc354599;
+                            }
+                        }
                     }
                 }
             }
 
             .add-step-box {
-                margin-top: 10px;
                 display: flex;
                 flex-wrap: wrap;
                 gap: 8px;
             }
         }
+    }
+}
+
+.face-controller-container,
+.sub-face-controller-container {
+    &.size1 {
+        height: 90vh;
+        top: 5vh;
+        right: 20px;
+    }
+
+    &.size2 {
+        height: 35vh;
+        top: 5vh;
+        right: 20px;
+    }
+
+    &.size3 {
+        height: 50vh;
+        top: 45vh;
+        right: 20px;
+    }
+
+    &.size4 {
+        height: 0vh;
+        top: 95vh;
+        right: 20px;
+        padding: 0;
+        opacity: 0;
     }
 }

@@ -46,7 +46,7 @@ export default function GenerateObject({ faces }) {
                     ref={objectRef}
                     className='object'
                 >
-                    {faces.map(face => {
+                    {/* {faces.map(face => {
                         const styleObj = {};
                         face.steps.forEach(step => {
                             if (step.type == 'translateX') {
@@ -83,7 +83,54 @@ export default function GenerateObject({ faces }) {
                                 {face.name}
                             </div>
                         );
+                    })} */}
+
+                    {faces.map(face => {
+                        const styleObj = {};
+                        let polygonPoints = null;
+
+                        face.steps.forEach(step => {
+                            if (step.type.startsWith('translate') ||
+                                step.type.startsWith('rotate') ||
+                                step.type == 'scale') {
+
+                                styleObj.transform = (styleObj.transform || '') +
+                                    ` ${step.type}(${step.value}${step.type.includes('rotate') ? 'deg' : 'px'})`;
+                            }
+
+                            if (step.type === 'clipPath') {
+                                polygonPoints = step.value;
+                            }
+                        });
+
+                        return (
+                            <svg
+                                key={face.id}
+                                className='face-svg'
+                                width='100'
+                                height='100'
+                                viewBox='0 0 100 100'
+                                style={styleObj}
+                            >
+                                <polygon
+                                    points={polygonPoints || '0,0 100,0 100,100 0,100'}
+                                    fill='var(--face)'
+                                    stroke='var(--border)'
+                                    strokeWidth='2'
+                                />
+                                <text
+                                    x='50'
+                                    y='55'
+                                    textAnchor='middle'
+                                    fill='var(--accent)'
+                                    fontSize='12'
+                                >
+                                    {face.name}
+                                </text>
+                            </svg>
+                        );
                     })}
+
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@
 }
 
 :root {
-  --font-tech: 'Organix', 'Akashi', 'Inter', Arial;
+  --font-tech: 'Inter', 'Organix', 'Akashi', Arial;
 
   --gray-1: #111827;
   --gray-2: #1F2937;
@@ -41,15 +41,21 @@
   --text-cyber: #7DD3FC;
   /* chữ dữ liệu */
 
-  --border-glow: rgba(56, 189, 248, 0.6);
-  --border-soft: rgba(148, 163, 184, 0.2);
+  --background-1: #04143A;
+  --background-1-trans: #04143A20;
+  --background-2: #184BB4;
 
-  --background: #020617;
+  --face: #68FCFF80;
+
   --primary: #38BDF8;
-  --accent: #22D3EE;
-  --text: #E5E7EB;
+  --secondary: #0EA5E9;
+  --accent: #80FCFF;
+
   --muted: #94A3B8;
-  --border: rgba(56, 189, 248, .4);
+
+  --border: #68FCFF;
+  --border-glow: #38BDF899;
+  --border-soft: #94A3B833;
 }
 
 body {
@@ -58,8 +64,8 @@ body {
   padding: 0;
   font-family: var(--font-tech);
 
-  background: radial-gradient(circle at top right, #04143A, #020617 60%);
-  color: var(--primary);
+  background: linear-gradient(to bottom, var(--background-1), var(--background-2), var(--background-1));
+  color: var(--accent);
 }
 
 a {
@@ -189,42 +195,50 @@ video::-webkit-media-controls-play-button {
 }
 
 .glow {
-  color: #38BDF8;
-  text-shadow: 0 0 8px rgba(56, 189, 248, .8), 0 0 20px rgba(34, 211, 238, .6);
+  color: var(--primary);
+  text-shadow: 0 0 8px #38bdf8cc, 0 0 20px #22d3ee99;
 }
 
 .btn {
-  border: 1px solid rgba(56, 189, 248, .5);
-  color: #38BDF8;
-  background: transparent;
+  color: var(--accent);
+  /* primary */
+  background: #38BDF899;
+  border: 2px solid var(--border);
+  box-shadow: 0 0 6px var(--border-glow);
 
   &:hover {
-    box-shadow: 0 0 12px rgba(56, 189, 248, .8);
+    /* primary */
+    background: #38BDF8;
+    /* secondary */
+    box-shadow: 0 0 12px #0EA5E9;
   }
 }
 
 .card {
-  background: rgba(4, 20, 58, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(56, 189, 248, .3);
-  box-shadow: 0 0 20px rgba(56, 189, 248, .15);
+  background: var(--background-1-trans);
+  backdrop-filter: blur(4px);
+  border: 2px solid var(--border);
+  box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow);
+  text-shadow: 0 0 8px var(--border-glow);
 }
 
 .input {
   color: var(--primary);
-  background: rgba(4, 20, 58, 0.6);
-  border: 1px solid rgba(56, 189, 248, .3);
-  box-shadow: 0 0 20px rgba(56, 189, 248, .15);
+  background: transparent;
+  border: 2px solid var(--border);
+  box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow);
+  text-shadow: 0 0 4px var(--border-glow);
 }
 
 .select {
   color: var(--primary);
-  background: rgba(4, 20, 58, 0.6);
-  border: 1px solid rgba(56, 189, 248, .3);
-  box-shadow: 0 0 20px rgba(56, 189, 248, .15);
+  background: transparent;
+  border: 2px solid var(--border);
+  box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow);
+  text-shadow: 0 0 4px var(--border-glow);
 }
 
 .option {
   color: var(--accent);
-  background: rgba(4, 20, 58, 0.6);
+  background: var(--background-1);
 }

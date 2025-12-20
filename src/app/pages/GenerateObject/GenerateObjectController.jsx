@@ -23,13 +23,12 @@ export default function GenerateObjectController() {
     //     }
     // ]);
     const [faces, setFaces] = useState([]);
-    const [selectedFace, setSelectedFace] = useState(null);
     console.log('faces', faces);
 
     return (
         <>
             <GenerateObject faces={faces} />
-            <FaceController faces={faces} setFaces={setFaces} setSelectedFace={setSelectedFace} />
+            <FaceController faces={faces} setFaces={setFaces} />
         </>
     )
 }
