@@ -11,16 +11,21 @@
     border-radius: 20px;
     transition: all 0.5s ease;
 
-    h2 {
+    .heading {
         margin: 0 0 16px;
-        color: var(--text);
-        font-weight: 500;
-    }
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-    .add-btn {
-        padding: 8px 12px;
-        margin-bottom: 12px;
-        border-radius: 6px;
+        h2 {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .add-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
     }
 
     .faces-list {
@@ -61,8 +66,6 @@
                         &.visible-face {
                             color: var(--text);
                             text-shadow: 0 0 8px var(--border-glow);
-                            color: #dc3545;
-                            text-shadow: 0 0 8px #dc354599;
                         }
 
                         &.remove-face {
@@ -107,10 +110,11 @@
                             padding: 2px;
                             background: transparent;
                             font-size: 20px;
+                            color: var(--secondary);
 
                             &.visible-step {
-                                color: #dc3545;
-                                text-shadow: 0 0 8px #dc354599;
+                                color: var(--text);
+                                text-shadow: 0 0 8px var(--border-glow);
                             }
 
                             &.remove-step {
@@ -127,6 +131,32 @@
                 flex-wrap: wrap;
                 gap: 8px;
             }
+        }
+    }
+}
+
+.sub-face-controller-container {
+    .heading {
+        margin: 0 0 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            min-width: 32px;
+            padding: 2px;
+            background: transparent;
+            font-size: 20px;
+            color: #dc3545;
+            text-shadow: 0 0 8px #dc354599;
         }
     }
 }

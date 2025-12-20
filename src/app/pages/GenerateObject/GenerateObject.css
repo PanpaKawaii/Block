@@ -39,8 +39,9 @@
 
         .face-svg {
             position: absolute;
-            width: 100px;
-            height: 100px;
+            /* width: 100px; */
+            /* height: 100px; */
+            /* border: 1px solid red; */
 
             opacity: 0.85;
             transform-style: preserve-3d;

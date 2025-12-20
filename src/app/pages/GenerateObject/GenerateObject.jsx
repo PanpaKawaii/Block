@@ -90,26 +90,30 @@ export default function GenerateObject({ faces }) {
                         let polygonPoints = null;
 
                         face.steps.forEach(step => {
-                            if (step.type.startsWith('translate') ||
-                                step.type.startsWith('rotate') ||
-                                step.type == 'scale') {
+                            if ((step.type.startsWith('translate')
+                                || step.type.startsWith('rotate')
+                                || step.type == 'scale')
+                                && step.visible == 1) {
 
                                 styleObj.transform = (styleObj.transform || '') +
                                     ` ${step.type}(${step.value}${step.type.includes('rotate') ? 'deg' : 'px'})`;
                             }
 
-                            if (step.type === 'clipPath') {
+                            if (step.type === 'clipPath' && step.visible == 1) {
                                 polygonPoints = step.value;
                             }
                         });
 
-                        return (
+                        return face.visible == 1 ? (
                             <svg
                                 key={face.id}
                                 className='face-svg'
-                                width='100'
-                                height='100'
-                                viewBox='0 0 100 100'
+                                width={`${face.width || '0'} `}
+                                height={`${face.height || '0'} `}
+                                viewBox={`0 0 ${face.width || '0'} ${face.height || '0'}`}
+                                // width='0'
+                                // height='0'
+                                // viewBox='0 0 100 100'
                                 style={styleObj}
                             >
                                 <polygon
@@ -128,7 +132,7 @@ export default function GenerateObject({ faces }) {
                                     {face.name}
                                 </text>
                             </svg>
-                        );
+                        ) : null;
                     })}
 
                 </div>
