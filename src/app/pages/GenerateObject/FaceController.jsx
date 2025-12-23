@@ -33,7 +33,11 @@ export default function FaceController({ faces, setFaces }) {
                 width: 100,
                 height: 100,
                 color: '#68FCFF80',
+                borderWidth: 2,
+                borderColor: '#68FCFFFF',
                 visible: 1,
+                nameVisible: 1,
+                borderVisible: 1,
                 steps: [
                     { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 100,0 100,100 0,100', visible: 1 },
                 ]
@@ -51,7 +55,7 @@ export default function FaceController({ faces, setFaces }) {
                 face.id === faceId
                     ? {
                         ...face,
-                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'visible') ? Number(newValue) : newValue
+                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'borderWidth' || attribute == 'visible' || attribute == 'nameVisible' || attribute == 'borderVisible') ? Number(newValue) : newValue
                     }
                     : face
             )
@@ -134,6 +138,12 @@ export default function FaceController({ faces, setFaces }) {
             <div className={`face-controller-container card ${selectedFace ? 'size2' : 'size1'}`}>
                 <div className='heading'>
                     <h2>Face Controller Panel</h2>
+                    <input
+                        type='text'
+                        value={JSON.stringify(faces, null, 0)}
+                        onChange={(e) => setFaces(JSON.parse(e.target.value))}
+                        className='input json-output'
+                    />
                     <button className='btn add-btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
                 </div>
 
@@ -146,7 +156,7 @@ export default function FaceController({ faces, setFaces }) {
                                     value={face.color?.slice(0, 7) || '#ffffff'}
                                     onChange={(e) => updateFace(face.id, 'color', e.target.value?.toUpperCase())}
                                     className='input color-input'
-                                    style={{ opacity: hexRgbaToPercent(face.color) || 1 }}
+                                    style={{ opacity: hexRgbaToPercent(face.color || '#ffffffff') || 1 }}
                                 />
                                 <h3>{face.name}</h3>
                                 <div className='btns'>
@@ -234,7 +244,7 @@ export default function FaceController({ faces, setFaces }) {
                         />
                     </div>
 
-                    <div className='form-group'>
+                    <div className={`form-group ${selectedFace?.nameVisible == 0 && 'invisible'}`}>
                         <label>Name</label>
                         <input
                             type='text'
@@ -242,6 +252,7 @@ export default function FaceController({ faces, setFaces }) {
                             onChange={(e) => updateFace(selectedFace?.id, 'name', e.target.value)}
                             className='input'
                         />
+                        <button type='button' className={`btn-name ${selectedFace?.nameVisible == 1 && 'visible-name'}`} onClick={() => updateFace(selectedFace?.id, 'nameVisible', selectedFace?.nameVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
                     <div className='form-group'>
                         <label>Width</label>
@@ -261,12 +272,44 @@ export default function FaceController({ faces, setFaces }) {
                             className='input'
                         />
                     </div>
-                    <textarea
+
+                    <div className={`form-group color-picker-wrapper ${selectedFace?.borderVisible == 0 && 'invisible'}`}>
+                        <input
+                            type='number'
+                            value={selectedFace?.borderWidth || 0}
+                            onChange={(e) => updateFace(selectedFace?.id, 'borderWidth', e.target.value)}
+                            className='input border-width-input'
+                        />
+                        <input
+                            type='color'
+                            value={selectedFace?.borderColor?.slice(0, 7) || '#ffffff'}
+                            onChange={(e) => updateFace(selectedFace?.id, 'borderColor', e.target.value?.toUpperCase())}
+                            className='input color-input'
+                            style={{ opacity: hexRgbaToPercent(selectedFace?.borderColor || '#ffffffff') || 1 }}
+                        />
+                        <input
+                            type='text'
+                            value={selectedFace?.borderColor}
+                            onChange={(e) => updateFace(selectedFace?.id, 'borderColor', e.target.value?.toUpperCase())}
+                            className='input hex-input'
+                        />
+                        <input
+                            type='number'
+                            min={0}
+                            max={100}
+                            value={(hexRgbaToPercent(selectedFace?.borderColor || '#ffffffff') * 100)?.toFixed(0) || 100}
+                            onChange={(e) => updateFace(selectedFace?.id, 'borderColor', updateHexAlphaByPercent(selectedFace?.borderColor, e.target.value || 100))}
+                            className='input alpha-input'
+                        />
+                        <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 && 'visible-border'}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                    </div>
+
+                    {/* <textarea
                         type='textarea'
                         value={JSON.stringify(selectedFace, null, 0)}
                         className='input'
                         disabled
-                    />
+                    /> */}
                     {/* <pre>{JSON.stringify(selectedFace || '', null, 0).replace(/,\n/g, ',').replace(/],/g, '],\n')}</pre> */}
                 </form>
             </div>

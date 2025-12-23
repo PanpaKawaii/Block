@@ -111,16 +111,13 @@ export default function GenerateObject({ faces }) {
                                 width={`${face.width || '0'} `}
                                 height={`${face.height || '0'} `}
                                 viewBox={`0 0 ${face.width || '0'} ${face.height || '0'}`}
-                                // width='0'
-                                // height='0'
-                                // viewBox='0 0 100 100'
                                 style={styleObj}
                             >
                                 <polygon
                                     points={polygonPoints || '0,0 100,0 100,100 0,100'}
                                     fill={face.color || '#FFFFFF'}
-                                    stroke='var(--border)'
-                                    strokeWidth='2'
+                                    stroke={face.borderColor || '#FFFFFF'}
+                                    strokeWidth={face.borderVisible == 1 ? (face.borderWidth || '0') : '0'}
                                 />
                                 <text
                                     x='50'
@@ -129,7 +126,7 @@ export default function GenerateObject({ faces }) {
                                     fill='var(--accent)'
                                     fontSize='12'
                                 >
-                                    {face.name}
+                                    {face.nameVisible == 1 ? face.name : ''}
                                 </text>
                             </svg>
                         ) : null;

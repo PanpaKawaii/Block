@@ -22,6 +22,10 @@
             font-weight: 500;
         }
 
+        .json-output {
+            width: 40px;
+        }
+
         .add-btn {
             padding: 8px 12px;
             border-radius: 6px;
@@ -169,17 +173,38 @@
             width: fit-content;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
 
             &.color-picker-wrapper {
-                /* cursor: pointer; */
+                input {
+                    text-align: center;
 
-                .hex-input {
-                    width: 140px;
+                    &.hex-input {
+                        width: 140px;
+                    }
+
+                    &.alpha-input {
+                        width: 60px;
+                    }
+
+                    &.border-width-input {
+                        width: 60px;
+                    }
                 }
+            }
 
-                .alpha-input {
-                    width: 60px;
+            .btn-name,
+            .btn-border {
+                min-width: 32px;
+                padding: 2px;
+                background: transparent;
+                font-size: 20px;
+                color: var(--secondary);
+
+                &.visible-name,
+                &.visible-border {
+                    color: var(--text);
+                    text-shadow: 0 0 8px var(--border-glow);
                 }
             }
         }
