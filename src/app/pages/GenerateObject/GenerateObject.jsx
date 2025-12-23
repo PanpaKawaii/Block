@@ -118,7 +118,7 @@ export default function GenerateObject({ faces }) {
                             >
                                 <polygon
                                     points={polygonPoints || '0,0 100,0 100,100 0,100'}
-                                    fill='var(--face)'
+                                    fill={face.color || '#FFFFFF'}
                                     stroke='var(--border)'
                                     strokeWidth='2'
                                 />

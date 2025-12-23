@@ -29,10 +29,11 @@ export default function FaceController({ faces, setFaces }) {
             ...prev,
             {
                 id: crypto.randomUUID(),
-                visible: 1,
                 name: `Face ${prev.length + 1}`,
                 width: 100,
                 height: 100,
+                color: '#68FCFF80',
+                visible: 1,
                 steps: [
                     { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 100,0 100,100 0,100', visible: 1 },
                 ]
@@ -55,14 +56,6 @@ export default function FaceController({ faces, setFaces }) {
                     : face
             )
         );
-        // setSelectedFaceId((prev) =>
-        //     prev && prev.id === faceId
-        //         ? {
-        //             ...prev,
-        //             [attribute]: Number(newValue)
-        //         }
-        //         : prev
-        // );
     };
 
     const addStep = (faceId, type) => {
@@ -116,6 +109,23 @@ export default function FaceController({ faces, setFaces }) {
         );
     };
 
+    const hexRgbaToPercent = (hexRgba) => {
+        const hexAlpha = hexRgba.slice(7, 9) || 'ff';
+        const alpha = parseInt(hexAlpha, 16);
+        return (alpha / 255)?.toFixed(2) || 1;
+    };
+    const updateHexAlphaByPercent = (oldHex, percent) => {
+        const p = Math.max(0, Math.min(100, percent));
+        const alphaHex = Math.round((p / 100) * 255)
+            .toString(16)
+            .padStart(2, '0')
+            .toUpperCase();
+        const rgbHex = oldHex.slice(0, 7);
+        console.log('OLD:', oldHex);
+        console.log('HEX RGBA:', rgbHex + alphaHex);
+        return rgbHex + alphaHex;
+    };
+
     const selectedFace = faces.find(face => face.id === selectedFaceId);
     console.log('selectedFace', selectedFace);
 
@@ -129,8 +139,15 @@ export default function FaceController({ faces, setFaces }) {
 
                 <div className='faces-list'>
                     {faces.map((face) => (
-                        <div key={face.id} className='face-card card'>
+                        <div key={face.id} className={`face-card card ${face.visible == 0 && 'invisible'}`}>
                             <div className='face-header'>
+                                <input
+                                    type='color'
+                                    value={face.color?.slice(0, 7) || '#ffffff'}
+                                    onChange={(e) => updateFace(face.id, 'color', e.target.value?.toUpperCase())}
+                                    className='input color-input'
+                                    style={{ opacity: hexRgbaToPercent(face.color) || 1 }}
+                                />
                                 <h3>{face.name}</h3>
                                 <div className='btns'>
                                     <button className={`btn-face ${selectedFaceId == face.id && 'selected-face'}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
@@ -144,7 +161,7 @@ export default function FaceController({ faces, setFaces }) {
                                 <>
                                     <div className='steps'>
                                         {face.steps.map((step) => (
-                                            <div key={step.id} className='step-row'>
+                                            <div key={step.id} className={`step-row ${step.visible == 0 && 'invisible'}`}>
                                                 <select
                                                     value={step.type}
                                                     onChange={(e) => updateStep(face.id, step.id, e.target.value, step.value, step.visible)}
@@ -177,14 +194,6 @@ export default function FaceController({ faces, setFaces }) {
 
                                     <div className='add-step-box'>
                                         <button className='btn' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
-                                        {/* <button onClick={() => addStep(face.id, 'translateX')}>translateX</button>
-                                        <button onClick={() => addStep(face.id, 'translateY')}>translateY</button>
-                                        <button onClick={() => addStep(face.id, 'translateZ')}>translateZ</button>
-                                        <button onClick={() => addStep(face.id, 'rotateX')}>rotateX</button>
-                                        <button onClick={() => addStep(face.id, 'rotateY')}>rotateY</button>
-                                        <button onClick={() => addStep(face.id, 'rotateZ')}>rotateZ</button>
-                                        <button onClick={() => addStep(face.id, 'scale')}>scale</button>
-                                        <button onClick={() => addStep(face.id, 'clipPath')}>clip-path</button> */}
                                     </div>
                                 </>
                             }
@@ -199,14 +208,38 @@ export default function FaceController({ faces, setFaces }) {
                     <button className='btn-close' onClick={() => setSelectedFaceId(null)}><i className='fa-solid fa-xmark' /></button>
                 </div>
 
-                <div>
+                <form>
+                    <div className='form-group color-picker-wrapper'>
+                        <label>Color</label>
+                        <input
+                            type='color'
+                            value={selectedFace?.color?.slice(0, 7) || '#ffffff'}
+                            onChange={(e) => updateFace(selectedFace?.id, 'color', e.target.value?.toUpperCase())}
+                            className='input color-input'
+                            style={{ opacity: hexRgbaToPercent(selectedFace?.color || '#ffffffff') || 1 }}
+                        />
+                        <input
+                            type='text'
+                            value={selectedFace?.color}
+                            onChange={(e) => updateFace(selectedFace?.id, 'color', e.target.value?.toUpperCase())}
+                            className='input hex-input'
+                        />
+                        <input
+                            type='number'
+                            min={0}
+                            max={100}
+                            value={(hexRgbaToPercent(selectedFace?.color || '#ffffffff') * 100)?.toFixed(0) || 100}
+                            onChange={(e) => updateFace(selectedFace?.id, 'color', updateHexAlphaByPercent(selectedFace?.color, e.target.value || 100))}
+                            className='input alpha-input'
+                        />
+                    </div>
+
                     <div className='form-group'>
                         <label>Name</label>
                         <input
                             type='text'
                             value={selectedFace?.name || ''}
                             onChange={(e) => updateFace(selectedFace?.id, 'name', e.target.value)}
-                            // className={`input ${''}`}
                             className='input'
                         />
                     </div>
@@ -232,9 +265,10 @@ export default function FaceController({ faces, setFaces }) {
                         type='textarea'
                         value={JSON.stringify(selectedFace, null, 0)}
                         className='input'
+                        disabled
                     />
                     {/* <pre>{JSON.stringify(selectedFace || '', null, 0).replace(/,\n/g, ',').replace(/],/g, '],\n')}</pre> */}
-                </div>
+                </form>
             </div>
         </>
     );

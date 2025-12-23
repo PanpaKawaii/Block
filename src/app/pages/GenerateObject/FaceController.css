@@ -159,6 +159,31 @@
             text-shadow: 0 0 8px #dc354599;
         }
     }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .form-group {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            &.color-picker-wrapper {
+                /* cursor: pointer; */
+
+                .hex-input {
+                    width: 140px;
+                }
+
+                .alpha-input {
+                    width: 60px;
+                }
+            }
+        }
+    }
 }
 
 .face-controller-container,
