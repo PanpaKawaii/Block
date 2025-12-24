@@ -178,26 +178,24 @@
         gap: 8px;
 
         .form-group {
-            width: fit-content;
+            width: 100%;
             display: flex;
+            justify-content: space-between;
             align-items: center;
             gap: 8px;
 
-            &.color-picker-wrapper {
+            &.form-color {
+                flex-direction: column;
+                width: fit-content;
+            }
+
+            &.form-name,
+            &.form-size,
+            &.form-border {
                 input {
                     text-align: center;
-
-                    &.hex-input {
-                        width: 140px;
-                    }
-
-                    &.alpha-input {
-                        width: 60px;
-                    }
-
-                    &.border-width-input {
-                        width: 60px;
-                    }
+                    width: 0;
+                    flex: 1;
                 }
             }
 

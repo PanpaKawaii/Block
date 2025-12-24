@@ -1,0 +1,23 @@
+.color-input-container {
+    width: fit-content;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 4px;
+
+    input {
+        text-align: center;
+
+        &.hex-input {
+            width: 140px;
+        }
+
+        &.alpha-input {
+            width: 60px;
+        }
+
+        &.border-width-input {
+            width: 60px;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import './FaceController.css';
 
 export default function FaceController({ faces, setFaces }) {
@@ -32,8 +33,10 @@ export default function FaceController({ faces, setFaces }) {
                 name: `Face ${prev.length + 1}`,
                 width: 100,
                 height: 100,
-                color: '#68FCFF80',
+                nameSize: 12,
                 borderWidth: 2,
+                color: '#68FCFF80',
+                nameColor: '#80FCFFFF',
                 borderColor: '#68FCFFFF',
                 visible: 1,
                 nameVisible: 1,
@@ -55,7 +58,7 @@ export default function FaceController({ faces, setFaces }) {
                 face.id === faceId
                     ? {
                         ...face,
-                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'borderWidth' || attribute == 'visible' || attribute == 'nameVisible' || attribute == 'borderVisible') ? Number(newValue) : newValue
+                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'nameSize' || attribute == 'borderWidth' || attribute == 'visible' || attribute == 'nameVisible' || attribute == 'borderVisible') ? Number(newValue) : newValue
                     }
                     : face
             )
@@ -153,10 +156,10 @@ export default function FaceController({ faces, setFaces }) {
                             <div className='face-header'>
                                 <input
                                     type='color'
-                                    value={face.color?.slice(0, 7) || '#ffffff'}
+                                    value={face.color?.slice(0, 7) || '#FFFFFF'}
                                     onChange={(e) => updateFace(face.id, 'color', e.target.value?.toUpperCase())}
                                     className='input color-input'
-                                    style={{ opacity: hexRgbaToPercent(face.color || '#ffffffff') || 1 }}
+                                    style={{ opacity: hexRgbaToPercent(face.color || '#FFFFFFFF') || 1 }}
                                 />
                                 <h3>{face.name}</h3>
                                 <div className='btns'>
@@ -184,7 +187,7 @@ export default function FaceController({ faces, setFaces }) {
                                                     <option value='rotateY' className='option'>rotateY</option>
                                                     <option value='rotateZ' className='option'>rotateZ</option>
                                                     <option value='scale' className='option'>scale</option>
-                                                    <option value='clipPath' className='option'>clip-path</option>
+                                                    <option value='clipPath' className='option'>clipPath</option>
                                                 </select>
 
                                                 <input
@@ -219,52 +222,55 @@ export default function FaceController({ faces, setFaces }) {
                 </div>
 
                 <form>
-                    <div className='form-group color-picker-wrapper'>
-                        <label>Color</label>
-                        <input
-                            type='color'
-                            value={selectedFace?.color?.slice(0, 7) || '#ffffff'}
-                            onChange={(e) => updateFace(selectedFace?.id, 'color', e.target.value?.toUpperCase())}
-                            className='input color-input'
-                            style={{ opacity: hexRgbaToPercent(selectedFace?.color || '#ffffffff') || 1 }}
+                    <div className='form-group form-color'>
+                        <ColorInput
+                            selectedFace={selectedFace}
+                            attribute={'color'}
+                            label={'Face Color'}
+                            updateFace={updateFace}
+                            hexRgbaToPercent={hexRgbaToPercent}
+                            updateHexAlphaByPercent={updateHexAlphaByPercent}
                         />
-                        <input
-                            type='text'
-                            value={selectedFace?.color}
-                            onChange={(e) => updateFace(selectedFace?.id, 'color', e.target.value?.toUpperCase())}
-                            className='input hex-input'
+                        <ColorInput
+                            selectedFace={selectedFace}
+                            attribute={'nameColor'}
+                            label={'Name Color'}
+                            updateFace={updateFace}
+                            hexRgbaToPercent={hexRgbaToPercent}
+                            updateHexAlphaByPercent={updateHexAlphaByPercent}
                         />
-                        <input
-                            type='number'
-                            min={0}
-                            max={100}
-                            value={(hexRgbaToPercent(selectedFace?.color || '#ffffffff') * 100)?.toFixed(0) || 100}
-                            onChange={(e) => updateFace(selectedFace?.id, 'color', updateHexAlphaByPercent(selectedFace?.color, e.target.value || 100))}
-                            className='input alpha-input'
+                        <ColorInput
+                            selectedFace={selectedFace}
+                            attribute={'borderColor'}
+                            label={'Border Color'}
+                            updateFace={updateFace}
+                            hexRgbaToPercent={hexRgbaToPercent}
+                            updateHexAlphaByPercent={updateHexAlphaByPercent}
                         />
                     </div>
 
-                    <div className={`form-group ${selectedFace?.nameVisible == 0 && 'invisible'}`}>
-                        <label>Name</label>
+                    <div className={`form-group form-name ${selectedFace?.nameVisible == 0 && 'invisible'}`}>
                         <input
                             type='text'
                             value={selectedFace?.name || ''}
                             onChange={(e) => updateFace(selectedFace?.id, 'name', e.target.value)}
                             className='input'
                         />
+                        <input
+                            type='number'
+                            value={selectedFace?.nameSize || 0}
+                            onChange={(e) => updateFace(selectedFace?.id, 'nameSize', e.target.value)}
+                            className='input'
+                        />
                         <button type='button' className={`btn-name ${selectedFace?.nameVisible == 1 && 'visible-name'}`} onClick={() => updateFace(selectedFace?.id, 'nameVisible', selectedFace?.nameVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
-                    <div className='form-group'>
-                        <label>Width</label>
+                    <div className='form-group form-size'>
                         <input
                             type='number'
                             value={selectedFace?.width || 0}
                             onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
                             className='input'
                         />
-                    </div>
-                    <div className='form-group'>
-                        <label>Height</label>
                         <input
                             type='number'
                             value={selectedFace?.height || 0}
@@ -272,34 +278,12 @@ export default function FaceController({ faces, setFaces }) {
                             className='input'
                         />
                     </div>
-
-                    <div className={`form-group color-picker-wrapper ${selectedFace?.borderVisible == 0 && 'invisible'}`}>
+                    <div className={`form-group form-border ${selectedFace?.borderVisible == 0 && 'invisible'}`}>
                         <input
                             type='number'
                             value={selectedFace?.borderWidth || 0}
                             onChange={(e) => updateFace(selectedFace?.id, 'borderWidth', e.target.value)}
-                            className='input border-width-input'
-                        />
-                        <input
-                            type='color'
-                            value={selectedFace?.borderColor?.slice(0, 7) || '#ffffff'}
-                            onChange={(e) => updateFace(selectedFace?.id, 'borderColor', e.target.value?.toUpperCase())}
-                            className='input color-input'
-                            style={{ opacity: hexRgbaToPercent(selectedFace?.borderColor || '#ffffffff') || 1 }}
-                        />
-                        <input
-                            type='text'
-                            value={selectedFace?.borderColor}
-                            onChange={(e) => updateFace(selectedFace?.id, 'borderColor', e.target.value?.toUpperCase())}
-                            className='input hex-input'
-                        />
-                        <input
-                            type='number'
-                            min={0}
-                            max={100}
-                            value={(hexRgbaToPercent(selectedFace?.borderColor || '#ffffffff') * 100)?.toFixed(0) || 100}
-                            onChange={(e) => updateFace(selectedFace?.id, 'borderColor', updateHexAlphaByPercent(selectedFace?.borderColor, e.target.value || 100))}
-                            className='input alpha-input'
+                            className='input'
                         />
                         <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 && 'visible-border'}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>

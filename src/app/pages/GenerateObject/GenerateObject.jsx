@@ -96,7 +96,7 @@ export default function GenerateObject({ faces }) {
                                 && step.visible == 1) {
 
                                 styleObj.transform = (styleObj.transform || '') +
-                                    ` ${step.type}(${step.value}${step.type.includes('rotate') ? 'deg' : 'px'})`;
+                                    ` ${step.type}(${step.value}${step.type.includes('rotate') ? 'deg' : (step.type.includes('translate') ? 'px' : '')})`;
                             }
 
                             if (step.type === 'clipPath' && step.visible == 1) {
@@ -120,11 +120,11 @@ export default function GenerateObject({ faces }) {
                                     strokeWidth={face.borderVisible == 1 ? (face.borderWidth || '0') : '0'}
                                 />
                                 <text
-                                    x='50'
-                                    y='55'
+                                    x={face.width / 2 || '50'}
+                                    y={(face.height / 2 + face.nameSize / 3) || '50'}
                                     textAnchor='middle'
-                                    fill='var(--accent)'
-                                    fontSize='12'
+                                    fill={face.nameColor || '#FFFFFF'}
+                                    fontSize={face.nameSize || '12'}
                                 >
                                     {face.nameVisible == 1 ? face.name : ''}
                                 </text>
