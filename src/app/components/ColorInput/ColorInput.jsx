@@ -25,8 +25,6 @@ export default function ColorInput({ selectedFace, attribute, label, updateFace,
                 <input
                     type='number'
                     placeholder=''
-                    min={0}
-                    max={100}
                     value={(hexRgbaToPercent(selectedFace?.[attribute] || '#FFFFFFFF') * 100)?.toFixed(0) || 100}
                     onChange={(e) => updateFace(selectedFace?.id, attribute, updateHexAlphaByPercent(selectedFace?.[attribute], e.target.value || 100))}
                     className='input alpha-input'

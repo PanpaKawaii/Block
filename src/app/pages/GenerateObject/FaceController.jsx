@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import './FaceController.css';
+import { Link } from 'react-router-dom';
 
 export default function FaceController({ faces, setFaces }) {
 
@@ -58,7 +59,7 @@ export default function FaceController({ faces, setFaces }) {
                 face.id === faceId
                     ? {
                         ...face,
-                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'nameSize' || attribute == 'borderWidth' || attribute == 'visible' || attribute == 'nameVisible' || attribute == 'borderVisible') ? Number(newValue) : newValue
+                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'nameSize' || attribute == 'borderWidth' || attribute == 'visible' || attribute == 'nameVisible' || attribute == 'borderVisible') ? Math.max(0, Number(newValue)) : newValue
                     }
                     : face
             )
@@ -136,6 +137,25 @@ export default function FaceController({ faces, setFaces }) {
     const selectedFace = faces.find(face => face.id === selectedFaceId);
     console.log('selectedFace', selectedFace);
 
+    const jsonToState = (json) => {
+        const id = json?.replaceAll('"id"', 'id');
+        const name = id?.replaceAll('"name"', 'name');
+        const width = name?.replaceAll('"width"', 'width');
+        const height = width?.replaceAll('"height"', 'height');
+        const nameSize = height?.replaceAll('"nameSize"', 'nameSize');
+        const borderWidth = nameSize?.replaceAll('"borderWidth"', 'borderWidth');
+        const color = borderWidth?.replaceAll('"color"', 'color');
+        const nameColor = color?.replaceAll('"nameColor"', 'nameColor');
+        const borderColor = nameColor?.replaceAll('"borderColor"', 'borderColor');
+        const visible = borderColor?.replaceAll('"visible"', 'visible');
+        const nameVisible = visible?.replaceAll('"nameVisible"', 'nameVisible');
+        const borderVisible = nameVisible?.replaceAll('"borderVisible"', 'borderVisible');
+        const steps = borderVisible?.replaceAll('"steps"', 'steps');
+        const type = steps?.replaceAll('"type"', 'type');
+        const value = type?.replaceAll('"value"', 'value');
+        return value;
+    }
+
     return (
         <>
             <div className={`face-controller-container card ${selectedFace ? 'size2' : 'size1'}`}>
@@ -144,10 +164,12 @@ export default function FaceController({ faces, setFaces }) {
                     <input
                         type='text'
                         value={JSON.stringify(faces, null, 0)}
+                        // value={jsonToState(JSON.stringify(faces, null, 0)) || ''}
                         onChange={(e) => setFaces(JSON.parse(e.target.value))}
                         className='input json-output'
                     />
                     <button className='btn add-btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
+                    {/* <Link to='/' state={'5fa8b8df-595a-4f13-b808-7f58b404dd87'}><button className='btn'>/</button></Link> */}
                 </div>
 
                 <div className='faces-list'>
@@ -263,6 +285,7 @@ export default function FaceController({ faces, setFaces }) {
                         <div className='input-group'>
                             <input
                                 type='number'
+                                placeholder=''
                                 value={selectedFace?.nameSize || 0}
                                 onChange={(e) => updateFace(selectedFace?.id, 'nameSize', e.target.value)}
                                 className='input'
@@ -275,6 +298,7 @@ export default function FaceController({ faces, setFaces }) {
                         <div className='input-group'>
                             <input
                                 type='number'
+                                placeholder=''
                                 value={selectedFace?.borderWidth || 0}
                                 onChange={(e) => updateFace(selectedFace?.id, 'borderWidth', e.target.value)}
                                 className='input'
@@ -287,6 +311,7 @@ export default function FaceController({ faces, setFaces }) {
                         <div className='input-group'>
                             <input
                                 type='number'
+                                placeholder=''
                                 value={selectedFace?.width || 0}
                                 onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
                                 className='input'
@@ -296,6 +321,7 @@ export default function FaceController({ faces, setFaces }) {
                         <div className='input-group'>
                             <input
                                 type='number'
+                                placeholder=''
                                 value={selectedFace?.height || 0}
                                 onChange={(e) => updateFace(selectedFace?.id, 'height', e.target.value)}
                                 className='input'
