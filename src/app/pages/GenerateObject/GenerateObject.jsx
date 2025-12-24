@@ -124,7 +124,7 @@ export default function GenerateObject({ faces }) {
                                     y={(face.height / 2 + face.nameSize / 3) || '50'}
                                     textAnchor='middle'
                                     fill={face.nameColor || '#FFFFFF'}
-                                    fontSize={face.nameSize || '12'}
+                                    fontSize={face.nameSize || '0'}
                                 >
                                     {face.nameVisible == 1 ? face.name : ''}
                                 </text>

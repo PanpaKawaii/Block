@@ -250,42 +250,58 @@ export default function FaceController({ faces, setFaces }) {
                     </div>
 
                     <div className={`form-group form-name ${selectedFace?.nameVisible == 0 && 'invisible'}`}>
-                        <input
-                            type='text'
-                            value={selectedFace?.name || ''}
-                            onChange={(e) => updateFace(selectedFace?.id, 'name', e.target.value)}
-                            className='input'
-                        />
-                        <input
-                            type='number'
-                            value={selectedFace?.nameSize || 0}
-                            onChange={(e) => updateFace(selectedFace?.id, 'nameSize', e.target.value)}
-                            className='input'
-                        />
+                        <div className='input-group flex-2'>
+                            <input
+                                type='text'
+                                placeholder=''
+                                value={selectedFace?.name || ''}
+                                onChange={(e) => updateFace(selectedFace?.id, 'name', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='Name'>Name</label>
+                        </div>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                value={selectedFace?.nameSize || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'nameSize', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='nameSize'>Name Size</label>
+                        </div>
                         <button type='button' className={`btn-name ${selectedFace?.nameVisible == 1 && 'visible-name'}`} onClick={() => updateFace(selectedFace?.id, 'nameVisible', selectedFace?.nameVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
-                    <div className='form-group form-size'>
-                        <input
-                            type='number'
-                            value={selectedFace?.width || 0}
-                            onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
-                            className='input'
-                        />
-                        <input
-                            type='number'
-                            value={selectedFace?.height || 0}
-                            onChange={(e) => updateFace(selectedFace?.id, 'height', e.target.value)}
-                            className='input'
-                        />
-                    </div>
                     <div className={`form-group form-border ${selectedFace?.borderVisible == 0 && 'invisible'}`}>
-                        <input
-                            type='number'
-                            value={selectedFace?.borderWidth || 0}
-                            onChange={(e) => updateFace(selectedFace?.id, 'borderWidth', e.target.value)}
-                            className='input'
-                        />
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                value={selectedFace?.borderWidth || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'borderWidth', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='borderWidth'>Border Width</label>
+                        </div>
                         <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 && 'visible-border'}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                    </div>
+                    <div className='form-group form-size'>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                value={selectedFace?.width || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='Width'>Width</label>
+                        </div>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                value={selectedFace?.height || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'height', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='Height'>Height</label>
+                        </div>
                     </div>
 
                     {/* <textarea
