@@ -45,6 +45,14 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                gap: 8px;
+
+                h3 {
+                    flex: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
 
                 .btns {
                     display: flex;

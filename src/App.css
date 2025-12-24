@@ -13,7 +13,15 @@
 }
 
 :root {
-  --font-tech: 'Inter', 'Organix', 'Akashi', Arial;
+  --font-tech:
+    'Inter',
+    Consolas,
+    Menlo,
+    Monaco,
+    monospace,
+    'Organix',
+    'Akashi',
+    Arial;
 
   --gray-1: #111827;
   --gray-2: #1F2937;
@@ -245,6 +253,7 @@ video::-webkit-media-controls-play-button {
 .color-input {
   appearance: none;
   width: 40px;
+  min-width: 40px;
   height: 40px;
   padding: 0;
   background: none;
