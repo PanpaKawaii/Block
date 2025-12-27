@@ -74,6 +74,8 @@ body {
 
   background: linear-gradient(to bottom, var(--background-1), var(--background-2), var(--background-1));
   color: var(--accent);
+
+  overflow: hidden;
 }
 
 a {
@@ -276,4 +278,10 @@ video::-webkit-media-controls-play-button {
 
 .invisible {
   opacity: 0.4;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -100;
+  }
 }

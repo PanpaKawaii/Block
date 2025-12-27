@@ -3,7 +3,7 @@ import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import './FaceController.css';
 import { Link } from 'react-router-dom';
 
-export default function FaceController({ faces, setFaces }) {
+export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle }) {
 
     const [selectedFaceId, setSelectedFaceId] = useState(null);
     const toggleSelectFace = (faceId) => {
@@ -158,6 +158,68 @@ export default function FaceController({ faces, setFaces }) {
 
     return (
         <>
+            <div className='scene-controller-container'>
+                <form>
+                    <div className='form-group'>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) - 0.5), 10)) }))}>
+                            <i className='fa-solid fa-minus' />
+                        </button>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={(sceneStyle.scale * 100)?.toFixed(0) || 100}
+                                onChange={(e) => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(e.target.value / 100), 10)) }))}
+                                className='input'
+                            />
+                            <label htmlFor='Zoom'>Zoom</label>
+                        </div>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) + 0.5), 10)) }))}>
+                            <i className='fa-solid fa-plus' />
+                        </button>
+                    </div>
+                    <div className='form-group'>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) - 50), 1000)) }))}>
+                            <i className='fa-solid fa-chevron-left' />
+                        </button>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={sceneStyle.translateX || 0}
+                                onChange={(e) => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(e.target.value), 1000)) }))}
+                                className='input'
+                            />
+                            <label htmlFor='translateX'>Left/Right</label>
+                        </div>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) + 50), 1000)) }))}>
+                            <i className='fa-solid fa-chevron-right' />
+                        </button>
+                    </div>
+                    <div className='form-group'>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
+                            <i className='fa-solid fa-chevron-left' />
+                        </button>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={sceneStyle.translateY || 0}
+                                onChange={(e) => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(e.target.value), 500)) }))}
+                                className='input'
+                            />
+                            <label htmlFor='translateY'>Up/Down</label>
+                        </div>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
+                            <i className='fa-solid fa-chevron-right' />
+                        </button>
+                    </div>
+                    <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0 })}>
+                        <i className='fa-solid fa-arrows-rotate' />
+                    </button>
+                </form>
+            </div>
+
             <div className={`face-controller-container card ${selectedFace ? 'size2' : 'size1'}`}>
                 <div className='heading'>
                     <h2>Face Controller Panel</h2>
@@ -271,6 +333,28 @@ export default function FaceController({ faces, setFaces }) {
                         />
                     </div>
 
+                    <div className='form-group form-size'>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={selectedFace?.width || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='Width'>Width</label>
+                        </div>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={selectedFace?.height || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'height', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='Height'>Height</label>
+                        </div>
+                    </div>
                     <div className={`form-group form-name ${selectedFace?.nameVisible == 0 && 'invisible'}`}>
                         <div className='input-group flex-2'>
                             <input
@@ -306,28 +390,6 @@ export default function FaceController({ faces, setFaces }) {
                             <label htmlFor='borderWidth'>Border Width</label>
                         </div>
                         <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 && 'visible-border'}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                    </div>
-                    <div className='form-group form-size'>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.width || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='Width'>Width</label>
-                        </div>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.height || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'height', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='Height'>Height</label>
-                        </div>
                     </div>
 
                     {/* <textarea

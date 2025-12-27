@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './GenerateObject.css';
 
-export default function GenerateObject({ faces }) {
+export default function GenerateObject({ faces, sceneStyle }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
@@ -36,55 +36,27 @@ export default function GenerateObject({ faces }) {
         };
     }, []);
 
+    const polygonToPath = (points) => {
+        if (!points) return '';
+        const coords = points.trim().split(/\s+/);
+        let d = `M ${coords[0].replace(',', ' ')}`;
+        for (let i = 1; i < coords.length; i++) {
+            d += ` L ${coords[i].replace(',', ' ')}`;
+        }
+        return d + ' Z';
+    };
+
     return (
-        <div className='generateobject-container'>
+        <div className='generate-object-container'>
             <div
                 ref={containerRef}
                 className='scene-object'
+                style={{ transform: `translate(${sceneStyle?.translateX || 0}px, ${sceneStyle?.translateY || 0}px) scale(${sceneStyle?.scale || 1})` }}
             >
                 <div
                     ref={objectRef}
                     className='object'
                 >
-                    {/* {faces.map(face => {
-                        const styleObj = {};
-                        face.steps.forEach(step => {
-                            if (step.type == 'translateX') {
-                                styleObj.transform = (styleObj.transform || '') + ` translateX(${step.value}px)`;
-                            }
-                            if (step.type == 'translateY') {
-                                styleObj.transform = (styleObj.transform || '') + ` translateY(${step.value}px)`;
-                            }
-                            if (step.type == 'translateZ') {
-                                styleObj.transform = (styleObj.transform || '') + ` translateZ(${step.value}px)`;
-                            }
-                            if (step.type == 'rotateX') {
-                                styleObj.transform = (styleObj.transform || '') + ` rotateX(${step.value}deg)`;
-                            }
-                            if (step.type == 'rotateY') {
-                                styleObj.transform = (styleObj.transform || '') + ` rotateY(${step.value}deg)`;
-                            }
-                            if (step.type == 'rotateZ') {
-                                styleObj.transform = (styleObj.transform || '') + ` rotateZ(${step.value}deg)`;
-                            }
-                            if (step.type == 'scale') {
-                                styleObj.transform = (styleObj.transform || '') + ` scale(${step.value})`;
-                            }
-                            if (step.type == 'clipPath') {
-                                styleObj.clipPath = `polygon(${step.value})`;
-                            }
-                        });
-                        return (
-                            <div
-                                key={face.id}
-                                className='face face-box'
-                                style={styleObj}
-                            >
-                                {face.name}
-                            </div>
-                        );
-                    })} */}
-
                     {faces.map(face => {
                         const styleObj = {};
                         let polygonPoints = null;
@@ -113,20 +85,51 @@ export default function GenerateObject({ faces }) {
                                 viewBox={`0 0 ${face.width || '0'} ${face.height || '0'}`}
                                 style={styleObj}
                             >
-                                <polygon
-                                    points={polygonPoints || '0,0 100,0 100,100 0,100'}
-                                    fill={face.color || '#FFFFFF'}
-                                    stroke={face.borderColor || '#FFFFFF'}
-                                    strokeWidth={face.borderVisible == 1 ? (face.borderWidth || '0') : '0'}
+                                <defs>
+                                    <filter
+                                        id={`glow-${face.id}`}
+                                        x='-60%'
+                                        y='-60%'
+                                        width='220%'
+                                        height='220%'
+                                    >
+                                        <feGaussianBlur stdDeviation='6' result='blur' />
+                                        {/* <feColorMatrix
+                                            type='matrix'
+                                            values='
+                                                0 0 0 0 0
+                                                0 1 1 0 0.9
+                                                0 1 1 0 1
+                                                0 0 0 1 0
+                                            '
+                                        /> */}
+                                        <feMerge>
+                                            <feMergeNode />
+                                            <feMergeNode in='SourceGraphic' />
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                <path
+                                    d={polygonToPath(polygonPoints)}
+                                    fill={face.color || '#fff'}
+                                    stroke={face.borderColor || '#fff'}
+                                    strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}
+                                    vectorEffect='non-scaling-stroke'
+                                    filter={`url(#glow-${face.id})`}
+
+                                    strokeLinecap='round'
+                                    strokeDasharray='8 6'
+                                    style={{ animation: 'dash 3s linear infinite' }}
                                 />
                                 <text
-                                    x={face.width / 2 || '50'}
-                                    y={(face.height / 2 + face.nameSize / 3) || '50'}
+                                    x={face.width / 2}
+                                    y={face.height / 2 + face.nameSize / 3}
                                     textAnchor='middle'
-                                    fill={face.nameColor || '#FFFFFF'}
-                                    fontSize={face.nameSize || '0'}
+                                    dominantBaseline='middle'
+                                    fill={face.nameColor}
+                                    fontSize={face.nameSize}
                                 >
-                                    {face.nameVisible == 1 ? face.name : ''}
+                                    {face.nameVisible === 1 ? face.name : ''}
                                 </text>
                             </svg>
                         ) : null;

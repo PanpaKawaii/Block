@@ -44,10 +44,16 @@ export default function GenerateObjectController() {
         // console.log('useEffect END');
     }, [location.state]);
 
+    const [sceneStyle, setSceneStyle] = useState({
+        scale: 1,
+        translateX: 0,
+        translateY: 0,
+    });
+
     return (
         <>
-            <GenerateObject faces={faces} />
-            <FaceController faces={faces} setFaces={setFaces} />
+            <GenerateObject faces={faces} sceneStyle={sceneStyle} />
+            <FaceController faces={faces} setFaces={setFaces} sceneStyle={sceneStyle} setSceneStyle={setSceneStyle} />
         </>
     )
 }
