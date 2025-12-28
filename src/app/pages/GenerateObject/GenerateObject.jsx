@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './GenerateObject.css';
 
-export default function GenerateObject({ faces, sceneStyle }) {
+export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setSelectedFaceId }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
@@ -85,30 +85,23 @@ export default function GenerateObject({ faces, sceneStyle }) {
                                 viewBox={`0 0 ${face.width || '0'} ${face.height || '0'}`}
                                 style={styleObj}
                             >
-                                <defs>
-                                    <filter
-                                        id={`glow-${face.id}`}
-                                        x='-60%'
-                                        y='-60%'
-                                        width='220%'
-                                        height='220%'
-                                    >
-                                        <feGaussianBlur stdDeviation='6' result='blur' />
-                                        {/* <feColorMatrix
-                                            type='matrix'
-                                            values='
-                                                0 0 0 0 0
-                                                0 1 1 0 0.9
-                                                0 1 1 0 1
-                                                0 0 0 1 0
-                                            '
-                                        /> */}
-                                        <feMerge>
-                                            <feMergeNode />
-                                            <feMergeNode in='SourceGraphic' />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
+                                {face.glowVisible &&
+                                    <defs>
+                                        <filter
+                                            id={`glow-${face.id}`}
+                                            x='-60%'
+                                            y='-60%'
+                                            width='220%'
+                                            height='220%'
+                                        >
+                                            <feGaussianBlur stdDeviation={face.glow || '0'} result='blur' />
+                                            <feMerge>
+                                                <feMergeNode />
+                                                <feMergeNode in='SourceGraphic' />
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                }
                                 <path
                                     d={polygonToPath(polygonPoints)}
                                     fill={face.color || '#fff'}
@@ -117,9 +110,17 @@ export default function GenerateObject({ faces, sceneStyle }) {
                                     vectorEffect='non-scaling-stroke'
                                     filter={`url(#glow-${face.id})`}
 
-                                    strokeLinecap='round'
-                                    strokeDasharray='8 6'
-                                    style={{ animation: 'dash 3s linear infinite' }}
+                                    strokeLinecap={face.id == selectedFaceId ? 'round' : ''}
+                                    strokeDasharray={face.id == selectedFaceId ? '8 6' : ''}
+                                    className={face.id == selectedFaceId ? 'dashoffset' : ''}
+
+                                    onClick={() => setSelectedFaceId(prev => {
+                                        if (prev && prev == face.id) {
+                                            return null;
+                                        } else {
+                                            return face.id;
+                                        }
+                                    })}
                                 />
                                 <text
                                     x={face.width / 2}

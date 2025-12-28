@@ -34,10 +34,11 @@
     .faces-list {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 8px;
 
         .face-card {
-            padding: 12px;
+            position: relative;
+            padding: 8px;
             border-radius: 12px;
 
             .face-header {
@@ -229,7 +230,8 @@
             }
 
             .btn-name,
-            .btn-border {
+            .btn-border,
+            .btn-glow {
                 min-width: 32px;
                 padding: 2px;
                 background: transparent;
@@ -237,7 +239,8 @@
                 color: var(--secondary);
 
                 &.visible-name,
-                &.visible-border {
+                &.visible-border,
+                &.visible-glow {
                     color: var(--text);
                     text-shadow: 0 0 8px var(--border-glow);
                 }
@@ -301,28 +304,28 @@
 .face-controller-container,
 .sub-face-controller-container {
     &.size1 {
-        height: 80vh;
+        height: 88vh;
         top: 10vh;
-        right: 20px;
+        right: 2vh;
     }
 
     &.size2 {
-        height: 35vh;
+        height: 56vh;
         top: 10vh;
-        right: 20px;
+        right: 2vh;
     }
 
     &.size3 {
-        height: 50vh;
-        top: 45vh;
-        right: 20px;
+        height: 30vh;
+        top: 68vh;
+        right: 2vh;
     }
 
     &.size4 {
         height: 0vh;
-        top: 95vh;
-        right: 20px;
-        padding: 0;
+        top: 98vh;
+        right: 2vh;
+        padding: 0 20px;
         opacity: 0;
     }
 }

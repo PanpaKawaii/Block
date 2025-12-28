@@ -31,6 +31,7 @@ export default function GenerateObjectController() {
     // const [blockId, setBlockId] = useState(location.state || crypto.randomUUID());
     // console.log('blockId', blockId);
     const [faces, setFaces] = useState([]);
+    const [selectedFaceId, setSelectedFaceId] = useState(null);
     console.log('faces', faces);
 
     useEffect(() => {
@@ -52,8 +53,8 @@ export default function GenerateObjectController() {
 
     return (
         <>
-            <GenerateObject faces={faces} sceneStyle={sceneStyle} />
-            <FaceController faces={faces} setFaces={setFaces} sceneStyle={sceneStyle} setSceneStyle={setSceneStyle} />
+            <GenerateObject faces={faces} sceneStyle={sceneStyle} selectedFaceId={selectedFaceId} setSelectedFaceId={setSelectedFaceId} />
+            <FaceController faces={faces} setFaces={setFaces} sceneStyle={sceneStyle} setSceneStyle={setSceneStyle} selectedFaceId={selectedFaceId} setSelectedFaceId={setSelectedFaceId} />
         </>
     )
 }

@@ -3,9 +3,8 @@ import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import './FaceController.css';
 import { Link } from 'react-router-dom';
 
-export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle }) {
+export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId }) {
 
-    const [selectedFaceId, setSelectedFaceId] = useState(null);
     const toggleSelectFace = (faceId) => {
         setSelectedFaceId(prev => {
             if (prev && prev == faceId) {
@@ -26,27 +25,44 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
         })
     }
 
-    const addFace = () => {
+    const copyFace = (faceId) => {
+        const newId = crypto.randomUUID();
         setFaces((prev) => [
             ...prev,
             {
-                id: crypto.randomUUID(),
+                ...prev.find(face => face.id == faceId),
+                id: newId,
                 name: `Face ${prev.length + 1}`,
-                width: 100,
-                height: 100,
+            }
+        ]);
+        toggleOpenFace(newId);
+    };
+
+    const addFace = () => {
+        const newId = crypto.randomUUID();
+        setFaces((prev) => [
+            ...prev,
+            {
+                id: newId,
+                name: `Face ${prev.length + 1}`,
+                width: 200,
+                height: 200,
+                glow: 4,
                 nameSize: 12,
                 borderWidth: 2,
-                color: '#68FCFF80',
+                color: '#68FCFF33',
                 nameColor: '#80FCFFFF',
                 borderColor: '#68FCFFFF',
                 visible: 1,
                 nameVisible: 1,
                 borderVisible: 1,
+                glowVisible: 1,
                 steps: [
-                    { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 100,0 100,100 0,100', visible: 1 },
+                    { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 200,0 200,200 0,200', visible: 1 },
                 ]
             }
         ]);
+        toggleOpenFace(newId);
     };
 
     const removeFace = (faceId) => {
@@ -59,7 +75,17 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                 face.id === faceId
                     ? {
                         ...face,
-                        [attribute]: (attribute == 'width' || attribute == 'height' || attribute == 'nameSize' || attribute == 'borderWidth' || attribute == 'visible' || attribute == 'nameVisible' || attribute == 'borderVisible') ? Math.max(0, Number(newValue)) : newValue
+                        [attribute]: (
+                            attribute == 'width'
+                            || attribute == 'height'
+                            || attribute == 'glow'
+                            || attribute == 'nameSize'
+                            || attribute == 'borderWidth'
+                            || attribute == 'visible'
+                            || attribute == 'nameVisible'
+                            || attribute == 'borderVisible'
+                            || attribute == 'glowVisible'
+                        ) ? Math.max(0, Number(newValue)) : newValue
                     }
                     : face
             )
@@ -156,6 +182,15 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
         return value;
     }
 
+    const changeUUID = () => {
+        setFaces(prev => prev.map((face, index) => ({
+            ...face,
+            id: crypto.randomUUID(),
+            name: `Face ${index + 1}`,
+            color: face.color == '#68FCFF33' ? '#68FCFFFF' : '#184BB4FF'
+        })));
+    };
+
     return (
         <>
             <div className='scene-controller-container'>
@@ -197,8 +232,8 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                         </button>
                     </div>
                     <div className='form-group'>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
-                            <i className='fa-solid fa-chevron-left' />
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
+                            <i className='fa-solid fa-chevron-down' />
                         </button>
                         <div className='input-group'>
                             <input
@@ -210,8 +245,8 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                             />
                             <label htmlFor='translateY'>Up/Down</label>
                         </div>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
-                            <i className='fa-solid fa-chevron-right' />
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
+                            <i className='fa-solid fa-chevron-up' />
                         </button>
                     </div>
                     <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0 })}>
@@ -231,12 +266,13 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                         className='input json-output'
                     />
                     <button className='btn add-btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
+                    {/* <button className='btn add-btn' onClick={changeUUID}><i className='fa-solid fa-file' /></button> */}
                     {/* <Link to='/' state={'5fa8b8df-595a-4f13-b808-7f58b404dd87'}><button className='btn'>/</button></Link> */}
                 </div>
 
                 <div className='faces-list'>
                     {faces.map((face) => (
-                        <div key={face.id} className={`face-card card ${face.visible == 0 && 'invisible'}`}>
+                        <div key={face.id} className={`face-card card ${face.visible == 0 && 'invisible'} ${face.id == selectedFaceId ? 'dash-box' : ''}`}>
                             <div className='face-header'>
                                 <input
                                     type='color'
@@ -250,6 +286,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                                     <button className={`btn-face ${selectedFaceId == face.id && 'selected-face'}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
                                     <button className={`btn-face ${opennedFaceId.includes(face.id) && 'openned-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
                                     <button className={`btn-face ${face.visible == 1 && 'visible-face'}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                    <button className='btn-face' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
                                     <button className='btn-face remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-xmark' /></button>
                                 </div>
                             </div>
@@ -390,6 +427,19 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                             <label htmlFor='borderWidth'>Border Width</label>
                         </div>
                         <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 && 'visible-border'}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                    </div>
+                    <div className={`form-group form-glow ${selectedFace?.glowVisible == 0 && 'invisible'}`}>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={selectedFace?.glow || 0}
+                                onChange={(e) => updateFace(selectedFace?.id, 'glow', e.target.value)}
+                                className='input'
+                            />
+                            <label htmlFor='glow'>Glow</label>
+                        </div>
+                        <button type='button' className={`btn-glow ${selectedFace?.glowVisible == 1 && 'visible-glow'}`} onClick={() => updateFace(selectedFace?.id, 'glowVisible', selectedFace?.glowVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
 
                     {/* <textarea
