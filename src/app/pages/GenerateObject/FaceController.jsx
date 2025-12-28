@@ -2,9 +2,11 @@ import { useState } from 'react';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import './FaceController.css';
 import { Link } from 'react-router-dom';
+import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 
 export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId }) {
 
+    const [openEditShape, setOpenEditShape] = useState(false);
     const toggleSelectFace = (faceId) => {
         setSelectedFaceId(prev => {
             if (prev && prev == faceId) {
@@ -44,6 +46,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
             ...prev,
             {
                 id: newId,
+                shape: '0,0 200,0 200,200 0,200',
                 name: `Face ${prev.length + 1}`,
                 width: 200,
                 height: 200,
@@ -287,7 +290,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                                     <button className={`btn-face ${opennedFaceId.includes(face.id) && 'openned-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
                                     <button className={`btn-face ${face.visible == 1 && 'visible-face'}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                     <button className='btn-face' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
-                                    <button className='btn-face remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-xmark' /></button>
+                                    <button className='btn-face remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button>
                                 </div>
                             </div>
 
@@ -320,7 +323,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
 
                                                 <div className='btns'>
                                                     <button className={`btn-step ${step.visible == 1 && 'visible-step'}`} onClick={() => updateStep(face.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                                    <button className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-xmark' /></button>
+                                                    <button className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-ban' /></button>
                                                 </div>
                                             </div>
                                         ))}
@@ -339,7 +342,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
             <div className={`sub-face-controller-container card ${selectedFace ? 'size3' : 'size4'}`}>
                 <div className='heading'>
                     <h2>Face Detail</h2>
-                    <button className='btn-close' onClick={() => setSelectedFaceId(null)}><i className='fa-solid fa-xmark' /></button>
+                    <button className='btn-close' onClick={() => setSelectedFaceId(null)}><i className='fa-regular fa-circle-xmark' /></button>
                 </div>
 
                 <form>
@@ -441,6 +444,25 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                         </div>
                         <button type='button' className={`btn-glow ${selectedFace?.glowVisible == 1 && 'visible-glow'}`} onClick={() => updateFace(selectedFace?.id, 'glowVisible', selectedFace?.glowVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
+                    <div className='form-group form-shape'>
+                        <div className='input-group'>
+                            <textarea
+                                type='textarea'
+                                placeholder=''
+                                value={selectedFace?.shape || ''}
+                                onChange={(e) => updateFace(selectedFace?.id, 'shape', e.target.value)}
+                                className='input'
+                                rows='5'
+                                cols='4'
+                                onInput={(e) => {
+                                    e.target.style.height = 'auto';
+                                    e.target.style.height = e.target.scrollHeight + 'px';
+                                }}
+                            />
+                            <label htmlFor='shape'>Shape</label>
+                        </div>
+                        <button type='button' className='btn' onClick={() => setOpenEditShape(true)}>Edit Shape</button>
+                    </div>
 
                     {/* <textarea
                         type='textarea'
@@ -451,6 +473,8 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                     {/* <pre>{JSON.stringify(selectedFace || '', null, 0).replace(/,\n/g, ',').replace(/],/g, '],\n')}</pre> */}
                 </form>
             </div>
+
+            {openEditShape && <ClickPercentBox selectedFaceId={selectedFaceId} shape={selectedFace?.shape} setOpenEditShape={setOpenEditShape} updateFace={updateFace} width={selectedFace?.width} height={selectedFace?.height} />}
         </>
-    );
+    )
 }

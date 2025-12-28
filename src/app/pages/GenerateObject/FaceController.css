@@ -151,7 +151,6 @@
     .heading {
         margin: 0 0 20px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
 
         h2 {
@@ -192,6 +191,7 @@
 
             .input-group {
                 flex: 1;
+                display: flex;
                 position: relative;
 
                 input {
@@ -212,7 +212,9 @@
                 }
 
                 input:focus+label,
-                input:not(:placeholder-shown)+label {
+                input:not(:placeholder-shown)+label,
+                textarea:focus+label,
+                textarea:not(:placeholder-shown)+label {
                     left: 8px;
                     border-radius: 10px;
                     font-size: 12px;
@@ -226,6 +228,12 @@
                     border: 2px solid var(--border);
                     background: var(--background-1);
                     /* box-shadow: 0 0 6px var(--border-glow), 0 0 0 3px #38BDF866, inset 0 0 6px var(--border-glow); */
+                }
+
+                textarea {
+                    flex: 1;
+                    overflow: hidden;
+                    resize: vertical;
                 }
             }
 

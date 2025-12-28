@@ -31,7 +31,7 @@ export default function NavigationBar() {
                 <ul>
                     {menuItems.map((item, index) => (
                         <li key={index}>
-                            <div className={`box ${location.pathname.includes(item.path) ? 'located' : ''}`} style={{ '--i': menuItems.length - index }}>
+                            <div className={`box ${((location.pathname.includes(item.path) && item.path != '/') || item.path == location.pathname) ? 'located' : ''}`} style={{ '--i': menuItems.length - index }}>
                                 <Link to={`${item.path}`}>
                                     <div className='face-text'><span>{item.name}</span></div>
                                     <div className='face-icon'><i className={`fa-solid fa-${item.icon}`} /></div>

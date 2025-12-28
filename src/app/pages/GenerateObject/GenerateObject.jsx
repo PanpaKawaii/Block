@@ -51,7 +51,7 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
             <div
                 ref={containerRef}
                 className='scene-object'
-                style={{ transform: `translate(${sceneStyle?.translateX || 0}px, ${sceneStyle?.translateY || 0}px) scale(${sceneStyle?.scale || 1})` }}
+                style={{ transform: `scale(${sceneStyle?.scale || 1}) translate(${sceneStyle?.translateX || 0}px, ${sceneStyle?.translateY || 0}px)` }}
             >
                 <div
                     ref={objectRef}
@@ -75,6 +75,10 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
                                 polygonPoints = step.value;
                             }
                         });
+
+                        let testPath = `m 10 10 l 50 0 v 40 h -50 z`;
+                        testPath = `M 15 0 H 85 L 100 15 V 85 L 85 100 H 15 L 0 85 V 15 Z`;
+                        testPath = `M 10 0 H 90 A 10 10 0 0 1 100 10 V 90 A 10 10 0 0 1 90 100 H 10 A 10 10 0 0 1 0 90 V 10 A 10 10 0 0 1 10 0 Z`;
 
                         return face.visible == 1 ? (
                             <svg
@@ -103,7 +107,7 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
                                     </defs>
                                 }
                                 <path
-                                    d={polygonToPath(polygonPoints)}
+                                    d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : (polygonPoints?.includes('M') ? polygonPoints : polygonToPath(polygonPoints))}
                                     fill={face.color || '#fff'}
                                     stroke={face.borderColor || '#fff'}
                                     strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}
