@@ -10,7 +10,7 @@
 
     .arrow {
         position: absolute;
-        text-shadow: 0 0 1px #FFFFFF;
+        text-shadow: 0 0 1px var(--face);
 
         &.arrow-x {
             color: #FF0000;
@@ -37,13 +37,13 @@
 
         &.color {
             .text-svg {
-                text-shadow: 0 0 1px #FFFFFF;
+                text-shadow: 0 0 1px var(--face);
             }
         }
 
         &.white {
             .text-svg {
-                text-shadow: 0 0 1px #000000;
+                text-shadow: 0 0 1px var(--background-1);
             }
         }
     }

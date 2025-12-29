@@ -52,7 +52,7 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
             <div
                 ref={containerRef}
                 className='scene-object'
-                style={{ transform: `scale(${sceneStyle?.scale || 1}) translate(${sceneStyle?.translateX || 0}px, ${sceneStyle?.translateY || 0}px)` }}
+                style={{ transform: `scale(${sceneStyle?.scale || 1})  translateX(${sceneStyle?.translateX || 0}px) translateY(${sceneStyle?.translateY || 0}px) translateZ(${sceneStyle?.translateZ || 0}px)` }}
             >
                 <div
                     ref={objectRef}

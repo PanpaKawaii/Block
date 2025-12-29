@@ -258,8 +258,8 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                         </button>
                     </div>
                     <div className='form-group'>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
-                            <i className='fa-solid fa-chevron-down' />
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
+                            <i className='fa-solid fa-chevron-up' />
                         </button>
                         <div className='input-group'>
                             <input
@@ -271,11 +271,29 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                             />
                             <label htmlFor='translateY'>Up/Down</label>
                         </div>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
-                            <i className='fa-solid fa-chevron-up' />
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
+                            <i className='fa-solid fa-chevron-down' />
                         </button>
                     </div>
-                    <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0 })}>
+                    <div className='form-group'>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) + 50), 500)) }))}>
+                            <i className='fa-regular fa-circle-dot' />
+                        </button>
+                        <div className='input-group'>
+                            <input
+                                type='number'
+                                placeholder=''
+                                value={sceneStyle.translateZ || 0}
+                                onChange={(e) => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(e.target.value), 500)) }))}
+                                className='input'
+                            />
+                            <label htmlFor='translateZ'>Forward/Backward</label>
+                        </div>
+                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) - 50), 500)) }))}>
+                            <i className='fa-regular fa-circle-xmark' />
+                        </button>
+                    </div>
+                    <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0, translateZ: 0 })}>
                         <i className='fa-solid fa-arrows-rotate' />
                     </button>
                 </form>

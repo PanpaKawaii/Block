@@ -50,7 +50,11 @@ export default function GenerateObjectController() {
         scale: 1,
         translateX: 0,
         translateY: 0,
+        translateZ: 0,
     });
+
+    console.log('sceneStyle', sceneStyle);
+
 
     return (
         <>

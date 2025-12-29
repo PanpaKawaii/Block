@@ -6,11 +6,11 @@ export default function CoordinateAxes({ width = 800, height = 40, styleObj }) {
         <div className='coordinate-axes-container' style={styleObj}>
             {[
                 { name: 'x', type: 'color', color: '#FF0000' },
-                { name: 'x', type: 'white', color: '#FFFFFF' },
+                { name: 'x', type: 'white', color: '#68FCFF' },
                 { name: 'y', type: 'color', color: '#00FF00' },
-                { name: 'y', type: 'white', color: '#FFFFFF' },
+                { name: 'y', type: 'white', color: '#68FCFF' },
                 { name: 'z', type: 'color', color: '#0000FF' },
-                { name: 'z', type: 'white', color: '#FFFFFF' },
+                { name: 'z', type: 'white', color: '#68FCFF' },
             ].map((axe) => (
                 <React.Fragment key={`${axe.name}-${axe.type}`}>
                     <svg
@@ -19,25 +19,10 @@ export default function CoordinateAxes({ width = 800, height = 40, styleObj }) {
                         height={`${height || '0'}`}
                         viewBox={`0 0 ${width || '0'} ${height || '0'}`}
                     >
-                        {/* <defs>
-                        <filter
-                            id={`glow-${axe.name}-${axe.type}`}
-                            x='-60%'
-                            y='-60%'
-                            width='220%'
-                            height='220%'
-                        >
-                            <feGaussianBlur stdDeviation='4' result='blur' />
-                            <feMerge>
-                                <feMergeNode />
-                                <feMergeNode in='SourceGraphic' />
-                            </feMerge>
-                        </filter>
-                    </defs> */}
                         <path
                             d={`M 2 ${height / 2 - 1} L ${width - 2} ${height / 2 - 1} L ${width - 2} ${height / 2 + 1} L 2 ${height / 2 + 1} Z`}
                             fill={axe.color}
-                            stroke='#FFFFFF'
+                            stroke='#68FCFF'
                             strokeWidth='0.5'
                             vectorEffect='non-scaling-stroke'
                             filter={`url(#glow-${axe.name}-${axe.type})`}
