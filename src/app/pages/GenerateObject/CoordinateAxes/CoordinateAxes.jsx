@@ -6,11 +6,11 @@ export default function CoordinateAxes({ width = 800, height = 40, styleObj }) {
         <div className='coordinate-axes-container' style={styleObj}>
             {[
                 { name: 'x', type: 'color', color: '#FF0000' },
-                { name: 'x', type: 'white', color: '#68FCFF' },
+                // { name: 'x', type: 'white', color: '#68FCFF' },
                 { name: 'y', type: 'color', color: '#00FF00' },
-                { name: 'y', type: 'white', color: '#68FCFF' },
+                // { name: 'y', type: 'white', color: '#68FCFF' },
                 { name: 'z', type: 'color', color: '#0000FF' },
-                { name: 'z', type: 'white', color: '#68FCFF' },
+                // { name: 'z', type: 'white', color: '#68FCFF' },
             ].map((axe) => (
                 <React.Fragment key={`${axe.name}-${axe.type}`}>
                     <svg
@@ -20,7 +20,7 @@ export default function CoordinateAxes({ width = 800, height = 40, styleObj }) {
                         viewBox={`0 0 ${width || '0'} ${height || '0'}`}
                     >
                         <path
-                            d={`M 2 ${height / 2 - 1} L ${width - 2} ${height / 2 - 1} L ${width - 2} ${height / 2 + 1} L 2 ${height / 2 + 1} Z`}
+                            d={`M 20 ${height / 2 - 1} L ${width - 2} ${height / 2 - 1} L ${width - 2} ${height / 2 + 1} L 20 ${height / 2 + 1} L 20 28 L 2 ${height / 2 + 1} L 20 12 Z`}
                             fill={axe.color}
                             stroke='#68FCFF'
                             strokeWidth='0.5'
@@ -39,7 +39,7 @@ export default function CoordinateAxes({ width = 800, height = 40, styleObj }) {
                             {axe.name.toUpperCase()}
                         </text>
                     </svg>
-                    {axe.type == 'color' && <i className={`fa-solid fa-rotate-right arrow arrow-${axe.name}`} style={{ '--width': `${width * 9 / 20}px` }} />}
+                    {axe.type == 'color' && <i className={`fa-solid fa-rotate-right arrow arrow-${axe.name}`} style={{ '--width': `${Math.max(20, width / 2 - 30)}px` }} />}
                 </React.Fragment>
             ))}
         </div>

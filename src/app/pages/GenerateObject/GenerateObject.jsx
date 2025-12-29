@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import CoordinateAxes from './CoordinateAxes/CoordinateAxes';
 import './GenerateObject.css';
 
-export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setSelectedFaceId, showCoordinateAxes }) {
+export default function GenerateObject({ faces, dots, sceneStyle, selectedFaceId, setSelectedFaceId, selectedDotId, setSelectedDotId, showCoordinateAxes }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
@@ -52,7 +52,7 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
             <div
                 ref={containerRef}
                 className='scene-object'
-                style={{ transform: `scale(${sceneStyle?.scale || 1})  translateX(${sceneStyle?.translateX || 0}px) translateY(${sceneStyle?.translateY || 0}px) translateZ(${sceneStyle?.translateZ || 0}px)` }}
+                style={{ transform: `scale(${sceneStyle?.scale || 1}) translateX(${sceneStyle?.translateX || 0}px) translateY(${sceneStyle?.translateY || 0}px) translateZ(${sceneStyle?.translateZ || 0}px)` }}
             >
                 <div
                     ref={objectRef}
@@ -109,8 +109,8 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
                                     }
                                     <path
                                         d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : (polygonPoints?.includes('M') ? polygonPoints : polygonToPath(polygonPoints))}
-                                        fill={face.color || '#fff'}
-                                        stroke={face.borderColor || '#fff'}
+                                        fill={face.color || '#FFFFFF'}
+                                        stroke={face.borderColor || '#FFFFFF'}
                                         strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}
                                         vectorEffect='non-scaling-stroke'
                                         filter={`url(#glow-${face.id})`}
@@ -143,6 +143,55 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
                         ) : null;
                     })}
                     {showCoordinateAxes.includes('Oxyz') && <CoordinateAxes width={800} height={40} styleObj={{}} />}
+                    {dots.map(dot => {
+                        const size = dot.size;
+                        const radius = dot.size;
+                        const width = 20;
+                        const height = 20;
+                        return dot.visible == 1 ? (
+                            <React.Fragment key={dot.id}>
+                                <svg
+                                    className='dot-svg'
+                                    width={`${width || '0'}`}
+                                    height={`${height || '0'}`}
+                                    viewBox={`0 0 ${width || '0'} ${height || '0'}`}
+                                    style={{ transform: `translateX(${dot?.xCoordinate || 0}px) translateY(${dot?.yCoordinate || 0}px) translateZ(${dot?.zCoordinate || 0}px)` }}
+                                >
+                                    <path
+                                        d={`M ${width / 2} ${width / 2 - radius} A ${radius} ${radius} 0 1 1 ${width / 2 - 0.1} ${width / 2 - radius} Z`}
+                                        // d={`M ${(width - size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height + size) / 2} L ${(width - size) / 2} ${(height + size) / 2} Z`}
+                                        fill={dot.color || '#FFFFFF'}
+                                        stroke='#FFFFFF'
+                                        strokeWidth={dot.id == selectedDotId ? '1' : '0'}
+                                        vectorEffect='non-scaling-stroke'
+                                        filter={`url(#glow-${dot.id})`}
+
+                                        strokeLinecap={dot.id == selectedDotId ? 'round' : ''}
+                                        strokeDasharray={dot.id == selectedDotId ? '2 3' : ''}
+                                        className={dot.id == selectedDotId ? 'dashoffset' : ''}
+
+                                        onClick={() => setSelectedDotId(prev => {
+                                            if (prev && prev == dot.id) {
+                                                return null;
+                                            } else {
+                                                return dot.id;
+                                            }
+                                        })}
+                                    />
+                                    <text
+                                        x={dot.xCoordinateName / 2}
+                                        y={dot.yCoordinateName / 2 + 1}
+                                        textAnchor='middle'
+                                        dominantBaseline='middle'
+                                        fill={dot.nameColor}
+                                        fontSize={dot.nameSize}
+                                    >
+                                        {dot.nameVisible === 1 ? dot.name : ''}
+                                    </text>
+                                </svg>
+                            </React.Fragment>
+                        ) : null;
+                    })}
                 </div>
             </div>
         </div>

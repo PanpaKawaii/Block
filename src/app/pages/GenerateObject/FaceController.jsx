@@ -3,8 +3,9 @@ import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import './FaceController.css';
 import { Link } from 'react-router-dom';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
+import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
 
-export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId, showCoordinateAxes, setShowCoordinateAxes }) {
+export default function FaceController({ faces, setFaces, dots, setDots, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId, selectedDotId, setSelectedDotId, showCoordinateAxes, setShowCoordinateAxes }) {
     const handleShowCoordinateAxes = (faceId) => {
         setShowCoordinateAxes(prev => {
             if (prev.includes(faceId)) {
@@ -18,18 +19,18 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
     const [toggleStepFunction, setToggleStepFunction] = useState('step');
     const swapController = () => {
         setToggleStepFunction(p => p == 'step' ? 'function' : 'step');
-        setOpennedFaceId([]);
+        setOpenedFaceId([]);
     };
 
     const [toggleMenu, setToggleMenu] = useState(true);
     const collapseController = () => {
         setToggleMenu(p => !p);
-        setOpennedFaceId([]);
+        setOpenedFaceId([]);
     };
 
-    const [opennedFaceId, setOpennedFaceId] = useState([]);
+    const [openedFaceId, setOpenedFaceId] = useState([]);
     const toggleOpenFace = (faceId) => {
-        setOpennedFaceId(prev => {
+        setOpenedFaceId(prev => {
             if (prev.includes(faceId)) {
                 return prev.filter(id => id != faceId);
             } else {
@@ -187,6 +188,8 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
 
     const selectedFace = faces.find(face => face.id === selectedFaceId);
     console.log('selectedFace', selectedFace);
+    const selectedDot = dots.find(dot => dot.id === selectedDotId);
+    console.log('selectedDot', selectedDot);
 
     const jsonToState = (json) => {
         const id = json?.replaceAll('"id"', 'id');
@@ -299,7 +302,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                 </form>
             </div>
 
-            <div className={`face-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'step' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
+            <div className={`face-controller-container face-dot-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'step' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
                 <div className='heading'>
                     <h2>Step Controller</h2>
                     <div className='control'>
@@ -333,7 +336,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                                 <div className='btns'>
                                     <button className={`btn-face ${selectedFaceId == face.id && 'selected-face'}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
                                     <div className='collapse-hidden'>
-                                        <button className={`btn-face ${opennedFaceId.includes(face.id) && 'openned-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
+                                        <button className={`btn-face ${openedFaceId.includes(face.id) && 'opened-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
                                         <button className={`btn-face ${face.visible == 1 && 'visible-face'}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                         <button className={`btn-face ${showCoordinateAxes.includes(face.id) && 'show-coordinate-axes-face'}`} onClick={() => handleShowCoordinateAxes(face.id)}><i className='fa-solid fa-location-crosshairs' /></button>
                                         <button className='btn-face' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
@@ -342,7 +345,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                                 </div>
                             </div>
 
-                            {opennedFaceId.includes(face.id) &&
+                            {openedFaceId.includes(face.id) &&
                                 <>
                                     <div className='steps'>
                                         {face.steps.map((step) => (
@@ -387,28 +390,21 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                 </div>
             </div>
 
-            <div className={`face-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'function' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
-                <div className='heading'>
-                    <h2>Function Controller</h2>
-                    <div className='control'>
-                        <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                        <input
-                            type='text'
-                            value={JSON.stringify(faces, null, 0)}
-                            onChange={(e) => setFaces(JSON.parse(e.target.value))}
-                            className='input json-output'
-                        />
-                        <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
-                        <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
-                    </div>
-                </div>
+            <DotControllerPanel
+                selectedFace={selectedFace}
+                dots={dots}
+                setDots={setDots}
+                selectedDotId={selectedDotId}
+                setSelectedDotId={setSelectedDotId}
+                selectedDot={selectedDot}
+                toggleMenu={toggleMenu}
+                toggleStepFunction={toggleStepFunction}
+                collapseController={collapseController}
+                swapController={swapController}
+                hexRgbaToPercent={hexRgbaToPercent}
+            />
 
-                <div className='faces-list'>
-
-                </div>
-            </div>
-
-            <div className={`sub-face-controller-container card ${selectedFace ? 'size_2_1' : 'size_2_2'}`}>
+            <div className={`sub-face-controller-container face-dot-function-controller-container card ${selectedFace ? 'size_2_1' : 'size_2_2'}`}>
                 <div className='heading'>
                     <h2>Face Detail</h2>
                     <button className='btn-close' onClick={() => setSelectedFaceId(null)}><i className='fa-regular fa-circle-xmark' /></button>

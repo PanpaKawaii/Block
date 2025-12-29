@@ -1,5 +1,4 @@
-.face-controller-container,
-.sub-face-controller-container {
+.face-dot-function-controller-container {
     overflow-y: scroll;
     scrollbar-width: none;
     width: fit-content;
@@ -97,7 +96,7 @@
                         color: var(--secondary);
 
                         &.selected-face,
-                        &.openned-face,
+                        &.opened-face,
                         &.visible-face,
                         &.show-coordinate-axes-face {
                             color: var(--text);
@@ -366,8 +365,7 @@
     }
 }
 
-.face-controller-container,
-.sub-face-controller-container {
+.face-dot-function-controller-container {
     &.size_1_1 {
         height: 88vh;
         top: 10vh;

@@ -33,6 +33,9 @@ export default function GenerateObjectController() {
     const [faces, setFaces] = useState([]);
     const [selectedFaceId, setSelectedFaceId] = useState(null);
     console.log('faces', faces);
+    const [dots, setDots] = useState([]);
+    const [selectedDotId, setSelectedDotId] = useState(null);
+    console.log('dots', dots);
 
     useEffect(() => {
         // console.log('useEffect START');
@@ -53,24 +56,29 @@ export default function GenerateObjectController() {
         translateZ: 0,
     });
 
-    console.log('sceneStyle', sceneStyle);
-
-
     return (
         <>
             <GenerateObject
-                faces={faces} sceneStyle={sceneStyle}
+                faces={faces}
+                dots={dots}
+                sceneStyle={sceneStyle}
                 selectedFaceId={selectedFaceId}
                 setSelectedFaceId={setSelectedFaceId}
+                selectedDotId={selectedDotId}
+                setSelectedDotId={setSelectedDotId}
                 showCoordinateAxes={showCoordinateAxes}
             />
             <FaceController
                 faces={faces}
                 setFaces={setFaces}
+                dots={dots}
+                setDots={setDots}
                 sceneStyle={sceneStyle}
                 setSceneStyle={setSceneStyle}
                 selectedFaceId={selectedFaceId}
                 setSelectedFaceId={setSelectedFaceId}
+                selectedDotId={selectedDotId}
+                setSelectedDotId={setSelectedDotId}
                 showCoordinateAxes={showCoordinateAxes}
                 setShowCoordinateAxes={setShowCoordinateAxes}
             />

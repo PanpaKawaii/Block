@@ -25,7 +25,8 @@
             transform-style: preserve-3d;
             transition: all 0.1s ease;
 
-            .face-svg {
+            .face-svg,
+            .dot-svg {
                 position: absolute;
                 overflow: initial;
 
