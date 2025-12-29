@@ -1,0 +1,74 @@
+.coordinate-axes-container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    transition: all 1s ease;
+
+    .arrow {
+        position: absolute;
+        text-shadow: 0 0 1px #FFFFFF;
+
+        &.arrow-x {
+            color: #FF0000;
+            transform: rotateY(90deg) translateZ(var(--width));
+        }
+
+        &.arrow-y {
+            color: #00FF00;
+            transform: rotateX(-90deg) translateZ(var(--width));
+        }
+
+        &.arrow-z {
+            color: #0000FF;
+            transform: translateZ(var(--width));
+        }
+    }
+
+    .face-axes {
+        position: absolute;
+        overflow: initial;
+
+        transform-style: preserve-3d;
+        transition: all 1s ease;
+
+        &.color {
+            .text-svg {
+                text-shadow: 0 0 1px #FFFFFF;
+            }
+        }
+
+        &.white {
+            .text-svg {
+                text-shadow: 0 0 1px #000000;
+            }
+        }
+    }
+
+    .line-x {
+        transform: rotateY(180deg);
+
+        &.white {
+            transform: rotateY(180deg) rotateX(-90deg);
+        }
+    }
+
+    .line-y {
+        transform: rotateZ(-90deg);
+
+        &.white {
+            transform: rotateZ(-90deg) rotateX(-90deg);
+        }
+    }
+
+    .line-z {
+        transform: rotateY(90deg);
+
+        &.white {
+            transform: rotateY(90deg) rotateX(-90deg);
+        }
+    }
+}

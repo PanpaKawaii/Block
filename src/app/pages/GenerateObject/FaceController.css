@@ -83,7 +83,7 @@
                         display: flex;
                         gap: 4px;
                         width: fit-content;
-                        max-width: 140px;
+                        max-width: 176px;
                         min-width: 0px;
                         overflow: hidden;
                         transition: all 0.5s ease;
@@ -96,17 +96,10 @@
                         font-size: 20px;
                         color: var(--secondary);
 
-                        &.selected-face {
-                            color: var(--text);
-                            text-shadow: 0 0 8px var(--border-glow);
-                        }
-
-                        &.openned-face {
-                            color: var(--text);
-                            text-shadow: 0 0 8px var(--border-glow);
-                        }
-
-                        &.visible-face {
+                        &.selected-face,
+                        &.openned-face,
+                        &.visible-face,
+                        &.show-coordinate-axes-face {
                             color: var(--text);
                             text-shadow: 0 0 8px var(--border-glow);
                         }
@@ -325,8 +318,8 @@
     top: 3vh;
     right: 20px;
 
-    width: 600px;
-    max-width: 480px;
+    width: 800px;
+    max-width: 800px;
     position: absolute;
     transition: all 0.5s ease;
 

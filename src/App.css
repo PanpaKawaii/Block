@@ -229,6 +229,10 @@ video::-webkit-media-controls-play-button {
     /* secondary */
     box-shadow: 0 0 12px #0EA5E9;
   }
+
+  &.off {
+    opacity: 0.4;
+  }
 }
 
 .card {

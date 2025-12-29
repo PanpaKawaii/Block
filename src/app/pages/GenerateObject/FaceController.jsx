@@ -4,7 +4,16 @@ import './FaceController.css';
 import { Link } from 'react-router-dom';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 
-export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId }) {
+export default function FaceController({ faces, setFaces, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId, showCoordinateAxes, setShowCoordinateAxes }) {
+    const handleShowCoordinateAxes = (faceId) => {
+        setShowCoordinateAxes(prev => {
+            if (prev.includes(faceId)) {
+                return prev.filter(id => id != faceId);
+            } else {
+                return [...prev, faceId];
+            }
+        });
+    };
 
     const [toggleStepFunction, setToggleStepFunction] = useState('step');
     const swapController = () => {
@@ -26,7 +35,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
             } else {
                 return [...prev, faceId];
             }
-        })
+        });
     };
 
     const [openEditShape, setOpenEditShape] = useState(false);
@@ -37,7 +46,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
             } else {
                 return faceId;
             }
-        })
+        });
     };
 
     const copyFace = (faceId) => {
@@ -211,6 +220,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
         <>
             <div className='scene-controller-container'>
                 <form>
+                    <button type='button' className={`btn btn-xyz ${!showCoordinateAxes.includes('Oxyz') && 'off'}`} onClick={() => handleShowCoordinateAxes('Oxyz')}>Oxyz</button>
                     <div className='form-group'>
                         <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) - 0.5), 10)) }))}>
                             <i className='fa-solid fa-minus' />
@@ -307,6 +317,7 @@ export default function FaceController({ faces, setFaces, sceneStyle, setSceneSt
                                     <div className='collapse-hidden'>
                                         <button className={`btn-face ${opennedFaceId.includes(face.id) && 'openned-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
                                         <button className={`btn-face ${face.visible == 1 && 'visible-face'}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                        <button className={`btn-face ${showCoordinateAxes.includes(face.id) && 'show-coordinate-axes-face'}`} onClick={() => handleShowCoordinateAxes(face.id)}><i className='fa-solid fa-location-crosshairs' /></button>
                                         <button className='btn-face' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
                                         <button className='btn-face remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button>
                                     </div>

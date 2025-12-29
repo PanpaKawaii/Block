@@ -45,6 +45,7 @@ export default function GenerateObjectController() {
         // console.log('useEffect END');
     }, [location.state]);
 
+    const [showCoordinateAxes, setShowCoordinateAxes] = useState([]);
     const [sceneStyle, setSceneStyle] = useState({
         scale: 1,
         translateX: 0,
@@ -53,8 +54,22 @@ export default function GenerateObjectController() {
 
     return (
         <>
-            <GenerateObject faces={faces} sceneStyle={sceneStyle} selectedFaceId={selectedFaceId} setSelectedFaceId={setSelectedFaceId} />
-            <FaceController faces={faces} setFaces={setFaces} sceneStyle={sceneStyle} setSceneStyle={setSceneStyle} selectedFaceId={selectedFaceId} setSelectedFaceId={setSelectedFaceId} />
+            <GenerateObject
+                faces={faces} sceneStyle={sceneStyle}
+                selectedFaceId={selectedFaceId}
+                setSelectedFaceId={setSelectedFaceId}
+                showCoordinateAxes={showCoordinateAxes}
+            />
+            <FaceController
+                faces={faces}
+                setFaces={setFaces}
+                sceneStyle={sceneStyle}
+                setSceneStyle={setSceneStyle}
+                selectedFaceId={selectedFaceId}
+                setSelectedFaceId={setSelectedFaceId}
+                showCoordinateAxes={showCoordinateAxes}
+                setShowCoordinateAxes={setShowCoordinateAxes}
+            />
         </>
     )
 }

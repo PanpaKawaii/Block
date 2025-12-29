@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import CoordinateAxes from './CoordinateAxes/CoordinateAxes';
 import './GenerateObject.css';
 
-export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setSelectedFaceId }) {
+export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setSelectedFaceId, showCoordinateAxes }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
@@ -81,65 +82,67 @@ export default function GenerateObject({ faces, sceneStyle, selectedFaceId, setS
                         testPath = `M 10 0 H 90 A 10 10 0 0 1 100 10 V 90 A 10 10 0 0 1 90 100 H 10 A 10 10 0 0 1 0 90 V 10 A 10 10 0 0 1 10 0 Z`;
 
                         return face.visible == 1 ? (
-                            <svg
-                                key={face.id}
-                                className='face-svg'
-                                width={`${face.width || '0'} `}
-                                height={`${face.height || '0'} `}
-                                viewBox={`0 0 ${face.width || '0'} ${face.height || '0'}`}
-                                style={styleObj}
-                            >
-                                {face.glowVisible &&
-                                    <defs>
-                                        <filter
-                                            id={`glow-${face.id}`}
-                                            x='-60%'
-                                            y='-60%'
-                                            width='220%'
-                                            height='220%'
-                                        >
-                                            <feGaussianBlur stdDeviation={face.glow || '0'} result='blur' />
-                                            <feMerge>
-                                                <feMergeNode />
-                                                <feMergeNode in='SourceGraphic' />
-                                            </feMerge>
-                                        </filter>
-                                    </defs>
-                                }
-                                <path
-                                    d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : (polygonPoints?.includes('M') ? polygonPoints : polygonToPath(polygonPoints))}
-                                    fill={face.color || '#fff'}
-                                    stroke={face.borderColor || '#fff'}
-                                    strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}
-                                    vectorEffect='non-scaling-stroke'
-                                    filter={`url(#glow-${face.id})`}
-
-                                    strokeLinecap={face.id == selectedFaceId ? 'round' : ''}
-                                    strokeDasharray={face.id == selectedFaceId ? '8 6' : ''}
-                                    className={face.id == selectedFaceId ? 'dashoffset' : ''}
-
-                                    onClick={() => setSelectedFaceId(prev => {
-                                        if (prev && prev == face.id) {
-                                            return null;
-                                        } else {
-                                            return face.id;
-                                        }
-                                    })}
-                                />
-                                <text
-                                    x={face.width / 2}
-                                    y={face.height / 2 + face.nameSize / 3}
-                                    textAnchor='middle'
-                                    dominantBaseline='middle'
-                                    fill={face.nameColor}
-                                    fontSize={face.nameSize}
+                            <React.Fragment key={face.id}>
+                                <svg
+                                    className='face-svg'
+                                    width={`${face.width || '0'}`}
+                                    height={`${face.height || '0'}`}
+                                    viewBox={`0 0 ${face.width || '0'} ${face.height || '0'}`}
+                                    style={styleObj}
                                 >
-                                    {face.nameVisible === 1 ? face.name : ''}
-                                </text>
-                            </svg>
+                                    {face.glowVisible &&
+                                        <defs>
+                                            <filter
+                                                id={`glow-${face.id}`}
+                                                x='-60%'
+                                                y='-60%'
+                                                width='220%'
+                                                height='220%'
+                                            >
+                                                <feGaussianBlur stdDeviation={face.glow || '0'} result='blur' />
+                                                <feMerge>
+                                                    <feMergeNode />
+                                                    <feMergeNode in='SourceGraphic' />
+                                                </feMerge>
+                                            </filter>
+                                        </defs>
+                                    }
+                                    <path
+                                        d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : (polygonPoints?.includes('M') ? polygonPoints : polygonToPath(polygonPoints))}
+                                        fill={face.color || '#fff'}
+                                        stroke={face.borderColor || '#fff'}
+                                        strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}
+                                        vectorEffect='non-scaling-stroke'
+                                        filter={`url(#glow-${face.id})`}
+
+                                        strokeLinecap={face.id == selectedFaceId ? 'round' : ''}
+                                        strokeDasharray={face.id == selectedFaceId ? '8 6' : ''}
+                                        className={face.id == selectedFaceId ? 'dashoffset' : ''}
+
+                                        onClick={() => setSelectedFaceId(prev => {
+                                            if (prev && prev == face.id) {
+                                                return null;
+                                            } else {
+                                                return face.id;
+                                            }
+                                        })}
+                                    />
+                                    <text
+                                        x={face.width / 2}
+                                        y={face.height / 2 + 1}
+                                        textAnchor='middle'
+                                        dominantBaseline='middle'
+                                        fill={face.nameColor}
+                                        fontSize={face.nameSize}
+                                    >
+                                        {face.nameVisible === 1 ? face.name : ''}
+                                    </text>
+                                </svg>
+                                {showCoordinateAxes.includes(face.id) && <CoordinateAxes width={2 * face.width} height={40} styleObj={styleObj} />}
+                            </React.Fragment>
                         ) : null;
                     })}
-
+                    {showCoordinateAxes.includes('Oxyz') && <CoordinateAxes width={800} height={40} styleObj={{}} />}
                 </div>
             </div>
         </div>
