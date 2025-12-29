@@ -2,8 +2,9 @@
 .sub-face-controller-container {
     overflow-y: scroll;
     scrollbar-width: none;
-    width: 400px;
-    max-width: 400px;
+    width: fit-content;
+    max-width: 480px;
+    min-width: 480px;
     padding: 20px;
     box-sizing: border-box;
     position: absolute;
@@ -17,17 +18,37 @@
         align-items: center;
 
         h2 {
+            width: 300px;
             color: var(--text);
             font-weight: 500;
+            opacity: 1;
+            transition: all 0.5s ease;
+            text-wrap: nowrap;
+            overflow: hidden;
         }
 
-        .json-output {
-            width: 40px;
-        }
+        .control {
+            display: flex;
+            gap: 8px;
 
-        .add-btn {
-            padding: 8px 12px;
-            border-radius: 6px;
+            .btn-collapsed {
+                padding: 0px;
+                background: var(--background-1);
+                transform: rotateZ(0deg);
+                transition: all 0.5s ease;
+            }
+
+            .json-output {
+                width: 44px;
+                height: 44px;
+            }
+
+            .btn {
+                width: 44px;
+                height: 44px;
+                padding: 0px;
+                border-radius: 6px;
+            }
         }
     }
 
@@ -57,6 +78,16 @@
                 .btns {
                     display: flex;
                     gap: 4px;
+
+                    .collapse-hidden {
+                        display: flex;
+                        gap: 4px;
+                        width: fit-content;
+                        max-width: 140px;
+                        min-width: 0px;
+                        overflow: hidden;
+                        transition: all 0.5s ease;
+                    }
 
                     .btn-face {
                         min-width: 32px;
@@ -142,6 +173,39 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 8px;
+            }
+        }
+    }
+
+    &.collapsed {
+        max-width: 480px;
+        min-width: 0px;
+
+        .heading {
+            h2 {
+                width: 0px;
+                opacity: 0;
+                transition: all 0.5s ease;
+            }
+
+            .control {
+                .btn-collapsed {
+                    transform: rotateZ(180deg);
+                }
+            }
+        }
+
+        .faces-list {
+            .face-card {
+                .face-header {
+                    .btns {
+                        .collapse-hidden {
+                            max-width: 0px;
+                            min-width: 0px;
+                            transition: all 0.2s ease;
+                        }
+                    }
+                }
             }
         }
     }
@@ -311,25 +375,41 @@
 
 .face-controller-container,
 .sub-face-controller-container {
-    &.size1 {
+    &.size_1_1 {
         height: 88vh;
         top: 10vh;
         right: 2vh;
     }
 
-    &.size2 {
+    &.size_1_2 {
         height: 56vh;
         top: 10vh;
         right: 2vh;
     }
 
-    &.size3 {
+    &.size_1_3 {
+        height: 0vh;
+        right: 2vh;
+        top: 96vh;
+        padding: 0 20px;
+        opacity: 0;
+    }
+
+    &.size_1_4 {
+        height: 0vh;
+        top: 66vh;
+        right: 2vh;
+        padding: 0 20px;
+        opacity: 0;
+    }
+
+    &.size_2_1 {
         height: 30vh;
         top: 68vh;
         right: 2vh;
     }
 
-    &.size4 {
+    &.size_2_2 {
         height: 0vh;
         top: 98vh;
         right: 2vh;
