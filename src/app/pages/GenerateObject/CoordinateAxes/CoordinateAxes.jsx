@@ -1,7 +1,11 @@
 import React from 'react';
 import './CoordinateAxes.css';
 
-export default function CoordinateAxes({ width = 800, height = 40, styleObj }) {
+export default function CoordinateAxes({
+    width = 800,
+    height = 40,
+    styleObj
+}) {
     return (
         <div className='coordinate-axes-container' style={styleObj}>
             {[

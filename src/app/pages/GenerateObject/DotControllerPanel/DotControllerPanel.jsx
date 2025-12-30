@@ -32,6 +32,7 @@ export default function DotControllerPanel({
                 nameColor: '#80FCFF',
                 visible: 1,
                 nameVisible: 1,
+                vectorVisible: 1,
             }
         ]);
     };
@@ -157,6 +158,7 @@ export default function DotControllerPanel({
                                 <button className={`btn-click ${selectedDotId == dot.id ? 'selected' : ''}`} onClick={() => toggleSelectDot(dot.id)}><i className='fa-solid fa-gear' /></button>
                                 <div className='collapse-hidden'>
                                     <button className={`btn-click ${dot.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(dot.id, 'visible', dot.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                    <button className={`btn-click ${dot.vectorVisible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(dot.id, 'vectorVisible', dot.vectorVisible == 1 ? 0 : 1)}><i className='fa-solid fa-arrow-up-right-from-square' /></button>
                                     <button className='btn-click remove-click' onClick={() => removeDot(dot.id)}><i className='fa-solid fa-trash-can' /></button>
                                 </div>
                             </div>

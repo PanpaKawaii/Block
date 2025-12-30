@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import './ClickPercentBox.css';
 
-export default function ClickPercentBox({ selectedFaceId, shape, setOpenEditShape, updateFace, width, height }) {
+export default function ClickPercentBox({
+    selectedFaceId,
+    shape,
+    setOpenEditShape,
+    updateFace,
+    width,
+    height
+}) {
     const boxRef = useRef(null);
     const [points, setPoints] = useState([]);
     const [stringPoints, setStringPoints] = useState('');

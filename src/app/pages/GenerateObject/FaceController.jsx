@@ -37,7 +37,8 @@ export default function FaceController({
 
     const [toggleStepFunction, setToggleStepFunction] = useState('face');
     const swapController = () => {
-        setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'vector' : (p == 'vector' ? 'function' : 'face')));
+        // setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'vector' : (p == 'vector' ? 'function' : 'face')));
+        setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'function' : 'face'));
         setOpenedFaceId([]);
     };
 
@@ -277,7 +278,7 @@ export default function FaceController({
                                     className='input color-input'
                                     style={{ opacity: hexRgbaToPercent(face.color || '#FFFFFFFF') || 1 }}
                                 />
-                                <h3>{face.name}</h3>
+                                <h3 title={face.name}>{face.name}</h3>
                                 <div className='btns'>
                                     <button className={`btn-click ${selectedFaceId == face.id ? 'selected' : ''}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
                                     <div className='collapse-hidden'>
@@ -371,6 +372,7 @@ export default function FaceController({
                 selectedFace={selectedFace}
                 selectedFaceId={selectedFaceId}
                 openedFaceId={openedFaceId}
+                updateFace={updateFace}
                 dots={dots}
                 setDots={setDots}
                 selectedDotId={selectedDotId}
@@ -381,6 +383,7 @@ export default function FaceController({
                 collapseController={collapseController}
                 swapController={swapController}
                 hexRgbaToPercent={hexRgbaToPercent}
+                handleShowCoordinateAxes={handleShowCoordinateAxes}
                 showCoordinateAxes={showCoordinateAxes}
             />
 

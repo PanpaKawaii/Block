@@ -2,7 +2,17 @@ import React, { useEffect, useRef } from 'react';
 import CoordinateAxes from './CoordinateAxes/CoordinateAxes';
 import './GenerateObject.css';
 
-export default function GenerateObject({ faces, dots, vectors, sceneStyle, selectedFaceId, setSelectedFaceId, selectedDotId, setSelectedDotId, showCoordinateAxes }) {
+export default function GenerateObject({
+    faces,
+    dots,
+    vectors,
+    sceneStyle,
+    selectedFaceId,
+    setSelectedFaceId,
+    selectedDotId,
+    setSelectedDotId,
+    showCoordinateAxes
+}) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
@@ -148,49 +158,103 @@ export default function GenerateObject({ faces, dots, vectors, sceneStyle, selec
                         const radius = dot.size;
                         const width = 20;
                         const height = 20;
-                        return dot.visible == 1 ? (
+                        const X = dot.xCoordinate;
+                        const Y = dot.yCoordinate;
+                        const Z = dot.zCoordinate;
+                        const underY = Math.sqrt(X * X + Z * Z);
+                        const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z);
+                        let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
+                        xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
+                        xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
+                        xOz = (Z < 0 && X >= 0) ? 0 - xOz : xOz;
+                        xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz;
+                        xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : xOz;
+                        const Oxyz = (underY == 0) ? (Y >= 0 ? 90 : -90) : Math.atan(Y / underY) * 180 / Math.PI;
+                        return (
                             <React.Fragment key={dot.id}>
-                                <svg
-                                    className='dot-svg'
-                                    width={`${width || '0'}`}
-                                    height={`${height || '0'}`}
-                                    viewBox={`0 0 ${width || '0'} ${height || '0'}`}
-                                    style={{ transform: `translateX(${dot?.xCoordinate || 0}px) translateY(${dot?.yCoordinate || 0}px) translateZ(${dot?.zCoordinate || 0}px)` }}
-                                >
-                                    <path
-                                        d={`M ${width / 2} ${width / 2 - radius} A ${radius} ${radius} 0 1 1 ${width / 2 - 0.1} ${width / 2 - radius} Z`}
-                                        // d={`M ${(width - size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height + size) / 2} L ${(width - size) / 2} ${(height + size) / 2} Z`}
-                                        fill={dot.color || '#FFFFFF'}
-                                        stroke='#FFFFFF'
-                                        strokeWidth={dot.id == selectedDotId ? '1' : '0'}
-                                        vectorEffect='non-scaling-stroke'
-                                        filter={`url(#glow-${dot.id})`}
-
-                                        strokeLinecap={dot.id == selectedDotId ? 'round' : ''}
-                                        strokeDasharray={dot.id == selectedDotId ? '2 3' : ''}
-                                        className={dot.id == selectedDotId ? 'dashoffset' : ''}
-
-                                        onClick={() => setSelectedDotId(prev => {
-                                            if (prev && prev == dot.id) {
-                                                return null;
-                                            } else {
-                                                return dot.id;
-                                            }
-                                        })}
-                                    />
-                                    <text
-                                        x={dot.xCoordinateName / 2}
-                                        y={dot.yCoordinateName / 2 + 1}
-                                        textAnchor='middle'
-                                        dominantBaseline='middle'
-                                        fill={dot.nameColor}
-                                        fontSize={dot.nameSize}
+                                {dot.visible == 1 &&
+                                    <svg
+                                        className='vector-svg'
+                                        width={`${width || '0'}`}
+                                        height={`${height || '0'}`}
+                                        viewBox={`0 0 ${width || '0'} ${height || '0'}`}
+                                        style={{ transform: `translateX(${dot?.xCoordinate || 0}px) translateY(${dot?.yCoordinate || 0}px) translateZ(${dot?.zCoordinate || 0}px)` }}
                                     >
-                                        {dot.nameVisible === 1 ? dot.name : ''}
-                                    </text>
-                                </svg>
+                                        <path
+                                            d={`M ${width / 2} ${width / 2 - radius} A ${radius} ${radius} 0 1 1 ${width / 2 - 0.1} ${width / 2 - radius} Z`}
+                                            // d={`M ${(width - size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height + size) / 2} L ${(width - size) / 2} ${(height + size) / 2} Z`}
+                                            fill={dot.color || '#FFFFFF'}
+                                            stroke='#FFFFFF'
+                                            strokeWidth={dot.id == selectedDotId ? '1' : '0'}
+                                            vectorEffect='non-scaling-stroke'
+                                            filter={`url(#glow-${dot.id})`}
+
+                                            strokeLinecap={dot.id == selectedDotId ? 'round' : ''}
+                                            strokeDasharray={dot.id == selectedDotId ? '2 3' : ''}
+                                            className={dot.id == selectedDotId ? 'dashoffset' : ''}
+
+                                            onClick={() => setSelectedDotId(prev => {
+                                                if (prev && prev == dot.id) {
+                                                    return null;
+                                                } else {
+                                                    return dot.id;
+                                                }
+                                            })}
+                                        />
+                                        <text
+                                            x={dot.xCoordinateName / 2}
+                                            y={dot.yCoordinateName / 2 + 1}
+                                            textAnchor='middle'
+                                            dominantBaseline='middle'
+                                            fill={dot.nameColor}
+                                            fontSize={dot.nameSize}
+                                        >
+                                            {dot.nameVisible === 1 ? dot.name : ''}
+                                        </text>
+                                    </svg>
+                                }
+                                {dot.vectorVisible == 1 &&
+                                    <svg
+                                        className='dot-svg'
+                                        width={`${vectorLength || '0'}`}
+                                        height={`${height || '0'}`}
+                                        viewBox={`0 0 ${vectorLength || '0'} ${height || '0'}`}
+                                        style={{ transform: `rotateY(${xOz}deg) rotateZ(${Oxyz}deg) translateX(${vectorLength / 2}px)` }}
+                                    >
+                                        <path
+                                            d={`M 0 ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 4} L ${vectorLength} ${height / 2} L ${vectorLength - 8} ${height / 2 + 4} L ${vectorLength - 8} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
+                                            fill={dot.color || '#FFFFFF'}
+                                            stroke='#FFFFFF'
+                                            strokeWidth={dot.id == selectedDotId ? '1' : '0'}
+                                            vectorEffect='non-scaling-stroke'
+                                            filter={`url(#glow-${dot.id})`}
+
+                                            strokeLinecap={dot.id == selectedDotId ? 'round' : ''}
+                                            strokeDasharray={dot.id == selectedDotId ? '2 3' : ''}
+                                            className={dot.id == selectedDotId ? 'dashoffset' : ''}
+
+                                            onClick={() => setSelectedDotId(prev => {
+                                                if (prev && prev == dot.id) {
+                                                    return null;
+                                                } else {
+                                                    return dot.id;
+                                                }
+                                            })}
+                                        />
+                                        <text
+                                            x={dot.xCoordinateName / 2}
+                                            y={dot.yCoordinateName / 2 + 1}
+                                            textAnchor='middle'
+                                            dominantBaseline='middle'
+                                            fill={dot.nameColor}
+                                            fontSize={dot.nameSize}
+                                        >
+                                            {/* ---{dot.nameVisible === 1 ? dot.name : ''}--- */}
+                                        </text>
+                                    </svg>
+                                }
                             </React.Fragment>
-                        ) : null;
+                        )
                     })}
                 </div>
             </div>

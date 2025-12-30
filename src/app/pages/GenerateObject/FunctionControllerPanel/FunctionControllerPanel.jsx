@@ -7,6 +7,7 @@ export default function FunctionControllerPanel({
     selectedFace,
     selectedFaceId,
     openedFaceId,
+    updateFace,
     dots,
     setDots,
     selectedDotId,
@@ -17,22 +18,28 @@ export default function FunctionControllerPanel({
     collapseController,
     swapController,
     hexRgbaToPercent,
+    handleShowCoordinateAxes,
     showCoordinateAxes
 }) {
-    const [dotsOfFunction, setDotsOfFunction] = useState({ A: '', B: '', C: '' });
     const [groupFacesDotsVectors, setGroupFacesDotsVectors] = useState([]);
 
-    const toggleDotsOfFunction = (dotId) => {
-        setDotsOfFunction(prev => {
-            if (prev && prev == dotId) {
-                return null;
-            } else {
-                return dotId;
-            }
-        });
+    const getEquationString = (A, B, C) => {
+        const AB = { x: B.x - A.x, y: B.y - A.y, z: B.z - A.z };
+        const AC = { x: C.x - A.x, y: C.y - A.y, z: C.z - A.z };
+        const n = {
+            x: (AB.y * AC.z) - (AC.y * AB.z),
+            y: (AB.z * AC.x) - (AC.z * AB.x),
+            z: (AB.x * AC.y) - (AC.x * AB.y),
+        }
+        const fA = (n.x / 10000)?.toFixed(3);
+        const fB = (n.y / 10000)?.toFixed(3);
+        const fC = (n.z / 10000)?.toFixed(3);
+        const fD = ((-fA * A.x - fB * A.y - fC * A.z) / 10000)?.toFixed(3);
+        const f = `${getString(fA, 1)}x ${getString(fB, 0)}y ${getString(fC, 0)}z ${getString(fD, 0)} = 0`;
+        return f;
     };
 
-    const getEquationString = (A, B, C) => {
+    const getEquationWallString = (A, B, C) => {
         const AB = { x: B.x - A.x, y: B.y - A.y, z: B.z - A.z };
         const AC = { x: C.x - A.x, y: C.y - A.y, z: C.z - A.z };
         const n = {
@@ -44,13 +51,7 @@ export default function FunctionControllerPanel({
         const fB = n.y;
         const fC = n.z;
         const fD = -fA * A.x - fB * A.y - fC * A.z;
-        const f = `${getString(fA, 1)}x ${getString(fB, 0)}y ${getString(fC, 0)}z ${getString(fD, 0)} = 0`;
-        const FaceFunction = {
-            A: fA,
-            B: fB,
-            C: fC,
-            D: fD,
-        }
+        const f = `x/(${((-1) * fD / fA)?.toFixed(3)}) + y/(${((-1) * fD / fB)?.toFixed(3)}) + z/(${((-1) * fD / fC)?.toFixed(3)}) (${((-1) * fD / fD)?.toFixed(3)}) = 0`;
         return f;
     };
 
@@ -62,6 +63,7 @@ export default function FunctionControllerPanel({
             y: (AB.z * AC.x) - (AC.z * AB.x),
             z: (AB.x * AC.y) - (AC.x * AB.y),
         }
+        console.log('n', n);
         const fA = n.x;
         const fB = n.y;
         const fC = n.z;
@@ -92,21 +94,34 @@ export default function FunctionControllerPanel({
 
     const getAngle = (axe, points) => {
         const FaceFunction = getEquationObject(points[0], points[1], points[2]);
-        console.log('FaceFunction', FaceFunction);
-        const VectorLength = getVectorLength(FaceFunction);
-        console.log('LengthXYZ', FaceFunction.A, FaceFunction.B, FaceFunction.C);
 
-        let Angle = 0;
-        if (axe == 'y' && VectorLength != 0) {
-            Angle = Math.atan(FaceFunction.A / FaceFunction.C) * 180 / Math.PI;
-        } else if (axe == 'x' && VectorLength != 0) {
-            // Angle = Math.atan(FaceFunction.B / (Math.sqrt((FaceFunction.A * FaceFunction.A) + (FaceFunction.C) * (FaceFunction.C)) + 0.000001) * (Math.abs(FaceFunction.D) / FaceFunction.D)) * 180 / Math.PI;
-            Angle = Math.atan(FaceFunction.B / (getLengthAxe(FaceFunction.A, FaceFunction.C) + 0.000001) * (Math.abs(FaceFunction.D) / FaceFunction.D)) * 180 / Math.PI;
-        } else return 0;
-        console.log('Angle', Angle);
+        // let Angle = 0;
+        // if (axe == 'y' && VectorLength != 0) {
+        //     Angle = Math.atan(FaceFunction.A / FaceFunction.C) * 180 / Math.PI;
+        // } else if (axe == 'x' && VectorLength != 0) {
+        //     // Angle = Math.atan(FaceFunction.B / (Math.sqrt((FaceFunction.A * FaceFunction.A) + (FaceFunction.C) * (FaceFunction.C)) + 0.000001) * (Math.abs(FaceFunction.D) / FaceFunction.D)) * 180 / Math.PI;
+        //     Angle = Math.atan(FaceFunction.B / (getLengthAxe(FaceFunction.A, FaceFunction.C) + 0.000001) * (Math.abs(FaceFunction.D) / FaceFunction.D)) * 180 / Math.PI;
+        // } else return 0;
+        // console.log('Angle', Angle);
 
-        return Angle;
-        return Angle?.toFixed(2);
+        const D = FaceFunction.D;
+        const X = FaceFunction.A / (D == 0 ? 0.000001 : -D);
+        const Y = FaceFunction.B / (D == 0 ? 0.000001 : -D);
+        const Z = FaceFunction.C / (D == 0 ? 0.000001 : -D);
+        const underY = Math.sqrt(X * X + Z * Z);
+        // const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z);
+        let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
+        xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
+        xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
+        xOz = (Z < 0 && X >= 0) ? 0 - xOz : xOz;
+        xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz
+        xOz = (X == 0) ? (Z == 0 ? 90 : (Z > 0 ? 0 : 180)) : xOz + 90;
+        console.log('=========== xOz ===========', xOz);
+        const Oxyz = (underY == 0) ? 90 : Math.atan(Y / underY) * 180 / Math.PI;
+        console.log('=========== Oxyz ===========', Oxyz);
+
+        return axe == 'y' ? xOz
+            : (axe == 'x' ? (Y >= 0 ? 0 - Math.abs(Oxyz) : Math.abs(Oxyz)) : 0);
     };
 
     const addFace = () => {
@@ -132,7 +147,7 @@ export default function FunctionControllerPanel({
         ]);
     };
 
-    const updateFace = (faceId) => {
+    const updateFaceFunction = (faceId) => {
         const relatedDots = groupFacesDotsVectors?.find(g => g.faceId == faceId);
         console.log('relatedDots', relatedDots);
         if (!relatedDots || !relatedDots.dotA || !relatedDots.dotB || !relatedDots.dotC) {
@@ -157,6 +172,7 @@ export default function FunctionControllerPanel({
                 face.id === faceId
                     ? {
                         ...face,
+                        name: getEquationString(dotsLocation[0], dotsLocation[1], dotsLocation[2]),
                         width: 500,
                         height: 500,
                         shape: '0,0 500,0 500,500 0,500',
@@ -164,7 +180,7 @@ export default function FunctionControllerPanel({
                             { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 500,0 500,500 0,500', visible: 1 },
                             { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', dotsLocation), visible: 1 },
                             { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', dotsLocation), visible: 1 },
-                            { id: crypto.randomUUID(), type: 'translateZ', value: '150', visible: 1 },
+                            // { id: crypto.randomUUID(), type: 'translateZ', value: '80', visible: 1 },
 
                             // { id: crypto.randomUUID(), type: 'translateZ', value: '86.9789933327', visible: 1 },
                             // { id: crypto.randomUUID(), type: 'translateX', value: '-100', visible: 1 },
@@ -227,7 +243,7 @@ export default function FunctionControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(face.color || '#FFFFFFFF') || 1 }}
                             />
-                            <h3>{face.name}</h3>
+                            <h3 title={face.name}>{face.name}</h3>
                             <div className='btns'>
                                 <button className={`btn-click ${selectedFaceId == face.id ? 'selected' : ''}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
                                 <div className='collapse-hidden'>
@@ -239,10 +255,6 @@ export default function FunctionControllerPanel({
                                 </div>
                             </div>
                         </div>
-
-                        <div>{dotsOfFunction?.A}</div>
-                        <div>{dotsOfFunction?.B}</div>
-                        <div>{dotsOfFunction?.C}</div>
 
                         <div className='function-dots-vector'>
                             <select
@@ -308,20 +320,31 @@ export default function FunctionControllerPanel({
                                     <option key={index} value={dot.id} className='option'>{dot.name}</option>
                                 ))}
                             </select>
-                            <button className='btn' onClick={() => updateFace(face.id)}>SUBMIT</button>
+                            <button className='btn' onClick={() => updateFaceFunction(face.id)}>MOVE</button>
+                            <button className='btn' onClick={() => updateFaceFunction(face.id)}>CUT</button>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <div>{getEquationString({ x: 150, y: -20, z: 20 }, { x: 20, y: -200, z: 20 }, { x: 20, y: -20, z: 250 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 150, y: -20, z: 20 }, { x: 20, y: -200, z: 20 }, { x: 20, y: -20, z: 250 }))}</div>
+            {/* <div>ABC</div>
+            <div>(150,-40,40) (40,-200,40) (40,-40,250)</div>
+            <div>{getEquationString({ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 })}</div>
+            <div>{getEquationWallString({ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 })}</div>
+            <div>{getVectorLength(getEquationObject({ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 }))}</div>
+
+            <div>DEF</div>
             <div>{getEquationString({ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 })}</div>
+            <div>{getEquationWallString({ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 })}</div>
             <div>{getVectorLength(getEquationObject({ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 }))}</div>
+
+            <div>GHI</div>
             <div>{getEquationString({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }))}</div>
-            <div>{getEquationString({ x: 1, y: 0, z: 0 }, { x: 0, y: 2, z: 0 }, { x: 0, y: 0, z: 3 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 1, y: 0, z: 0 }, { x: 0, y: 2, z: 0 }, { x: 0, y: 0, z: 3 }))}</div>
+            <div>{getEquationWallString({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 })}</div>
+            <div>{getVectorLength(getEquationObject({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }))}</div> */}
+
+            {/* <div>{getEquationString({ x: 1, y: 0, z: 0 }, { x: 0, y: 2, z: 0 }, { x: 0, y: 0, z: 3 })}</div>
+            <div>{getVectorLength(getEquationObject({ x: 1, y: 0, z: 0 }, { x: 0, y: 2, z: 0 }, { x: 0, y: 0, z: 3 }))}</div> */}
         </div >
     )
 }
