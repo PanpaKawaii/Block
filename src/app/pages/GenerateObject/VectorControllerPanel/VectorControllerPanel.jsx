@@ -1,6 +1,6 @@
-import './DotControllerPanel.css';
+import './VectorControllerPanel.css';
 
-export default function DotControllerPanel({
+export default function VectorControllerPanel({
     setFaces,
     selectedFace,
     dots,
@@ -84,9 +84,9 @@ export default function DotControllerPanel({
     };
 
     return (
-        <div className={`dot-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'dot' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
+        <div className={`vector-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'vector' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Dot Controller</h2>
+                <h2>Vector Controller</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
@@ -101,33 +101,32 @@ export default function DotControllerPanel({
             </div>
 
             <div className='list'>
-                {dots.map((dot) => (
-                    <div key={dot.id} className={`card ${dot.visible == 0 ? 'invisible' : ''} ${dot.id == selectedDotId ? 'dash-box' : ''}`}>
+                {dots.map((face) => (
+                    <div key={face.id} className={`card ${face.visible == 0 ? 'invisible' : ''} ${face.id == selectedDotId ? 'dash-box' : ''}`}>
                         <div className='header'>
                             <input
                                 type='color'
-                                value={dot.color?.slice(0, 7) || '#FFFFFF'}
-                                onChange={(e) => updateDot(dot.id, 'color', e.target.value?.toUpperCase())}
+                                value={face.color?.slice(0, 7) || '#FFFFFF'}
+                                onChange={(e) => updateDot(face.id, 'color', e.target.value?.toUpperCase())}
                                 className='input color-input'
-                                style={{ opacity: hexRgbaToPercent(dot.color || '#FFFFFFFF') || 1 }}
+                                style={{ opacity: hexRgbaToPercent(face.color || '#FFFFFFFF') || 1 }}
                             />
                             <div className='input-group'>
                                 <input
                                     type='text'
                                     placeholder=''
-                                    value={dot?.name || ''}
-                                    onChange={(e) => updateDot(dot?.id, 'name', e.target.value)}
+                                    value={face?.name || ''}
+                                    onChange={(e) => updateDot(face?.id, 'name', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='Name'>Name</label>
                             </div>
-                            {/* <div className='collapse-hidden'> */}
                             <div className='input-group'>
                                 <input
                                     type='number'
                                     placeholder=''
-                                    value={dot?.xCoordinate || 0}
-                                    onChange={(e) => updateDot(dot?.id, 'xCoordinate', e.target.value)}
+                                    value={face?.xCoordinate || 0}
+                                    onChange={(e) => updateDot(face?.id, 'xCoordinate', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='X'>X</label>
@@ -136,8 +135,8 @@ export default function DotControllerPanel({
                                 <input
                                     type='number'
                                     placeholder=''
-                                    value={dot?.yCoordinate || 0}
-                                    onChange={(e) => updateDot(dot?.id, 'yCoordinate', e.target.value)}
+                                    value={face?.yCoordinate || 0}
+                                    onChange={(e) => updateDot(face?.id, 'yCoordinate', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='Y'>Y</label>
@@ -146,18 +145,17 @@ export default function DotControllerPanel({
                                 <input
                                     type='number'
                                     placeholder=''
-                                    value={dot?.zCoordinate || 0}
-                                    onChange={(e) => updateDot(dot?.id, 'zCoordinate', e.target.value)}
+                                    value={face?.zCoordinate || 0}
+                                    onChange={(e) => updateDot(face?.id, 'zCoordinate', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='Z'>Z</label>
                             </div>
-                            {/* </div> */}
                             <div className='btns'>
-                                <button className={`btn-click ${selectedDotId == dot.id ? 'selected' : ''}`} onClick={() => toggleSelectDot(dot.id)}><i className='fa-solid fa-gear' /></button>
+                                <button className={`btn-click ${selectedDotId == face.id ? 'selected' : ''}`} onClick={() => toggleSelectDot(face.id)}><i className='fa-solid fa-gear' /></button>
                                 <div className='collapse-hidden'>
-                                    <button className={`btn-click ${dot.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(dot.id, 'visible', dot.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                    <button className='btn-click remove-click' onClick={() => removeDot(dot.id)}><i className='fa-solid fa-trash-can' /></button>
+                                    <button className={`btn-click ${face.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                    <button className='btn-click remove-click' onClick={() => removeDot(face.id)}><i className='fa-solid fa-trash-can' /></button>
                                 </div>
                             </div>
                         </div>

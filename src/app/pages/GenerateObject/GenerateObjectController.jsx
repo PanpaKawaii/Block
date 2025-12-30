@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
-import GenerateObject from './GenerateObject';
 import FaceController from './FaceController';
+import GenerateObject from './GenerateObject';
 
 import { FACEs } from '../../../mocks/DatabaseSample';
 
@@ -36,6 +36,9 @@ export default function GenerateObjectController() {
     const [dots, setDots] = useState([]);
     const [selectedDotId, setSelectedDotId] = useState(null);
     console.log('dots', dots);
+    const [vectors, setVectors] = useState([]);
+    const [selectedVectorId, setSelectedVectorId] = useState(null);
+    console.log('vectors', vectors);
 
     useEffect(() => {
         // console.log('useEffect START');
@@ -54,6 +57,7 @@ export default function GenerateObjectController() {
         translateX: 0,
         translateY: 0,
         translateZ: 0,
+        rotateZ: 0,
     });
 
     return (
@@ -61,6 +65,7 @@ export default function GenerateObjectController() {
             <GenerateObject
                 faces={faces}
                 dots={dots}
+                vectors={vectors}
                 sceneStyle={sceneStyle}
                 selectedFaceId={selectedFaceId}
                 setSelectedFaceId={setSelectedFaceId}
@@ -73,6 +78,8 @@ export default function GenerateObjectController() {
                 setFaces={setFaces}
                 dots={dots}
                 setDots={setDots}
+                vectors={vectors}
+                setVectors={setVectors}
                 sceneStyle={sceneStyle}
                 setSceneStyle={setSceneStyle}
                 selectedFaceId={selectedFaceId}

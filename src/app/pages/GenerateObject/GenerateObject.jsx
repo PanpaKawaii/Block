@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import CoordinateAxes from './CoordinateAxes/CoordinateAxes';
 import './GenerateObject.css';
 
-export default function GenerateObject({ faces, dots, sceneStyle, selectedFaceId, setSelectedFaceId, selectedDotId, setSelectedDotId, showCoordinateAxes }) {
+export default function GenerateObject({ faces, dots, vectors, sceneStyle, selectedFaceId, setSelectedFaceId, selectedDotId, setSelectedDotId, showCoordinateAxes }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);
     const dragging = useRef(false);
@@ -52,7 +52,7 @@ export default function GenerateObject({ faces, dots, sceneStyle, selectedFaceId
             <div
                 ref={containerRef}
                 className='scene-object'
-                style={{ transform: `scale(${sceneStyle?.scale || 1}) translateX(${sceneStyle?.translateX || 0}px) translateY(${sceneStyle?.translateY || 0}px) translateZ(${sceneStyle?.translateZ || 0}px)` }}
+                style={{ transform: `scale(${sceneStyle?.scale || 1}) translateX(${sceneStyle?.translateX || 0}px) translateY(${sceneStyle?.translateY || 0}px) translateZ(${sceneStyle?.translateZ || 0}px) rotateZ(${-sceneStyle?.rotateZ || 0}deg)` }}
             >
                 <div
                     ref={objectRef}
@@ -62,7 +62,7 @@ export default function GenerateObject({ faces, dots, sceneStyle, selectedFaceId
                         const styleObj = {};
                         let polygonPoints = null;
 
-                        face.steps.forEach(step => {
+                        face.steps?.forEach(step => {
                             if ((step.type.startsWith('translate')
                                 || step.type.startsWith('rotate')
                                 || step.type == 'scale')

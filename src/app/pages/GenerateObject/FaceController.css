@@ -1,4 +1,4 @@
-.face-dot-function-controller-container {
+.face-dot-vector-function-controller-container {
     overflow-y: scroll;
     scrollbar-width: none;
     width: fit-content;
@@ -51,17 +51,17 @@
         }
     }
 
-    .faces-list {
+    .list {
         display: flex;
         flex-direction: column;
         gap: 8px;
 
-        .face-card {
+        .card {
             position: relative;
             padding: 8px;
             border-radius: 12px;
 
-            .face-header {
+            .header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -88,22 +88,22 @@
                         transition: all 0.5s ease;
                     }
 
-                    .btn-face {
+                    .btn-click {
                         min-width: 32px;
                         padding: 2px;
                         background: transparent;
                         font-size: 20px;
                         color: var(--secondary);
 
-                        &.selected-face,
-                        &.opened-face,
-                        &.visible-face,
-                        &.show-coordinate-axes-face {
+                        &.selected,
+                        &.opened-select,
+                        &.visible-select,
+                        &.show-coordinate-axes-select {
                             color: var(--text);
                             text-shadow: 0 0 8px var(--border-glow);
                         }
 
-                        &.remove-face {
+                        &.remove-click {
                             color: #dc3545;
                             text-shadow: 0 0 8px #dc354599;
                         }
@@ -187,9 +187,9 @@
             }
         }
 
-        .faces-list {
-            .face-card {
-                .face-header {
+        .list {
+            .card {
+                .header {
                     .btns {
                         .collapse-hidden {
                             max-width: 0px;
@@ -313,59 +313,7 @@
     }
 }
 
-.scene-controller-container {
-    top: 3vh;
-    right: 20px;
-
-    width: 800px;
-    max-width: 800px;
-    position: absolute;
-    transition: all 0.5s ease;
-
-    form {
-        display: flex;
-        gap: 8px;
-
-        .form-group {
-            display: flex;
-
-            button {
-                padding: 0 8px;
-                background: transparent;
-                border: none;
-                box-shadow: none;
-            }
-
-            .input-group {
-                flex: 1;
-                position: relative;
-
-                input {
-                    width: 100%;
-                    font-size: 16px;
-                    text-align: center;
-                }
-
-                label {
-                    padding: 0 4px;
-                    position: absolute;
-                    top: -10px;
-                    left: 50%;
-                    transform: translate(-50%);
-                    background: var(--background-1);
-                    border: 2px solid var(--border);
-                    border-radius: 10px;
-                    font-size: 12px;
-                    font-weight: bold;
-                    transition: 0.2s ease;
-                    pointer-events: none;
-                }
-            }
-        }
-    }
-}
-
-.face-dot-function-controller-container {
+.face-dot-vector-function-controller-container {
     &.size_1_1 {
         height: 88vh;
         top: 10vh;

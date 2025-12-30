@@ -1,0 +1,50 @@
+.scene-controller-container {
+    top: 3vh;
+    right: 20px;
+    width: 800px;
+    max-width: 800px;
+    position: absolute;
+    transition: all 0.5s ease;
+
+    form {
+        display: flex;
+        gap: 8px;
+
+        .form-group {
+            display: flex;
+
+            button {
+                padding: 0 8px;
+                background: transparent;
+                border: none;
+                box-shadow: none;
+            }
+
+            .input-group {
+                flex: 1;
+                position: relative;
+
+                input {
+                    width: 100%;
+                    font-size: 16px;
+                    text-align: center;
+                }
+
+                label {
+                    padding: 0 4px;
+                    position: absolute;
+                    top: -10px;
+                    left: 50%;
+                    transform: translate(-50%);
+                    background: var(--background-1);
+                    border: 2px solid var(--border);
+                    border-radius: 10px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    transition: 0.2s ease;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+}

@@ -1,11 +1,30 @@
 import { useState } from 'react';
+// import { Link } from 'react-router-dom';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
-import './FaceController.css';
-import { Link } from 'react-router-dom';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
+import FunctionControllerPanel from './FunctionControllerPanel/FunctionControllerPanel.jsx';
+import SceneController from './SceneController/SceneController.jsx';
+import VectorControllerPanel from './VectorControllerPanel/VectorControllerPanel.jsx';
 
-export default function FaceController({ faces, setFaces, dots, setDots, sceneStyle, setSceneStyle, selectedFaceId, setSelectedFaceId, selectedDotId, setSelectedDotId, showCoordinateAxes, setShowCoordinateAxes }) {
+import './FaceController.css';
+
+export default function FaceController({
+    faces,
+    setFaces,
+    dots,
+    setDots,
+    vectors,
+    setVectors,
+    sceneStyle,
+    setSceneStyle,
+    selectedFaceId,
+    setSelectedFaceId,
+    selectedDotId,
+    setSelectedDotId,
+    showCoordinateAxes,
+    setShowCoordinateAxes
+}) {
     const handleShowCoordinateAxes = (faceId) => {
         setShowCoordinateAxes(prev => {
             if (prev.includes(faceId)) {
@@ -16,9 +35,9 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
         });
     };
 
-    const [toggleStepFunction, setToggleStepFunction] = useState('step');
+    const [toggleStepFunction, setToggleStepFunction] = useState('face');
     const swapController = () => {
-        setToggleStepFunction(p => p == 'step' ? 'function' : 'step');
+        setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'vector' : (p == 'vector' ? 'function' : 'face')));
         setOpenedFaceId([]);
     };
 
@@ -221,90 +240,16 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
 
     return (
         <>
-            <div className='scene-controller-container'>
-                <form>
-                    <button type='button' className={`btn btn-xyz ${!showCoordinateAxes.includes('Oxyz') && 'off'}`} onClick={() => handleShowCoordinateAxes('Oxyz')}>Oxyz</button>
-                    <div className='form-group'>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) - 0.5), 10)) }))}>
-                            <i className='fa-solid fa-minus' />
-                        </button>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={(sceneStyle.scale * 100)?.toFixed(0) || 100}
-                                onChange={(e) => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(e.target.value / 100), 10)) }))}
-                                className='input'
-                            />
-                            <label htmlFor='Zoom'>Zoom</label>
-                        </div>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) + 0.5), 10)) }))}>
-                            <i className='fa-solid fa-plus' />
-                        </button>
-                    </div>
-                    <div className='form-group'>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) - 50), 1000)) }))}>
-                            <i className='fa-solid fa-chevron-left' />
-                        </button>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={sceneStyle.translateX || 0}
-                                onChange={(e) => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(e.target.value), 1000)) }))}
-                                className='input'
-                            />
-                            <label htmlFor='translateX'>Left/Right</label>
-                        </div>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) + 50), 1000)) }))}>
-                            <i className='fa-solid fa-chevron-right' />
-                        </button>
-                    </div>
-                    <div className='form-group'>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
-                            <i className='fa-solid fa-chevron-up' />
-                        </button>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={sceneStyle.translateY || 0}
-                                onChange={(e) => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(e.target.value), 500)) }))}
-                                className='input'
-                            />
-                            <label htmlFor='translateY'>Up/Down</label>
-                        </div>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
-                            <i className='fa-solid fa-chevron-down' />
-                        </button>
-                    </div>
-                    <div className='form-group'>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) + 50), 500)) }))}>
-                            <i className='fa-regular fa-circle-dot' />
-                        </button>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={sceneStyle.translateZ || 0}
-                                onChange={(e) => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(e.target.value), 500)) }))}
-                                className='input'
-                            />
-                            <label htmlFor='translateZ'>Forward/Backward</label>
-                        </div>
-                        <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) - 50), 500)) }))}>
-                            <i className='fa-regular fa-circle-xmark' />
-                        </button>
-                    </div>
-                    <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0, translateZ: 0 })}>
-                        <i className='fa-solid fa-arrows-rotate' />
-                    </button>
-                </form>
-            </div>
+            <SceneController
+                sceneStyle={sceneStyle}
+                setSceneStyle={setSceneStyle}
+                showCoordinateAxes={showCoordinateAxes}
+                handleShowCoordinateAxes={handleShowCoordinateAxes}
+            />
 
-            <div className={`face-controller-container face-dot-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'step' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
+            <div className={`face-controller-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'face' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
                 <div className='heading'>
-                    <h2>Step Controller</h2>
+                    <h2>Face Controller</h2>
                     <div className='control'>
                         <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                         <input
@@ -314,17 +259,17 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                             onChange={(e) => setFaces(JSON.parse(e.target.value))}
                             className='input json-output'
                         />
-                        <button className='btn add-btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
-                        <button className='btn add-btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
+                        <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
+                        <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
                     </div>
-                    {/* <button className='btn add-btn' onClick={changeUUID}><i className='fa-solid fa-file' /></button> */}
+                    {/* <button className='btn' onClick={changeUUID}><i className='fa-solid fa-file' /></button> */}
                     {/* <Link to='/' state={'5fa8b8df-595a-4f13-b808-7f58b404dd87'}><button className='btn'>/</button></Link> */}
                 </div>
 
-                <div className='faces-list'>
+                <div className='list'>
                     {faces.map((face) => (
-                        <div key={face.id} className={`face-card card ${face.visible == 0 && 'invisible'} ${face.id == selectedFaceId ? 'dash-box' : ''}`}>
-                            <div className='face-header'>
+                        <div key={face.id} className={`card ${face.visible == 0 ? 'invisible' : ''} ${face.id == selectedFaceId ? 'dash-box' : ''}`}>
+                            <div className='header'>
                                 <input
                                     type='color'
                                     value={face.color?.slice(0, 7) || '#FFFFFF'}
@@ -334,13 +279,13 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                                 />
                                 <h3>{face.name}</h3>
                                 <div className='btns'>
-                                    <button className={`btn-face ${selectedFaceId == face.id && 'selected-face'}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
+                                    <button className={`btn-click ${selectedFaceId == face.id ? 'selected' : ''}`} onClick={() => toggleSelectFace(face.id)}><i className='fa-solid fa-gear' /></button>
                                     <div className='collapse-hidden'>
-                                        <button className={`btn-face ${openedFaceId.includes(face.id) && 'opened-face'}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
-                                        <button className={`btn-face ${face.visible == 1 && 'visible-face'}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                        <button className={`btn-face ${showCoordinateAxes.includes(face.id) && 'show-coordinate-axes-face'}`} onClick={() => handleShowCoordinateAxes(face.id)}><i className='fa-solid fa-location-crosshairs' /></button>
-                                        <button className='btn-face' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
-                                        <button className='btn-face remove-face' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button>
+                                        <button className={`btn-click ${openedFaceId.includes(face.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
+                                        <button className={`btn-click ${face.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                        <button className={`btn-click ${showCoordinateAxes.includes(face.id) ? 'show-coordinate-axes-select' : ''}`} onClick={() => handleShowCoordinateAxes(face.id)}><i className='fa-solid fa-location-crosshairs' /></button>
+                                        <button className='btn-click' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
+                                        <button className='btn-click remove-click' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button>
                                     </div>
                                 </div>
                             </div>
@@ -348,8 +293,8 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                             {openedFaceId.includes(face.id) &&
                                 <>
                                     <div className='steps'>
-                                        {face.steps.map((step) => (
-                                            <div key={step.id} className={`step-row ${step.visible == 0 && 'invisible'}`}>
+                                        {face.steps?.map((step) => (
+                                            <div key={step.id} className={`step-row ${step.visible == 0 ? 'invisible' : ''}`}>
                                                 <select
                                                     value={step.type}
                                                     onChange={(e) => updateStep(face.id, step.id, e.target.value, step.value, step.visible)}
@@ -373,7 +318,7 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                                                 />
 
                                                 <div className='btns'>
-                                                    <button className={`btn-step ${step.visible == 1 && 'visible-step'}`} onClick={() => updateStep(face.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                                    <button className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(face.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                                     <button className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-ban' /></button>
                                                 </div>
                                             </div>
@@ -391,6 +336,7 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
             </div>
 
             <DotControllerPanel
+                setFaces={setFaces}
                 selectedFace={selectedFace}
                 dots={dots}
                 setDots={setDots}
@@ -404,7 +350,41 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                 hexRgbaToPercent={hexRgbaToPercent}
             />
 
-            <div className={`sub-face-controller-container face-dot-function-controller-container card ${selectedFace ? 'size_2_1' : 'size_2_2'}`}>
+            <VectorControllerPanel
+                setFaces={setFaces}
+                selectedFace={selectedFace}
+                dots={dots}
+                setDots={setDots}
+                selectedDotId={selectedDotId}
+                setSelectedDotId={setSelectedDotId}
+                selectedDot={selectedDot}
+                toggleMenu={toggleMenu}
+                toggleStepFunction={toggleStepFunction}
+                collapseController={collapseController}
+                swapController={swapController}
+                hexRgbaToPercent={hexRgbaToPercent}
+            />
+
+            <FunctionControllerPanel
+                faces={faces}
+                setFaces={setFaces}
+                selectedFace={selectedFace}
+                selectedFaceId={selectedFaceId}
+                openedFaceId={openedFaceId}
+                dots={dots}
+                setDots={setDots}
+                selectedDotId={selectedDotId}
+                setSelectedDotId={setSelectedDotId}
+                selectedDot={selectedDot}
+                toggleMenu={toggleMenu}
+                toggleStepFunction={toggleStepFunction}
+                collapseController={collapseController}
+                swapController={swapController}
+                hexRgbaToPercent={hexRgbaToPercent}
+                showCoordinateAxes={showCoordinateAxes}
+            />
+
+            <div className={`sub-face-controller-container face-dot-vector-function-controller-container card ${selectedFace ? 'size_2_1' : 'size_2_2'}`}>
                 <div className='heading'>
                     <h2>Face Detail</h2>
                     <button className='btn-close' onClick={() => setSelectedFaceId(null)}><i className='fa-regular fa-circle-xmark' /></button>
@@ -460,7 +440,7 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                             <label htmlFor='Height'>Height</label>
                         </div>
                     </div>
-                    <div className={`form-group form-name ${selectedFace?.nameVisible == 0 && 'invisible'}`}>
+                    <div className={`form-group form-name ${selectedFace?.nameVisible == 0 ? 'invisible' : ''}`}>
                         <div className='input-group flex-2'>
                             <input
                                 type='text'
@@ -481,9 +461,9 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                             />
                             <label htmlFor='nameSize'>Name Size</label>
                         </div>
-                        <button type='button' className={`btn-name ${selectedFace?.nameVisible == 1 && 'visible-name'}`} onClick={() => updateFace(selectedFace?.id, 'nameVisible', selectedFace?.nameVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                        <button type='button' className={`btn-name ${selectedFace?.nameVisible == 1 ? 'visible-name' : ''}`} onClick={() => updateFace(selectedFace?.id, 'nameVisible', selectedFace?.nameVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
-                    <div className={`form-group form-border ${selectedFace?.borderVisible == 0 && 'invisible'}`}>
+                    <div className={`form-group form-border ${selectedFace?.borderVisible == 0 ? 'invisible' : ''}`}>
                         <div className='input-group'>
                             <input
                                 type='number'
@@ -494,9 +474,9 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                             />
                             <label htmlFor='borderWidth'>Border Width</label>
                         </div>
-                        <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 && 'visible-border'}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                        <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 ? 'visible-border' : ''}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
-                    <div className={`form-group form-glow ${selectedFace?.glowVisible == 0 && 'invisible'}`}>
+                    <div className={`form-group form-glow ${selectedFace?.glowVisible == 0 ? 'invisible' : ''}`}>
                         <div className='input-group'>
                             <input
                                 type='number'
@@ -507,7 +487,7 @@ export default function FaceController({ faces, setFaces, dots, setDots, sceneSt
                             />
                             <label htmlFor='glow'>Glow</label>
                         </div>
-                        <button type='button' className={`btn-glow ${selectedFace?.glowVisible == 1 && 'visible-glow'}`} onClick={() => updateFace(selectedFace?.id, 'glowVisible', selectedFace?.glowVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                        <button type='button' className={`btn-glow ${selectedFace?.glowVisible == 1 ? 'visible-glow' : ''}`} onClick={() => updateFace(selectedFace?.id, 'glowVisible', selectedFace?.glowVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
                     <div className='form-group form-shape'>
                         <div className='input-group'>
