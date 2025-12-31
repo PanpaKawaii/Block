@@ -257,14 +257,14 @@ export default function GenerateObject({
                             </React.Fragment>
                         )
                     })}
-                    {vectors.map(dot => {
+                    {vectors.map(vector => {
                         const height = 20;
-                        const xA = dot.xCoordinateA;
-                        const yA = dot.yCoordinateA;
-                        const zA = dot.zCoordinateA;
-                        const xB = dot.xCoordinateB;
-                        const yB = dot.yCoordinateB;
-                        const zB = dot.zCoordinateB;
+                        const xA = vector.xCoordinateA;
+                        const yA = vector.yCoordinateA;
+                        const zA = vector.zCoordinateA;
+                        const xB = vector.xCoordinateB;
+                        const yB = vector.yCoordinateB;
+                        const zB = vector.zCoordinateB;
                         const xAB = xB - xA;
                         const yAB = yB - yA;
                         const zAB = zB - zA;
@@ -278,10 +278,10 @@ export default function GenerateObject({
                         xOz = (xAB == 0) ? (zAB == 0 ? 0 : (zAB > 0 ? -90 : 90)) : xOz;
                         const Oxyz = (underY == 0) ? (yAB >= 0 ? 90 : -90) : Math.atan(yAB / underY) * 180 / Math.PI;
                         return (
-                            <React.Fragment key={dot.id}>
-                                {dot.visible == 1 &&
+                            <React.Fragment key={vector.id}>
+                                {vector.visible == 1 &&
                                     <svg
-                                        className='dot-svg'
+                                        className='vector-svg'
                                         width={`${vectorLength || '0'}`}
                                         height={`${height || '0'}`}
                                         viewBox={`0 0 ${vectorLength || '0'} ${height || '0'}`}
@@ -289,21 +289,21 @@ export default function GenerateObject({
                                     >
                                         <path
                                             d={`M 0 ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 4} L ${vectorLength} ${height / 2} L ${vectorLength - 8} ${height / 2 + 4} L ${vectorLength - 8} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
-                                            fill={dot.color || '#FFFFFF'}
+                                            fill={vector.color || '#FFFFFF'}
                                             stroke='#FFFFFF'
-                                            strokeWidth={dot.id == selectedVectorId ? '1' : '0'}
+                                            strokeWidth={vector.id == selectedVectorId ? '1' : '0'}
                                             vectorEffect='non-scaling-stroke'
-                                            filter={`url(#glow-${dot.id})`}
+                                            filter={`url(#glow-${vector.id})`}
 
-                                            strokeLinecap={dot.id == selectedVectorId ? 'round' : ''}
-                                            strokeDasharray={dot.id == selectedVectorId ? '2 3' : ''}
-                                            className={dot.id == selectedVectorId ? 'dashoffset' : ''}
+                                            strokeLinecap={vector.id == selectedVectorId ? 'round' : ''}
+                                            strokeDasharray={vector.id == selectedVectorId ? '2 3' : ''}
+                                            className={vector.id == selectedVectorId ? 'dashoffset' : ''}
 
                                             onClick={() => setSelectedVectorId(prev => {
-                                                if (prev && prev == dot.id) {
+                                                if (prev && prev == vector.id) {
                                                     return null;
                                                 } else {
-                                                    return dot.id;
+                                                    return vector.id;
                                                 }
                                             })}
                                         />
@@ -312,10 +312,10 @@ export default function GenerateObject({
                                             y='0'
                                             textAnchor='middle'
                                             dominantBaseline='middle'
-                                            fill={dot.nameColor}
-                                            fontSize={dot.nameSize}
+                                            fill={vector.nameColor}
+                                            fontSize={vector.nameSize}
                                         >
-                                            {dot.nameVisible === 1 ? dot.name : ''}
+                                            {vector.nameVisible === 1 ? vector.name : ''}
                                         </text>
                                     </svg>
                                 }

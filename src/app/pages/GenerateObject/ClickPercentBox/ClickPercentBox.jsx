@@ -20,8 +20,8 @@ export default function ClickPercentBox({
         const x = Number((e.clientX - rect.left)?.toFixed(2));
         const y = Number((e.clientY - rect.top)?.toFixed(2));
 
-        const percentX = (x / rect.width) * 100;
-        const percentY = (y / rect.height) * 100;
+        const percentX = (x / (rect.width == 0 ? 0.000001 : rect.width)) * 100;
+        const percentY = (y / (rect.height == 0 ? 0.000001 : rect.height)) * 100;
 
         setPoints((prev) => [
             ...prev,

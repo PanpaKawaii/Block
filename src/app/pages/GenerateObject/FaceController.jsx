@@ -376,6 +376,8 @@ export default function FaceController({
                 setFaces={setFaces}
                 selectedFace={selectedFace}
                 selectedFaceId={selectedFaceId}
+                toggleSelectFace={toggleSelectFace}
+                toggleOpenFace={toggleOpenFace}
                 openedFaceId={openedFaceId}
                 addFace={addFace}
                 removeFace={removeFace}

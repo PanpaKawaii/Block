@@ -7,6 +7,8 @@ export default function FunctionControllerPanel({
     setFaces,
     selectedFace,
     selectedFaceId,
+    toggleSelectFace,
+    toggleOpenFace,
     openedFaceId,
     addFace,
     removeFace,
@@ -176,9 +178,9 @@ export default function FunctionControllerPanel({
         };
         console.log('dotG', dotG);
         const faceG = {
-            x: (FaceFunction.A / vectorLength2 * (-FaceFunction.D))?.toFixed(2),
-            y: (FaceFunction.B / vectorLength2 * (-FaceFunction.D))?.toFixed(2),
-            z: (FaceFunction.C / vectorLength2 * (-FaceFunction.D))?.toFixed(2),
+            x: (FaceFunction.A / (vectorLength2 == 0 ? 0.000001 : vectorLength2) * (-FaceFunction.D))?.toFixed(2),
+            y: (FaceFunction.B / (vectorLength2 == 0 ? 0.000001 : vectorLength2) * (-FaceFunction.D))?.toFixed(2),
+            z: (FaceFunction.C / (vectorLength2 == 0 ? 0.000001 : vectorLength2) * (-FaceFunction.D))?.toFixed(2),
         };
         console.log('faceG', faceG);
         setDots((prev) => [
@@ -189,7 +191,8 @@ export default function FunctionControllerPanel({
                 xCoordinate: dotG.x,
                 yCoordinate: dotG.y,
                 zCoordinate: dotG.z,
-                name: `G(${dotG.x},${dotG.y},${dotG.z})`,
+                // name: `G(${dotG.x},${dotG.y},${dotG.z})`,
+                name: `Gp`,
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
@@ -205,7 +208,8 @@ export default function FunctionControllerPanel({
                 xCoordinate: faceG.x,
                 yCoordinate: faceG.y,
                 zCoordinate: faceG.z,
-                name: `G(${faceG.x},${faceG.y},${faceG.z})`,
+                // name: `G(${faceG.x},${faceG.y},${faceG.z})`,
+                name: `Gf`,
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
