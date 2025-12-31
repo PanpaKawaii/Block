@@ -32,6 +32,7 @@ export default function VectorControllerPanel({
                 nameColor: '#80FCFF',
                 visible: 1,
                 nameVisible: 1,
+                vectorVisible: 1,
             }
         ]);
     };

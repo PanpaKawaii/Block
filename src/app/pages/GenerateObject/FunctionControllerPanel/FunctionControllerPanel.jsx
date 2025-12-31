@@ -7,12 +7,11 @@ export default function FunctionControllerPanel({
     selectedFace,
     selectedFaceId,
     openedFaceId,
+    addFace,
+    removeFace,
     updateFace,
     dots,
     setDots,
-    selectedDotId,
-    setSelectedDotId,
-    selectedDot,
     toggleMenu,
     toggleStepFunction,
     collapseController,
@@ -92,9 +91,7 @@ export default function FunctionControllerPanel({
         return Number(Math.sqrt((lengthA * lengthA) + (lengthB * lengthB)));
     };
 
-    const getAngle = (axe, points) => {
-        const FaceFunction = getEquationObject(points[0], points[1], points[2]);
-
+    const getAngle = (axe, FaceFunction) => {
         // let Angle = 0;
         // if (axe == 'y' && VectorLength != 0) {
         //     Angle = Math.atan(FaceFunction.A / FaceFunction.C) * 180 / Math.PI;
@@ -109,7 +106,7 @@ export default function FunctionControllerPanel({
         const Y = FaceFunction.B / (D == 0 ? 0.000001 : -D);
         const Z = FaceFunction.C / (D == 0 ? 0.000001 : -D);
         const underY = Math.sqrt(X * X + Z * Z);
-        // const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z);
+        const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z);
         let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
         xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
         xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
@@ -121,30 +118,8 @@ export default function FunctionControllerPanel({
         console.log('=========== Oxyz ===========', Oxyz);
 
         return axe == 'y' ? xOz
-            : (axe == 'x' ? (Y >= 0 ? 0 - Math.abs(Oxyz) : Math.abs(Oxyz)) : 0);
-    };
-
-    const addFace = () => {
-        setFaces((prev) => [
-            ...prev,
-            {
-                id: crypto.randomUUID(), shape: '0,0 500,0 500,500 0,500', name: `Face ${prev.length + 1}`, width: 500, height: 500, glow: 4, nameSize: 12, borderWidth: 2, color: '#68FCFF33', nameColor: '#80FCFFFF', borderColor: '#68FCFFFF', visible: 1, nameVisible: 1, borderVisible: 1, glowVisible: 1,
-                steps: [
-                    { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 500,0 500,500 0,500', visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', [{ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 }]), visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', [{ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 }]), visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'translateZ', value: '150', visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'translateX', value: '-100', visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', [{ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 }]), visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', [{ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 }]), visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'translateZ', value: '86.9789933327', visible: 1 },
-                    // { id: crypto.randomUUID(), type: 'translateX', value: '-100', visible: 1 },
-                    { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', [{ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }]), visible: 1 },
-                    { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', [{ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }]), visible: 1 },
-                    { id: crypto.randomUUID(), type: 'translateZ', value: '-74', visible: 1 },
-                ]
-            },
-        ]);
+            : (axe == 'x' ? (Y >= 0 ? 0 - Math.abs(Oxyz) : Math.abs(Oxyz))
+                : (axe == 'z' ? 1 / vectorLength : 0));
     };
 
     const updateFaceFunction = (faceId) => {
@@ -167,6 +142,11 @@ export default function FunctionControllerPanel({
         ];
         console.log('dotsLocation', dotsLocation);
 
+        const FaceFunction = getEquationObject(dotsLocation[0], dotsLocation[1], dotsLocation[2]);
+        console.log('FaceFunction', FaceFunction);
+        const vectorLength2 = (FaceFunction.A * FaceFunction.A) + (FaceFunction.B * FaceFunction.B) + (FaceFunction.C * FaceFunction.C);
+        console.log('vectorLength2', vectorLength2);
+
         setFaces((prev) =>
             prev.map((face) =>
                 face.id === faceId
@@ -178,41 +158,63 @@ export default function FunctionControllerPanel({
                         shape: '0,0 500,0 500,500 0,500',
                         steps: [
                             { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 500,0 500,500 0,500', visible: 1 },
-                            { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', dotsLocation), visible: 1 },
-                            { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', dotsLocation), visible: 1 },
-                            // { id: crypto.randomUUID(), type: 'translateZ', value: '80', visible: 1 },
-
-                            // { id: crypto.randomUUID(), type: 'translateZ', value: '86.9789933327', visible: 1 },
-                            // { id: crypto.randomUUID(), type: 'translateX', value: '-100', visible: 1 },
+                            { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', FaceFunction), visible: 1 },
+                            { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', FaceFunction), visible: 1 },
+                            { id: crypto.randomUUID(), type: 'translateZ', value: getAngle('z', FaceFunction), visible: 1 },
                         ]
                     }
                     : face
             )
         );
 
-        // setFaces((prev) =>
-        //     prev.map((face) =>
-        //         face.id === faceId
-        //             ? {
-        //                 ...face,
-        //                 steps: [
-        //                     { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 500,0 500,500 0,500', visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', [{ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 }]), visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', [{ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 }]), visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'translateZ', value: '150', visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'translateX', value: '-100', visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', [{ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 }]), visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', [{ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 }]), visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'translateZ', value: '86.9789933327', visible: 1 },
-        //                     // { id: crypto.randomUUID(), type: 'translateX', value: '-100', visible: 1 },
-        //                     { id: crypto.randomUUID(), type: 'rotateY', value: getAngle('y', [{ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }]), visible: 1 },
-        //                     { id: crypto.randomUUID(), type: 'rotateX', value: getAngle('x', [{ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }]), visible: 1 },
-        //                     { id: crypto.randomUUID(), type: 'translateZ', value: '-74', visible: 1 },
-        //                 ]
-        //             }
-        //             : face
-        //     )
-        // );
+        const newId = crypto.randomUUID();
+        const dotG = {
+            x: ((dotA.xCoordinate + dotB.xCoordinate + dotC.xCoordinate) / 3)?.toFixed(2),
+            y: ((dotA.yCoordinate + dotB.yCoordinate + dotC.yCoordinate) / 3)?.toFixed(2),
+            z: ((dotA.zCoordinate + dotB.zCoordinate + dotC.zCoordinate) / 3)?.toFixed(2),
+        };
+        console.log('dotG', dotG);
+        const faceG = {
+            x: (FaceFunction.A / vectorLength2 * (-FaceFunction.D))?.toFixed(2),
+            y: (FaceFunction.B / vectorLength2 * (-FaceFunction.D))?.toFixed(2),
+            z: (FaceFunction.C / vectorLength2 * (-FaceFunction.D))?.toFixed(2),
+        };
+        console.log('faceG', faceG);
+        setDots((prev) => [
+            ...prev,
+            {
+                id: crypto.randomUUID(),
+                size: 4,
+                xCoordinate: dotG.x,
+                yCoordinate: dotG.y,
+                zCoordinate: dotG.z,
+                name: `G(${dotG.x},${dotG.y},${dotG.z})`,
+                nameSize: 12,
+                xCoordinateName: 0,
+                yCoordinateName: 0,
+                color: '#68FCFF',
+                nameColor: '#80FCFF',
+                visible: 1,
+                nameVisible: 1,
+                vectorVisible: 1,
+            },
+            {
+                id: crypto.randomUUID(),
+                size: 4,
+                xCoordinate: faceG.x,
+                yCoordinate: faceG.y,
+                zCoordinate: faceG.z,
+                name: `G(${faceG.x},${faceG.y},${faceG.z})`,
+                nameSize: 12,
+                xCoordinateName: 0,
+                yCoordinateName: 0,
+                color: '#68FCFF',
+                nameColor: '#80FCFF',
+                visible: 1,
+                nameVisible: 1,
+                vectorVisible: 1,
+            }
+        ]);
     };
 
     return (
@@ -250,7 +252,7 @@ export default function FunctionControllerPanel({
                                     <button className={`btn-click ${openedFaceId.includes(face.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenFace(face.id)}><i className='fa-solid fa-hand' /></button>
                                     <button className={`btn-click ${face.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                     <button className={`btn-click ${showCoordinateAxes.includes(face.id) ? 'show-coordinate-axes-select' : ''}`} onClick={() => handleShowCoordinateAxes(face.id)}><i className='fa-solid fa-location-crosshairs' /></button>
-                                    <button className='btn-click' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
+                                    {/* <button className='btn-click' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button> */}
                                     <button className='btn-click remove-click' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button>
                                 </div>
                             </div>
@@ -273,7 +275,7 @@ export default function FunctionControllerPanel({
                                 }}
                                 className='select'
                             >
-                                <option value={''} className='option'>None</option>
+                                <option value={''} className='option'>--</option>
                                 {dots.map((dot, index) => (
                                     <option key={index} value={dot.id} className='option'>{dot.name}</option>
                                 ))}
@@ -294,7 +296,7 @@ export default function FunctionControllerPanel({
                                 }}
                                 className='select'
                             >
-                                <option value={''} className='option'>None</option>
+                                <option value={''} className='option'>--</option>
                                 {dots.map((dot, index) => (
                                     <option key={index} value={dot.id} className='option'>{dot.name}</option>
                                 ))}
@@ -315,36 +317,38 @@ export default function FunctionControllerPanel({
                                 }}
                                 className='select'
                             >
-                                <option value={''} className='option'>None</option>
+                                <option value={''} className='option'>--</option>
                                 {dots.map((dot, index) => (
                                     <option key={index} value={dot.id} className='option'>{dot.name}</option>
                                 ))}
                             </select>
-                            <button className='btn' onClick={() => updateFaceFunction(face.id)}>MOVE</button>
-                            <button className='btn' onClick={() => updateFaceFunction(face.id)}>CUT</button>
+                            <select
+                                value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.vectorId || ''}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setGroupFacesDotsVectors(prev => {
+                                        const index = prev.findIndex(g => g.faceId == face.id);
+                                        if (index !== -1) {
+                                            const newArr = [...prev];
+                                            newArr[index] = { ...newArr[index], vectorId: value };
+                                            return newArr;
+                                        }
+                                        return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: '', vectorId: value, }];
+                                    });
+                                }}
+                                className='select'
+                            >
+                                <option value={''} className='option'>--</option>
+                                {dots.map((dot, index) => (
+                                    <option key={index} value={dot.id} className='option'>{dot.name}</option>
+                                ))}
+                            </select>
+                            <button className='btn' onClick={() => updateFaceFunction(face.id)}><i className='fa-solid fa-arrows-up-down-left-right' /></button>
+                            {/* <button className='btn' onClick={() => updateFaceFunction(face.id)}><i className='fa-solid fa-cut' /></button> */}
                         </div>
                     </div>
                 ))}
             </div>
-
-            {/* <div>ABC</div>
-            <div>(150,-40,40) (40,-200,40) (40,-40,250)</div>
-            <div>{getEquationString({ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 })}</div>
-            <div>{getEquationWallString({ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 150, y: -40, z: 40 }, { x: 40, y: -200, z: 40 }, { x: 40, y: -40, z: 250 }))}</div>
-
-            <div>DEF</div>
-            <div>{getEquationString({ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 })}</div>
-            <div>{getEquationWallString({ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 100, y: 0, z: 0 }, { x: 0, y: 200, z: 0 }, { x: 0, y: 0, z: 300 }))}</div>
-
-            <div>GHI</div>
-            <div>{getEquationString({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 })}</div>
-            <div>{getEquationWallString({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 100, y: -200, z: 0 }, { x: 100, y: 100, z: 100 }, { x: 0, y: 100, z: -200 }))}</div> */}
-
-            {/* <div>{getEquationString({ x: 1, y: 0, z: 0 }, { x: 0, y: 2, z: 0 }, { x: 0, y: 0, z: 3 })}</div>
-            <div>{getVectorLength(getEquationObject({ x: 1, y: 0, z: 0 }, { x: 0, y: 2, z: 0 }, { x: 0, y: 0, z: 3 }))}</div> */}
         </div >
     )
 }

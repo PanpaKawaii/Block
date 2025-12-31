@@ -372,12 +372,11 @@ export default function FaceController({
                 selectedFace={selectedFace}
                 selectedFaceId={selectedFaceId}
                 openedFaceId={openedFaceId}
+                addFace={addFace}
+                removeFace={removeFace}
                 updateFace={updateFace}
                 dots={dots}
                 setDots={setDots}
-                selectedDotId={selectedDotId}
-                setSelectedDotId={setSelectedDotId}
-                selectedDot={selectedDot}
                 toggleMenu={toggleMenu}
                 toggleStepFunction={toggleStepFunction}
                 collapseController={collapseController}

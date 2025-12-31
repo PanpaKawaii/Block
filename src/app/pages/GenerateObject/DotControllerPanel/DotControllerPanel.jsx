@@ -122,7 +122,6 @@ export default function DotControllerPanel({
                                 />
                                 <label htmlFor='Name'>Name</label>
                             </div>
-                            {/* <div className='collapse-hidden'> */}
                             <div className='input-group'>
                                 <input
                                     type='number'
@@ -153,7 +152,6 @@ export default function DotControllerPanel({
                                 />
                                 <label htmlFor='Z'>Z</label>
                             </div>
-                            {/* </div> */}
                             <div className='btns'>
                                 <button className={`btn-click ${selectedDotId == dot.id ? 'selected' : ''}`} onClick={() => toggleSelectDot(dot.id)}><i className='fa-solid fa-gear' /></button>
                                 <div className='collapse-hidden'>

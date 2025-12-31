@@ -1,37 +1,21 @@
 .function-controller-panel-container {
     .list {
         .card {
-            padding: 16px;
-
             .header {
-                .collapse-hidden {
-                    display: flex;
+                margin: 0 0 8px;
+            }
+
+            .function-dots-vector {
+                display: flex;
+                gap: 8px;
+
+                select {
+                    width: 60px;
+                    padding: 6px 8px;
                 }
 
-                .input-group {
+                .btn {
                     flex: 1;
-                    position: relative;
-
-                    input {
-                        width: 100%;
-                        font-size: 16px;
-                        text-align: center;
-                    }
-
-                    label {
-                        padding: 0 4px;
-                        position: absolute;
-                        top: -10px;
-                        left: 50%;
-                        transform: translate(-50%);
-                        background: var(--background-1);
-                        border: 2px solid var(--border);
-                        border-radius: 10px;
-                        font-size: 12px;
-                        font-weight: bold;
-                        transition: 0.2s ease;
-                        pointer-events: none;
-                    }
                 }
             }
         }
