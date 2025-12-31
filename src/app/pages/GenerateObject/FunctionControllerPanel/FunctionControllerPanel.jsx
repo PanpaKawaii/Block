@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import './FunctionControllerPanel.css';
 
 export default function FunctionControllerPanel({
@@ -230,7 +231,10 @@ export default function FunctionControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
-                    <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
+                    <ButtonList
+                        icon={'arrows-rotate'}
+                        onToggle={swapController}
+                    />
                 </div>
             </div>
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 // import { Link } from 'react-router-dom';
+import ButtonList from '../../components/ButtonList/ButtonList.jsx';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
@@ -38,9 +39,8 @@ export default function FaceController({
     };
 
     const [toggleStepFunction, setToggleStepFunction] = useState('face');
-    const swapController = () => {
-        setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'vector' : (p == 'vector' ? 'function' : 'face')));
-        // setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'function' : 'face'));
+    const swapController = (item) => {
+        setToggleStepFunction(item);
         setOpenedFaceId([]);
     };
 
@@ -265,7 +265,10 @@ export default function FaceController({
                             className='input json-output'
                         />
                         <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
-                        <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
+                        <ButtonList
+                            icon={'arrows-rotate'}
+                            onToggle={swapController}
+                        />
                     </div>
                     {/* <button className='btn' onClick={changeUUID}><i className='fa-solid fa-file' /></button> */}
                     {/* <Link to='/' state={'5fa8b8df-595a-4f13-b808-7f58b404dd87'}><button className='btn'>/</button></Link> */}

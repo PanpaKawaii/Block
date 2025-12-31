@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import './VectorControllerPanel.css';
 
 export default function VectorControllerPanel({
@@ -43,9 +44,9 @@ export default function VectorControllerPanel({
             {
                 id: newId,
                 size: 4,
-                xCoordinate: 0,
-                yCoordinate: 0,
-                zCoordinate: 0,
+                xCoordinateA: 0,
+                yCoordinateB: 0,
+                zCoordinateC: 0,
                 name: orderToAlphaVector(prev.length + 1),
                 nameSize: 12,
                 xCoordinateName: 0,
@@ -113,7 +114,10 @@ export default function VectorControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addVector}><i className='fa-solid fa-plus' /></button>
-                    <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
+                    <ButtonList
+                        icon={'arrows-rotate'}
+                        onToggle={swapController}
+                    />
                 </div>
             </div>
 

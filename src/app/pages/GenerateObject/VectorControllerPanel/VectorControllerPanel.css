@@ -1,6 +1,8 @@
 .vector-controller-panel-container {
     .list {
         .card {
+            padding: 12px !important;
+
             .header {
                 .collapse-hidden {
                     display: flex;

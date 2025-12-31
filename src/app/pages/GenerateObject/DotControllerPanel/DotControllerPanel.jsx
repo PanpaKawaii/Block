@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import './DotControllerPanel.css';
 
 export default function DotControllerPanel({
@@ -113,7 +114,10 @@ export default function DotControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addDot}><i className='fa-solid fa-plus' /></button>
-                    <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
+                    <ButtonList
+                        icon={'arrows-rotate'}
+                        onToggle={swapController}
+                    />
                 </div>
             </div>
 
