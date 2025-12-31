@@ -11,6 +11,8 @@ export default function GenerateObject({
     setSelectedFaceId,
     selectedDotId,
     setSelectedDotId,
+    selectedVectorId,
+    setSelectedVectorId,
     showCoordinateAxes
 }) {
     const containerRef = useRef(null);
@@ -182,7 +184,6 @@ export default function GenerateObject({
                                     >
                                         <path
                                             d={`M ${width / 2} ${width / 2 - radius} A ${radius} ${radius} 0 1 1 ${width / 2 - 0.1} ${width / 2 - radius} Z`}
-                                            // d={`M ${(width - size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height - size) / 2} L ${(width + size) / 2} ${(height + size) / 2} L ${(width - size) / 2} ${(height + size) / 2} Z`}
                                             fill={dot.color || '#FFFFFF'}
                                             stroke='#FFFFFF'
                                             strokeWidth={dot.id == selectedDotId ? '1' : '0'}
@@ -242,14 +243,79 @@ export default function GenerateObject({
                                             })}
                                         />
                                         <text
-                                            x={dot.xCoordinateName / 2}
-                                            y={dot.yCoordinateName / 2 + 1}
+                                            x={vectorLength / 2}
+                                            y='0'
                                             textAnchor='middle'
                                             dominantBaseline='middle'
                                             fill={dot.nameColor}
                                             fontSize={dot.nameSize}
                                         >
-                                            {/* ---{dot.nameVisible === 1 ? dot.name : ''}--- */}
+                                            {dot.nameVisible === 1 ? 'O-' + dot.name : ''}
+                                        </text>
+                                    </svg>
+                                }
+                            </React.Fragment>
+                        )
+                    })}
+                    {vectors.map(dot => {
+                        const height = 20;
+                        const xA = dot.xCoordinateA;
+                        const yA = dot.yCoordinateA;
+                        const zA = dot.zCoordinateA;
+                        const xB = dot.xCoordinateB;
+                        const yB = dot.yCoordinateB;
+                        const zB = dot.zCoordinateB;
+                        const xAB = xB - xA;
+                        const yAB = yB - yA;
+                        const zAB = zB - zA;
+                        const underY = Math.sqrt(xAB * xAB + zAB * zAB);
+                        const vectorLength = Math.sqrt(xAB * xAB + yAB * yAB + zAB * zAB);
+                        let xOz = (xAB == 0) ? (zAB == 0 ? 0 : (zAB > 0 ? -90 : 90)) : Math.atan(zAB / xAB) * 180 / Math.PI;
+                        xOz = (zAB >= 0 && xAB >= 0) ? 0 - xOz : xOz;
+                        xOz = (zAB < 0 && xAB < 0) ? 180 - xOz : xOz;
+                        xOz = (zAB < 0 && xAB >= 0) ? 0 - xOz : xOz;
+                        xOz = (zAB >= 0 && xAB < 0) ? 180 - xOz : xOz;
+                        xOz = (xAB == 0) ? (zAB == 0 ? 0 : (zAB > 0 ? -90 : 90)) : xOz;
+                        const Oxyz = (underY == 0) ? (yAB >= 0 ? 90 : -90) : Math.atan(yAB / underY) * 180 / Math.PI;
+                        return (
+                            <React.Fragment key={dot.id}>
+                                {dot.visible == 1 &&
+                                    <svg
+                                        className='dot-svg'
+                                        width={`${vectorLength || '0'}`}
+                                        height={`${height || '0'}`}
+                                        viewBox={`0 0 ${vectorLength || '0'} ${height || '0'}`}
+                                        style={{ transform: `translateX(${xA}px) translateY(${yA}px) translateZ(${zA}px) rotateY(${xOz}deg) rotateZ(${Oxyz}deg) translateX(${vectorLength / 2}px)` }}
+                                    >
+                                        <path
+                                            d={`M 0 ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 4} L ${vectorLength} ${height / 2} L ${vectorLength - 8} ${height / 2 + 4} L ${vectorLength - 8} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
+                                            fill={dot.color || '#FFFFFF'}
+                                            stroke='#FFFFFF'
+                                            strokeWidth={dot.id == selectedVectorId ? '1' : '0'}
+                                            vectorEffect='non-scaling-stroke'
+                                            filter={`url(#glow-${dot.id})`}
+
+                                            strokeLinecap={dot.id == selectedVectorId ? 'round' : ''}
+                                            strokeDasharray={dot.id == selectedVectorId ? '2 3' : ''}
+                                            className={dot.id == selectedVectorId ? 'dashoffset' : ''}
+
+                                            onClick={() => setSelectedVectorId(prev => {
+                                                if (prev && prev == dot.id) {
+                                                    return null;
+                                                } else {
+                                                    return dot.id;
+                                                }
+                                            })}
+                                        />
+                                        <text
+                                            x={vectorLength / 2}
+                                            y='0'
+                                            textAnchor='middle'
+                                            dominantBaseline='middle'
+                                            fill={dot.nameColor}
+                                            fontSize={dot.nameSize}
+                                        >
+                                            {dot.nameVisible === 1 ? dot.name : ''}
                                         </text>
                                     </svg>
                                 }

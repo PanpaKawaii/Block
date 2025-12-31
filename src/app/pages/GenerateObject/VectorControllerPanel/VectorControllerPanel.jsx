@@ -3,6 +3,7 @@ import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import './VectorControllerPanel.css';
 
 export default function VectorControllerPanel({
+    dots,
     setFaces,
     selectedFace,
     vectors,
@@ -43,11 +44,13 @@ export default function VectorControllerPanel({
             ...prev,
             {
                 id: newId,
-                size: 4,
                 xCoordinateA: 0,
+                yCoordinateA: 0,
+                zCoordinateA: 0,
+                xCoordinateB: 0,
                 yCoordinateB: 0,
-                zCoordinateC: 0,
-                name: orderToAlphaVector(prev.length + 1),
+                zCoordinateB: 0,
+                name: 'O-O',
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
@@ -55,7 +58,6 @@ export default function VectorControllerPanel({
                 nameColor: '#80FCFF',
                 visible: 1,
                 nameVisible: 1,
-                vectorVisible: 1,
             }
         ]);
     };
@@ -71,17 +73,18 @@ export default function VectorControllerPanel({
                     ? {
                         ...vector,
                         [attribute]: (
-                            attribute == 'size'
-                            || attribute == 'nameSize'
+                            attribute == 'nameSize'
                             || attribute == 'visible'
                             || attribute == 'nameVisible'
-                            || attribute == 'vectorVisible'
                         ) ? Math.max(0, Number(newValue)) : (
-                            attribute == 'xCoordinate'
-                            || attribute == 'yCoordinate'
-                            || attribute == 'zCoordinate'
+                            attribute == 'xCoordinateA'
+                            || attribute == 'yCoordinateA'
+                            || attribute == 'zCoordinateA'
+                            || attribute == 'xCoordinateB'
+                            || attribute == 'yCoordinateB'
+                            || attribute == 'zCoordinateB'
+                            || attribute == 'xCoordinateName'
                             || attribute == 'yCoordinateName'
-                            || attribute == 'zCoordinateName'
                         ) ? Number(newValue) : newValue
                     }
                     : vector
@@ -89,16 +92,23 @@ export default function VectorControllerPanel({
         );
     };
 
-    const orderToAlphaVector = (order) => {
-        order -= 1;
-        const letters = 26;
-        const charCode = 65 + (order % letters);
-        const suffix = Math.floor(order / letters);
-
-        const newName = String.fromCharCode(charCode) + (suffix === 0 ? '' : suffix);
-        if (vectors.find(vector => vector.name == newName)) {
-            return orderToAlphaVector(order + 2);
-        } else return newName;
+    const updateVectorLocation = (vectorId, xA, yA, zA, xB, yB, zB, name, index) => {
+        setVectors((prev) =>
+            prev.map((vector) =>
+                vector.id === vectorId
+                    ? {
+                        ...vector,
+                        name: index == 1 ? name + '-' + vector.name?.split('-')?.[1] : vector.name?.split('-')?.[0] + '-' + name,
+                        xCoordinateA: xA,
+                        yCoordinateA: yA,
+                        zCoordinateA: zA,
+                        xCoordinateB: xB,
+                        yCoordinateB: yB,
+                        zCoordinateB: zB,
+                    }
+                    : vector
+            )
+        );
     };
 
     return (
@@ -139,41 +149,13 @@ export default function VectorControllerPanel({
                                     value={vector?.name || ''}
                                     onChange={(e) => updateVector(vector?.id, 'name', e.target.value)}
                                     className='input'
+                                    disabled
                                 />
                                 <label htmlFor='Name'>Name</label>
                             </div>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    placeholder=''
-                                    value={vector?.xCoordinate || 0}
-                                    onChange={(e) => updateVector(vector?.id, 'xCoordinate', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='X'>X</label>
-                            </div>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    placeholder=''
-                                    value={vector?.yCoordinate || 0}
-                                    onChange={(e) => updateVector(vector?.id, 'yCoordinate', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='Y'>Y</label>
-                            </div>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    placeholder=''
-                                    value={vector?.zCoordinate || 0}
-                                    onChange={(e) => updateVector(vector?.id, 'zCoordinate', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='Z'>Z</label>
-                            </div>
                             <div className='btns'>
                                 <button className={`btn-click ${selectedVectorId == vector.id ? 'selected' : ''}`} onClick={() => toggleSelectVector(vector.id)}><i className='fa-solid fa-gear' /></button>
+                                <button className={`btn-click ${openedVectorId.includes(vector.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenVector(vector.id)}><i className='fa-solid fa-hand' /></button>
                                 <div className='collapse-hidden'>
                                     <button className={`btn-click ${vector.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateVector(vector.id, 'visible', vector.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                     <button className={`btn-click ${vector.vectorVisible == 1 ? 'visible-select' : ''}`} onClick={() => updateVector(vector.id, 'vectorVisible', vector.vectorVisible == 1 ? 0 : 1)}><i className='fa-solid fa-arrow-up-right-from-square' /></button>
@@ -181,6 +163,109 @@ export default function VectorControllerPanel({
                                 </div>
                             </div>
                         </div>
+
+                        {openedVectorId.includes(vector.id) &&
+                            <div className='locations'>
+                                <div className='row row-1'>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={vector?.xCoordinateA || 0}
+                                            onChange={(e) => updateVector(vector?.id, 'xCoordinateA', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='X'>X</label>
+                                    </div>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={vector?.yCoordinateA || 0}
+                                            onChange={(e) => updateVector(vector?.id, 'yCoordinateA', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='Y'>Y</label>
+                                    </div>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={vector?.zCoordinateA || 0}
+                                            onChange={(e) => updateVector(vector?.id, 'zCoordinateA', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='Z'>Z</label>
+                                    </div>
+                                    <select
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            const selectDot = dots.find(dot => dot.id == value);
+                                            const X = selectDot?.xCoordinate || 0;
+                                            const Y = selectDot?.yCoordinate || 0;
+                                            const Z = selectDot?.zCoordinate || 0;
+                                            const name = selectDot?.name || 'O';
+                                            updateVectorLocation(vector?.id, X, Y, Z, vector?.xCoordinateB, vector?.yCoordinateB, vector?.zCoordinateB, name, 1);
+                                        }}
+                                        className='select'
+                                    >
+                                        <option value={''} className='option'>O</option>
+                                        {dots.map((dot, index) => (
+                                            <option key={index} value={dot.id} className='option'>{dot.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='row row-2'>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={vector?.xCoordinateB || 0}
+                                            onChange={(e) => updateVector(vector?.id, 'xCoordinateB', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='X'>X</label>
+                                    </div>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={vector?.yCoordinateB || 0}
+                                            onChange={(e) => updateVector(vector?.id, 'yCoordinateB', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='Y'>Y</label>
+                                    </div>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={vector?.zCoordinateB || 0}
+                                            onChange={(e) => updateVector(vector?.id, 'zCoordinateB', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='Z'>Z</label>
+                                    </div>
+                                    <select
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            const selectDot = dots.find(dot => dot.id == value);
+                                            const X = selectDot?.xCoordinate || 0;
+                                            const Y = selectDot?.yCoordinate || 0;
+                                            const Z = selectDot?.zCoordinate || 0;
+                                            const name = selectDot?.name || 'O';
+                                            updateVectorLocation(vector?.id, vector?.xCoordinateA, vector?.yCoordinateA, vector?.zCoordinateA, X, Y, Z, name, 2);
+                                        }}
+                                        className='select'
+                                    >
+                                        <option value={''} className='option'>O</option>
+                                        {dots.map((dot, index) => (
+                                            <option key={index} value={dot.id} className='option'>{dot.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        }
                     </div>
                 ))}
             </div>

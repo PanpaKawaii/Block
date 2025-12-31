@@ -161,10 +161,8 @@
                 }
             }
 
-            .add-step-box {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
+            .btn-add {
+                width: 100%;
             }
         }
     }

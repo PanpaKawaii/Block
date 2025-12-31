@@ -24,7 +24,7 @@ export default function CoordinateAxes({
                         viewBox={`0 0 ${width || '0'} ${height || '0'}`}
                     >
                         <path
-                            d={`M 20 ${height / 2 - 1} L ${width - 2} ${height / 2 - 1} L ${width - 2} ${height / 2 + 1} L 20 ${height / 2 + 1} L 20 28 L 2 ${height / 2 + 1} L 20 12 Z`}
+                            d={`M 20 ${height / 2 - 1} L ${width} ${height / 2 - 1} L ${width} ${height / 2 + 1} L 20 ${height / 2 + 1} L 20 28 L 2 ${height / 2 + 1} L 20 12 Z`}
                             fill={axe.color}
                             stroke='#68FCFF'
                             strokeWidth='0.5'

@@ -332,10 +332,7 @@ export default function FaceController({
                                             </div>
                                         ))}
                                     </div>
-
-                                    <div className='add-step-box'>
-                                        <button className='btn' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
-                                    </div>
+                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
                                 </>
                             }
                         </div>
@@ -359,6 +356,7 @@ export default function FaceController({
             />
 
             <VectorControllerPanel
+                dots={dots}
                 setFaces={setFaces}
                 selectedFace={selectedFace}
                 vectors={vectors}

@@ -27,30 +27,33 @@
                     }
 
                     label {
-                        padding: 0 4px;
                         position: absolute;
-                        top: -10px;
-                        left: 50%;
-                        transform: translate(-50%);
-                        background: var(--background-1);
-                        border: 2px solid var(--border);
-                        border-radius: 10px;
-                        font-size: 12px;
+                        top: 10px;
+                        left: 10px;
+                        opacity: 0.4;
                         font-weight: bold;
+                        padding: 0 4px;
                         transition: 0.2s ease;
                         pointer-events: none;
                     }
 
+                    input:focus+label,
+                    input:not(:placeholder-shown)+label {
+                        left: 8px;
+                        top: -10px;
+                        border-radius: 10px;
+                        font-size: 12px;
+                        opacity: 1;
+                        border: 2px solid var(--border);
+                        background: var(--background-1);
+                    }
+
                     .tag {
                         width: fit-content;
-                        padding: 0 4px;
                         position: absolute;
                         bottom: -14px;
                         left: 50%;
                         transform: translate(-50%);
-                        /* background: var(--background-1); */
-                        /* border: 2px solid var(--border); */
-                        border-radius: 10px;
                         font-size: 12px;
                         font-weight: bold;
                         white-space: nowrap;

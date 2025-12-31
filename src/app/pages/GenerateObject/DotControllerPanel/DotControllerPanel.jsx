@@ -80,8 +80,8 @@ export default function DotControllerPanel({
                             attribute == 'xCoordinate'
                             || attribute == 'yCoordinate'
                             || attribute == 'zCoordinate'
+                            || attribute == 'xCoordinateName'
                             || attribute == 'yCoordinateName'
-                            || attribute == 'zCoordinateName'
                         ) ? Number(newValue) : newValue
                     }
                     : dot
