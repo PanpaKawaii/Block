@@ -1,22 +1,44 @@
+import { useState } from 'react';
 import './VectorControllerPanel.css';
 
 export default function VectorControllerPanel({
     setFaces,
     selectedFace,
-    dots,
-    setDots,
-    selectedDotId,
-    setSelectedDotId,
-    selectedDot,
+    vectors,
+    setVectors,
+    selectedVectorId,
+    setSelectedVectorId,
+    selectedVector,
     toggleMenu,
     toggleStepFunction,
     collapseController,
     swapController,
     hexRgbaToPercent
 }) {
-    const addDot = () => {
+    const [openedVectorId, setOpenedVectorId] = useState([]);
+    const toggleOpenVector = (faceId) => {
+        setOpenedVectorId(prev => {
+            if (prev.includes(faceId)) {
+                return prev.filter(id => id != faceId);
+            } else {
+                return [...prev, faceId];
+            }
+        });
+    };
+
+    const toggleSelectVector = (vectorId) => {
+        setSelectedVectorId(prev => {
+            if (prev && prev == vectorId) {
+                return null;
+            } else {
+                return vectorId;
+            }
+        });
+    };
+
+    const addVector = () => {
         const newId = crypto.randomUUID();
-        setDots((prev) => [
+        setVectors((prev) => [
             ...prev,
             {
                 id: newId,
@@ -24,7 +46,7 @@ export default function VectorControllerPanel({
                 xCoordinate: 0,
                 yCoordinate: 0,
                 zCoordinate: 0,
-                name: orderToAlpha(prev.length + 1),
+                name: orderToAlphaVector(prev.length + 1),
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
@@ -37,21 +59,22 @@ export default function VectorControllerPanel({
         ]);
     };
 
-    const removeDot = (dotId) => {
-        setDots((prev) => prev.filter((dot) => dot.id !== dotId));
+    const removeVector = (vectorId) => {
+        setVectors((prev) => prev.filter((vector) => vector.id !== vectorId));
     };
 
-    const updateDot = (dotId, attribute, newValue) => {
-        setDots((prev) =>
-            prev.map((dot) =>
-                dot.id === dotId
+    const updateVector = (vectorId, attribute, newValue) => {
+        setVectors((prev) =>
+            prev.map((vector) =>
+                vector.id === vectorId
                     ? {
-                        ...dot,
+                        ...vector,
                         [attribute]: (
                             attribute == 'size'
                             || attribute == 'nameSize'
                             || attribute == 'visible'
                             || attribute == 'nameVisible'
+                            || attribute == 'vectorVisible'
                         ) ? Math.max(0, Number(newValue)) : (
                             attribute == 'xCoordinate'
                             || attribute == 'yCoordinate'
@@ -60,28 +83,21 @@ export default function VectorControllerPanel({
                             || attribute == 'zCoordinateName'
                         ) ? Number(newValue) : newValue
                     }
-                    : dot
+                    : vector
             )
         );
     };
 
-    const orderToAlpha = (order) => {
+    const orderToAlphaVector = (order) => {
         order -= 1;
         const letters = 26;
         const charCode = 65 + (order % letters);
         const suffix = Math.floor(order / letters);
 
-        return String.fromCharCode(charCode) + (suffix === 0 ? "" : suffix);
-    };
-
-    const toggleSelectDot = (dotId) => {
-        setSelectedDotId(prev => {
-            if (prev && prev == dotId) {
-                return null;
-            } else {
-                return dotId;
-            }
-        });
+        const newName = String.fromCharCode(charCode) + (suffix === 0 ? '' : suffix);
+        if (vectors.find(vector => vector.name == newName)) {
+            return orderToAlphaVector(order + 2);
+        } else return newName;
     };
 
     return (
@@ -92,32 +108,32 @@ export default function VectorControllerPanel({
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
                         type='text'
-                        value={JSON.stringify(dots, null, 0)}
-                        onChange={(e) => setDots(JSON.parse(e.target.value))}
+                        value={JSON.stringify(vectors, null, 0)}
+                        onChange={(e) => setVectors(JSON.parse(e.target.value))}
                         className='input json-output'
                     />
-                    <button className='btn' onClick={addDot}><i className='fa-solid fa-plus' /></button>
+                    <button className='btn' onClick={addVector}><i className='fa-solid fa-plus' /></button>
                     <button className='btn' onClick={swapController}><i className='fa-solid fa-arrows-rotate' /></button>
                 </div>
             </div>
 
             <div className='list'>
-                {dots.map((face) => (
-                    <div key={face.id} className={`card ${face.visible == 0 ? 'invisible' : ''} ${face.id == selectedDotId ? 'dash-box' : ''}`}>
+                {vectors.map((vector) => (
+                    <div key={vector.id} className={`card ${vector.visible == 0 ? 'invisible' : ''} ${vector.id == selectedVectorId ? 'dash-box' : ''}`}>
                         <div className='header'>
                             <input
                                 type='color'
-                                value={face.color?.slice(0, 7) || '#FFFFFF'}
-                                onChange={(e) => updateDot(face.id, 'color', e.target.value?.toUpperCase())}
+                                value={vector.color?.slice(0, 7) || '#FFFFFF'}
+                                onChange={(e) => updateVector(vector.id, 'color', e.target.value?.toUpperCase())}
                                 className='input color-input'
-                                style={{ opacity: hexRgbaToPercent(face.color || '#FFFFFFFF') || 1 }}
+                                style={{ opacity: hexRgbaToPercent(vector.color || '#FFFFFFFF') || 1 }}
                             />
                             <div className='input-group'>
                                 <input
                                     type='text'
                                     placeholder=''
-                                    value={face?.name || ''}
-                                    onChange={(e) => updateDot(face?.id, 'name', e.target.value)}
+                                    value={vector?.name || ''}
+                                    onChange={(e) => updateVector(vector?.id, 'name', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='Name'>Name</label>
@@ -126,8 +142,8 @@ export default function VectorControllerPanel({
                                 <input
                                     type='number'
                                     placeholder=''
-                                    value={face?.xCoordinate || 0}
-                                    onChange={(e) => updateDot(face?.id, 'xCoordinate', e.target.value)}
+                                    value={vector?.xCoordinate || 0}
+                                    onChange={(e) => updateVector(vector?.id, 'xCoordinate', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='X'>X</label>
@@ -136,8 +152,8 @@ export default function VectorControllerPanel({
                                 <input
                                     type='number'
                                     placeholder=''
-                                    value={face?.yCoordinate || 0}
-                                    onChange={(e) => updateDot(face?.id, 'yCoordinate', e.target.value)}
+                                    value={vector?.yCoordinate || 0}
+                                    onChange={(e) => updateVector(vector?.id, 'yCoordinate', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='Y'>Y</label>
@@ -146,17 +162,18 @@ export default function VectorControllerPanel({
                                 <input
                                     type='number'
                                     placeholder=''
-                                    value={face?.zCoordinate || 0}
-                                    onChange={(e) => updateDot(face?.id, 'zCoordinate', e.target.value)}
+                                    value={vector?.zCoordinate || 0}
+                                    onChange={(e) => updateVector(vector?.id, 'zCoordinate', e.target.value)}
                                     className='input'
                                 />
                                 <label htmlFor='Z'>Z</label>
                             </div>
                             <div className='btns'>
-                                <button className={`btn-click ${selectedDotId == face.id ? 'selected' : ''}`} onClick={() => toggleSelectDot(face.id)}><i className='fa-solid fa-gear' /></button>
+                                <button className={`btn-click ${selectedVectorId == vector.id ? 'selected' : ''}`} onClick={() => toggleSelectVector(vector.id)}><i className='fa-solid fa-gear' /></button>
                                 <div className='collapse-hidden'>
-                                    <button className={`btn-click ${face.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                    <button className='btn-click remove-click' onClick={() => removeDot(face.id)}><i className='fa-solid fa-trash-can' /></button>
+                                    <button className={`btn-click ${vector.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateVector(vector.id, 'visible', vector.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                    <button className={`btn-click ${vector.vectorVisible == 1 ? 'visible-select' : ''}`} onClick={() => updateVector(vector.id, 'vectorVisible', vector.vectorVisible == 1 ? 0 : 1)}><i className='fa-solid fa-arrow-up-right-from-square' /></button>
+                                    <button className='btn-click remove-click' onClick={() => removeVector(vector.id)}><i className='fa-solid fa-trash-can' /></button>
                                 </div>
                             </div>
                         </div>

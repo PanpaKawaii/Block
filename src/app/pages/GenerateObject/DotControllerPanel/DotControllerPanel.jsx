@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './DotControllerPanel.css';
 
 export default function DotControllerPanel({
@@ -14,6 +15,27 @@ export default function DotControllerPanel({
     swapController,
     hexRgbaToPercent
 }) {
+    const [openedDotId, setOpenedDotId] = useState([]);
+    const toggleOpenDot = (dotId) => {
+        setOpenedDotId(prev => {
+            if (prev.includes(dotId)) {
+                return prev.filter(id => id != dotId);
+            } else {
+                return [...prev, dotId];
+            }
+        });
+    };
+
+    const toggleSelectDot = (dotId) => {
+        setSelectedDotId(prev => {
+            if (prev && prev == dotId) {
+                return null;
+            } else {
+                return dotId;
+            }
+        });
+    };
+
     const addDot = () => {
         const newId = crypto.randomUUID();
         setDots((prev) => [
@@ -24,7 +46,7 @@ export default function DotControllerPanel({
                 xCoordinate: 0,
                 yCoordinate: 0,
                 zCoordinate: 0,
-                name: orderToAlpha(prev.length + 1),
+                name: orderToAlphaDot(prev.length + 1),
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
@@ -52,6 +74,7 @@ export default function DotControllerPanel({
                             || attribute == 'nameSize'
                             || attribute == 'visible'
                             || attribute == 'nameVisible'
+                            || attribute == 'vectorVisible'
                         ) ? Math.max(0, Number(newValue)) : (
                             attribute == 'xCoordinate'
                             || attribute == 'yCoordinate'
@@ -65,23 +88,16 @@ export default function DotControllerPanel({
         );
     };
 
-    const orderToAlpha = (order) => {
+    const orderToAlphaDot = (order) => {
         order -= 1;
         const letters = 26;
         const charCode = 65 + (order % letters);
         const suffix = Math.floor(order / letters);
 
-        return String.fromCharCode(charCode) + (suffix === 0 ? "" : suffix);
-    };
-
-    const toggleSelectDot = (dotId) => {
-        setSelectedDotId(prev => {
-            if (prev && prev == dotId) {
-                return null;
-            } else {
-                return dotId;
-            }
-        });
+        const newName = String.fromCharCode(charCode) + (suffix === 0 ? '' : suffix);
+        if (dots.find(dot => dot.name == newName)) {
+            return orderToAlphaDot(order + 2);
+        } else return newName;
     };
 
     return (
@@ -112,7 +128,7 @@ export default function DotControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(dot.color || '#FFFFFFFF') || 1 }}
                             />
-                            <div className='input-group'>
+                            <div className={`input-group ${(openedDotId.includes(dot.id) || toggleMenu) ? 'expanse' : ''}`} title={`(${dot.xCoordinate}, ${dot.yCoordinate}, ${dot.zCoordinate})`}>
                                 <input
                                     type='text'
                                     placeholder=''
@@ -121,39 +137,11 @@ export default function DotControllerPanel({
                                     className='input'
                                 />
                                 <label htmlFor='Name'>Name</label>
-                            </div>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    placeholder=''
-                                    value={dot?.xCoordinate || 0}
-                                    onChange={(e) => updateDot(dot?.id, 'xCoordinate', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='X'>X</label>
-                            </div>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    placeholder=''
-                                    value={dot?.yCoordinate || 0}
-                                    onChange={(e) => updateDot(dot?.id, 'yCoordinate', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='Y'>Y</label>
-                            </div>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    placeholder=''
-                                    value={dot?.zCoordinate || 0}
-                                    onChange={(e) => updateDot(dot?.id, 'zCoordinate', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='Z'>Z</label>
+                                {!openedDotId.includes(dot.id) && <div className='tag'>({dot.xCoordinate}, {dot.yCoordinate}, {dot.zCoordinate})</div>}
                             </div>
                             <div className='btns'>
                                 <button className={`btn-click ${selectedDotId == dot.id ? 'selected' : ''}`} onClick={() => toggleSelectDot(dot.id)}><i className='fa-solid fa-gear' /></button>
+                                <button className={`btn-click ${openedDotId.includes(dot.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenDot(dot.id)}><i className='fa-solid fa-hand' /></button>
                                 <div className='collapse-hidden'>
                                     <button className={`btn-click ${dot.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(dot.id, 'visible', dot.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                     <button className={`btn-click ${dot.vectorVisible == 1 ? 'visible-select' : ''}`} onClick={() => updateDot(dot.id, 'vectorVisible', dot.vectorVisible == 1 ? 0 : 1)}><i className='fa-solid fa-arrow-up-right-from-square' /></button>
@@ -161,6 +149,41 @@ export default function DotControllerPanel({
                                 </div>
                             </div>
                         </div>
+
+                        {openedDotId.includes(dot.id) &&
+                            <div className='coordinates'>
+                                <div className='input-group'>
+                                    <input
+                                        type='number'
+                                        placeholder=''
+                                        value={dot?.xCoordinate || 0}
+                                        onChange={(e) => updateDot(dot?.id, 'xCoordinate', e.target.value)}
+                                        className='input'
+                                    />
+                                    <label htmlFor='X'>X</label>
+                                </div>
+                                <div className='input-group'>
+                                    <input
+                                        type='number'
+                                        placeholder=''
+                                        value={dot?.yCoordinate || 0}
+                                        onChange={(e) => updateDot(dot?.id, 'yCoordinate', e.target.value)}
+                                        className='input'
+                                    />
+                                    <label htmlFor='Y'>Y</label>
+                                </div>
+                                <div className='input-group'>
+                                    <input
+                                        type='number'
+                                        placeholder=''
+                                        value={dot?.zCoordinate || 0}
+                                        onChange={(e) => updateDot(dot?.id, 'zCoordinate', e.target.value)}
+                                        className='input'
+                                    />
+                                    <label htmlFor='Z'>Z</label>
+                                </div>
+                            </div>
+                        }
                     </div>
                 ))}
             </div>

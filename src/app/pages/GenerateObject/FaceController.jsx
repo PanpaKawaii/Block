@@ -22,6 +22,8 @@ export default function FaceController({
     setSelectedFaceId,
     selectedDotId,
     setSelectedDotId,
+    selectedVectorId,
+    setSelectedVectorId,
     showCoordinateAxes,
     setShowCoordinateAxes
 }) {
@@ -37,8 +39,8 @@ export default function FaceController({
 
     const [toggleStepFunction, setToggleStepFunction] = useState('face');
     const swapController = () => {
-        // setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'vector' : (p == 'vector' ? 'function' : 'face')));
-        setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'function' : 'face'));
+        setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'vector' : (p == 'vector' ? 'function' : 'face')));
+        // setToggleStepFunction(p => p == 'face' ? 'dot' : (p == 'dot' ? 'function' : 'face'));
         setOpenedFaceId([]);
     };
 
@@ -167,7 +169,7 @@ export default function FaceController({
                 face.id === faceId
                     ? {
                         ...face,
-                        steps: face.steps.filter((step) => step.id !== stepId)
+                        steps: face.steps?.filter((step) => step.id !== stepId)
                     }
                     : face
             )
@@ -180,7 +182,7 @@ export default function FaceController({
                 face.id === faceId
                     ? {
                         ...face,
-                        steps: face.steps.map((step) =>
+                        steps: face.steps?.map((step) =>
                             step.id === stepId ? { ...step, type: newType, value: newValue, visible: newVisible } : step
                         )
                     }
@@ -210,6 +212,8 @@ export default function FaceController({
     console.log('selectedFace', selectedFace);
     const selectedDot = dots.find(dot => dot.id === selectedDotId);
     console.log('selectedDot', selectedDot);
+    const selectedVector = vectors.find(vector => vector.id === selectedVectorId);
+    console.log('selectedVector', selectedVector);
 
     const jsonToState = (json) => {
         const id = json?.replaceAll('"id"', 'id');
@@ -354,11 +358,11 @@ export default function FaceController({
             <VectorControllerPanel
                 setFaces={setFaces}
                 selectedFace={selectedFace}
-                dots={dots}
-                setDots={setDots}
-                selectedDotId={selectedDotId}
-                setSelectedDotId={setSelectedDotId}
-                selectedDot={selectedDot}
+                vectors={vectors}
+                setVectors={setVectors}
+                selectedVectorId={selectedVectorId}
+                setSelectedVectorId={setSelectedVectorId}
+                selectedVector={selectedVector}
                 toggleMenu={toggleMenu}
                 toggleStepFunction={toggleStepFunction}
                 collapseController={collapseController}

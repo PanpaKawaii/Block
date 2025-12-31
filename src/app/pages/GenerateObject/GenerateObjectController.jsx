@@ -86,6 +86,8 @@ export default function GenerateObjectController() {
                 setSelectedFaceId={setSelectedFaceId}
                 selectedDotId={selectedDotId}
                 setSelectedDotId={setSelectedDotId}
+                selectedVectorId={selectedVectorId}
+                setSelectedVectorId={setSelectedVectorId}
                 showCoordinateAxes={showCoordinateAxes}
                 setShowCoordinateAxes={setShowCoordinateAxes}
             />
