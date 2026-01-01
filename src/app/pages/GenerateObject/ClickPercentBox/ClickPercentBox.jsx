@@ -48,7 +48,7 @@ export default function ClickPercentBox({
     };
 
     const approveShape = () => {
-        updateFace(selectedFaceId, 'shape', stringPoints);
+        updateFace(selectedFaceId, 'shape', stringPoints || `M 0 0 L ${width} 0 L ${width} ${height} L 0 ${height} Z`);
         setOpenEditShape(false);
     };
 

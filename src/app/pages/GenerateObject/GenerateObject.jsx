@@ -72,7 +72,6 @@ export default function GenerateObject({
                 >
                     {faces.map(face => {
                         const styleObj = {};
-                        let polygonPoints = null;
 
                         face.steps?.forEach(step => {
                             if ((step.type.startsWith('translate')
@@ -82,10 +81,6 @@ export default function GenerateObject({
 
                                 styleObj.transform = (styleObj.transform || '') +
                                     ` ${step.type}(${step.value}${step.type.includes('rotate') ? 'deg' : (step.type.includes('translate') ? 'px' : '')})`;
-                            }
-
-                            if (step.type === 'clipPath' && step.visible == 1) {
-                                polygonPoints = step.value;
                             }
                         });
 
@@ -120,7 +115,7 @@ export default function GenerateObject({
                                         </defs>
                                     }
                                     <path
-                                        d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : (polygonPoints?.includes('M') ? polygonPoints : polygonToPath(polygonPoints))}
+                                        d={face.shape ? (face.shape?.includes('M') ? face.shape : polygonToPath(face.shape)) : `M 0 0 L ${face.width} 0 L ${face.width} ${face.height} L 0 ${face.height} Z`}
                                         fill={face.color || '#FFFFFF'}
                                         stroke={face.borderColor || '#FFFFFF'}
                                         strokeWidth={face.borderVisible === 1 ? face.borderWidth : 0}

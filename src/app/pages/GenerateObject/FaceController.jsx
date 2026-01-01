@@ -105,9 +105,7 @@ export default function FaceController({
                 nameVisible: 1,
                 borderVisible: 1,
                 glowVisible: 1,
-                steps: [
-                    { id: crypto.randomUUID(), type: 'clipPath', value: '0,0 200,0 200,200 0,200', visible: 1 },
-                ]
+                steps: []
             }
         ]);
         toggleOpenFace(newId);
@@ -315,11 +313,10 @@ export default function FaceController({
                                                     <option value='rotateY' className='option'>rotateY</option>
                                                     <option value='rotateZ' className='option'>rotateZ</option>
                                                     <option value='scale' className='option'>scale</option>
-                                                    <option value='clipPath' className='option'>clipPath</option>
                                                 </select>
 
                                                 <input
-                                                    type='text'
+                                                    type='number'
                                                     value={step.value}
                                                     onChange={(e) => updateStep(face.id, step.id, step.type, e.target.value, step.visible)}
                                                     className={`input ${step.type}`}
