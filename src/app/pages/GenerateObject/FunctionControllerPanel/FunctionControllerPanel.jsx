@@ -197,6 +197,7 @@ export default function FunctionControllerPanel({
                 visible: 1,
                 nameVisible: 1,
                 vectorVisible: 1,
+                vectorNameVisible: 1,
             }
         ]);
     };

@@ -212,7 +212,7 @@ export default function GenerateObject({
                                         </text>
                                     </svg>
                                 }
-                                {dot.vectorVisible == 1 &&
+                                {(dot.visible == 1 && dot.vectorVisible == 1) &&
                                     <svg
                                         className='dot-svg'
                                         width={`${vectorLength || '0'}`}
@@ -248,7 +248,7 @@ export default function GenerateObject({
                                             fill={dot.nameColor}
                                             fontSize={dot.nameSize}
                                         >
-                                            {dot.nameVisible === 1 ? 'O-' + dot.name : ''}
+                                            {dot.vectorNameVisible === 1 ? 'O-' + dot.name : ''}
                                         </text>
                                     </svg>
                                 }

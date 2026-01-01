@@ -56,6 +56,7 @@ export default function DotControllerPanel({
                 visible: 1,
                 nameVisible: 1,
                 vectorVisible: 1,
+                vectorNameVisible: 1,
             }
         ]);
     };
@@ -76,6 +77,7 @@ export default function DotControllerPanel({
                             || attribute == 'visible'
                             || attribute == 'nameVisible'
                             || attribute == 'vectorVisible'
+                            || attribute == 'vectorNameVisible'
                         ) ? Math.max(0, Number(newValue)) : (
                             attribute == 'xCoordinate'
                             || attribute == 'yCoordinate'
