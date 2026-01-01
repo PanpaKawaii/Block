@@ -5,6 +5,7 @@ import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
 import FunctionControllerPanel from './FunctionControllerPanel/FunctionControllerPanel.jsx';
+import LineControllerPanel from './LineControllerPanel/LineControllerPanel.jsx';
 import SceneController from './SceneController/SceneController.jsx';
 import VectorControllerPanel from './VectorControllerPanel/VectorControllerPanel.jsx';
 
@@ -26,7 +27,11 @@ export default function FaceController({
     selectedVectorId,
     setSelectedVectorId,
     showCoordinateAxes,
-    setShowCoordinateAxes
+    setShowCoordinateAxes,
+    lines,
+    setLines,
+    selectedLineId,
+    setSelectedLineId
 }) {
     const handleShowCoordinateAxes = (faceId) => {
         setShowCoordinateAxes(prev => {
@@ -212,6 +217,8 @@ export default function FaceController({
     console.log('selectedDot', selectedDot);
     const selectedVector = vectors.find(vector => vector.id === selectedVectorId);
     console.log('selectedVector', selectedVector);
+    const selectedLine = lines.find(line => line.id === selectedLineId);
+    console.log('selectedLine', selectedLine);
 
     const jsonToState = (json) => {
         const id = json?.replaceAll('"id"', 'id');
@@ -366,6 +373,26 @@ export default function FaceController({
                 collapseController={collapseController}
                 swapController={swapController}
                 hexRgbaToPercent={hexRgbaToPercent}
+            />
+
+            <LineControllerPanel
+                dots={dots}
+                setFaces={setFaces}
+                selectedFace={selectedFace}
+                vectors={vectors}
+                setVectors={setVectors}
+                selectedVectorId={selectedVectorId}
+                setSelectedVectorId={setSelectedVectorId}
+                selectedVector={selectedVector}
+                toggleMenu={toggleMenu}
+                toggleStepFunction={toggleStepFunction}
+                collapseController={collapseController}
+                swapController={swapController}
+                hexRgbaToPercent={hexRgbaToPercent}
+                lines={lines}
+                setLines={setLines}
+                selectedLineId={selectedLineId}
+                setSelectedLineId={setSelectedLineId}
             />
 
             <FunctionControllerPanel

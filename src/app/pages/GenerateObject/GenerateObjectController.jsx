@@ -39,6 +39,9 @@ export default function GenerateObjectController() {
     const [vectors, setVectors] = useState([]);
     const [selectedVectorId, setSelectedVectorId] = useState(null);
     console.log('vectors', vectors);
+    const [lines, setLines] = useState([]);
+    const [selectedLineId, setSelectedLineId] = useState(null);
+    console.log('lines', lines);
 
     useEffect(() => {
         // console.log('useEffect START');
@@ -66,13 +69,16 @@ export default function GenerateObjectController() {
                 faces={faces}
                 dots={dots}
                 vectors={vectors}
-                sceneStyle={sceneStyle}
+                lines={lines}
                 selectedFaceId={selectedFaceId}
-                setSelectedFaceId={setSelectedFaceId}
                 selectedDotId={selectedDotId}
-                setSelectedDotId={setSelectedDotId}
                 selectedVectorId={selectedVectorId}
+                selectedLineId={selectedLineId}
+                setSelectedFaceId={setSelectedFaceId}
+                setSelectedDotId={setSelectedDotId}
                 setSelectedVectorId={setSelectedVectorId}
+                setSelectedLineId={setSelectedLineId}
+                sceneStyle={sceneStyle}
                 showCoordinateAxes={showCoordinateAxes}
             />
             <FaceController
@@ -92,6 +98,10 @@ export default function GenerateObjectController() {
                 setSelectedVectorId={setSelectedVectorId}
                 showCoordinateAxes={showCoordinateAxes}
                 setShowCoordinateAxes={setShowCoordinateAxes}
+                lines={lines}
+                setLines={setLines}
+                selectedLineId={selectedLineId}
+                setSelectedLineId={setSelectedLineId}
             />
         </>
     )

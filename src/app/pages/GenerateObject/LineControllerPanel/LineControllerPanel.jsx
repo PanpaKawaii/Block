@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
-import './VectorControllerPanel.css';
+import './LineControllerPanel.css';
 
-export default function VectorControllerPanel({
+export default function LineControllerPanel({
     dots,
     setFaces,
     selectedFace,
@@ -15,42 +15,46 @@ export default function VectorControllerPanel({
     toggleStepFunction,
     collapseController,
     swapController,
-    hexRgbaToPercent
+    hexRgbaToPercent,
+    lines,
+    setLines,
+    selectedLineId,
+    setSelectedLineId
 }) {
-    const [openedVectorId, setOpenedVectorId] = useState([]);
-    const toggleOpenVector = (vectorId) => {
-        setOpenedVectorId(prev => {
-            if (prev.includes(vectorId)) {
-                return prev.filter(id => id != vectorId);
+    const [openedLineId, setOpenedLineId] = useState([]);
+    const toggleOpenLine = (lineId) => {
+        setOpenedLineId(prev => {
+            if (prev.includes(lineId)) {
+                return prev.filter(id => id != lineId);
             } else {
-                return [...prev, vectorId];
+                return [...prev, lineId];
             }
         });
     };
 
-    const toggleSelectVector = (vectorId) => {
-        setSelectedVectorId(prev => {
-            if (prev && prev == vectorId) {
+    const toggleSelectLine = (lineId) => {
+        setSelectedLineId(prev => {
+            if (prev && prev == lineId) {
                 return null;
             } else {
-                return vectorId;
+                return lineId;
             }
         });
     };
 
-    const addVector = () => {
+    const addLine = () => {
         const newId = crypto.randomUUID();
-        setVectors((prev) => [
+        setLines((prev) => [
             ...prev,
             {
                 id: newId,
-                xCoordinateA: 0,
-                yCoordinateA: 0,
-                zCoordinateA: 0,
-                xCoordinateB: 0,
-                yCoordinateB: 0,
-                zCoordinateB: 0,
-                name: 'O-O',
+                parameterA: 0,
+                parameterB: 0,
+                parameterC: 0,
+                pointX0: 0,
+                pointY0: 0,
+                pointZ0: 0,
+                name: `Line ${prev.length + 1}`,
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
@@ -62,68 +66,67 @@ export default function VectorControllerPanel({
         ]);
     };
 
-    const removeVector = (vectorId) => {
-        setVectors((prev) => prev.filter((vector) => vector.id !== vectorId));
+    const removeLine = (lineId) => {
+        setLines((prev) => prev.filter((line) => line.id !== lineId));
     };
 
-    const updateVector = (vectorId, attribute, newValue) => {
-        setVectors((prev) =>
-            prev.map((vector) =>
-                vector.id === vectorId
+    const updateLine = (lineId, attribute, newValue) => {
+        setLines((prev) =>
+            prev.map((line) =>
+                line.id === lineId
                     ? {
-                        ...vector,
+                        ...line,
                         [attribute]: (
                             attribute == 'nameSize'
                             || attribute == 'visible'
                             || attribute == 'nameVisible'
                         ) ? Math.max(0, Number(newValue)) : (
-                            attribute == 'xCoordinateA'
-                            || attribute == 'yCoordinateA'
-                            || attribute == 'zCoordinateA'
-                            || attribute == 'xCoordinateB'
-                            || attribute == 'yCoordinateB'
-                            || attribute == 'zCoordinateB'
+                            attribute == 'parameterA'
+                            || attribute == 'parameterB'
+                            || attribute == 'parameterC'
                             || attribute == 'xCoordinateName'
                             || attribute == 'yCoordinateName'
+                            || attribute == 'pointX0'
+                            || attribute == 'pointY0'
+                            || attribute == 'pointZ0'
                         ) ? Number(newValue) : newValue
                     }
-                    : vector
+                    : line
             )
         );
     };
 
-    const updateVectorLocation = (vectorId, xA, yA, zA, xB, yB, zB, name, index) => {
-        setVectors((prev) =>
-            prev.map((vector) =>
-                vector.id === vectorId
+    const updateLineParameter = (lineId, A, B, C, X0, Y0, Z0) => {
+        setLines((prev) =>
+            prev.map((line) =>
+                line.id === lineId
                     ? {
-                        ...vector,
-                        name: index == 1 ? name + '-' + vector.name?.split('-')?.[1] : vector.name?.split('-')?.[0] + '-' + name,
-                        xCoordinateA: xA,
-                        yCoordinateA: yA,
-                        zCoordinateA: zA,
-                        xCoordinateB: xB,
-                        yCoordinateB: yB,
-                        zCoordinateB: zB,
+                        ...line,
+                        parameterA: A,
+                        parameterB: B,
+                        parameterC: C,
+                        pointX0: X0,
+                        pointY0: Y0,
+                        pointZ0: Z0,
                     }
-                    : vector
+                    : line
             )
         );
     };
 
     return (
-        <div className={`vector-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'vector' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
+        <div className={`line-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'line' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Vector Controller</h2>
+                <h2>Line Controller</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
                         type='text'
-                        value={JSON.stringify(vectors, null, 0)}
-                        onChange={(e) => setVectors(JSON.parse(e.target.value))}
+                        value={JSON.stringify(lines, null, 0)}
+                        onChange={(e) => setLines(JSON.parse(e.target.value))}
                         className='input json-output'
                     />
-                    <button className='btn' onClick={addVector}><i className='fa-solid fa-plus' /></button>
+                    <button className='btn' onClick={addLine}><i className='fa-solid fa-plus' /></button>
                     <ButtonList
                         icon={'arrows-rotate'}
                         onToggle={swapController}
@@ -132,46 +135,45 @@ export default function VectorControllerPanel({
             </div>
 
             <div className='list'>
-                {vectors.map((vector) => (
-                    <div key={vector.id} className={`card ${vector.visible == 0 ? 'invisible' : ''} ${vector.id == selectedVectorId ? 'dash-box' : ''}`}>
+                {lines.map((line) => (
+                    <div key={line.id} className={`card ${line.visible == 0 ? 'invisible' : ''} ${line.id == selectedLineId ? 'dash-box' : ''}`}>
                         <div className='header'>
                             <input
                                 type='color'
-                                value={vector.color?.slice(0, 7) || '#FFFFFF'}
-                                onChange={(e) => updateVector(vector.id, 'color', e.target.value?.toUpperCase())}
+                                value={line.color?.slice(0, 7) || '#FFFFFF'}
+                                onChange={(e) => updateLine(line.id, 'color', e.target.value?.toUpperCase())}
                                 className='input color-input'
-                                style={{ opacity: hexRgbaToPercent(vector.color || '#FFFFFFFF') || 1 }}
+                                style={{ opacity: hexRgbaToPercent(line.color || '#FFFFFFFF') || 1 }}
                             />
                             <div className='input-group'>
                                 <input
                                     type='text'
                                     placeholder=''
-                                    value={vector?.name || ''}
-                                    onChange={(e) => updateVector(vector?.id, 'name', e.target.value)}
+                                    value={line?.name || ''}
+                                    onChange={(e) => updateLine(line?.id, 'name', e.target.value)}
                                     className='input'
-                                    disabled
                                 />
                                 <label htmlFor='Name'>Name</label>
                             </div>
                             <div className='btns'>
-                                <button className={`btn-click ${selectedVectorId == vector.id ? 'selected' : ''}`} onClick={() => toggleSelectVector(vector.id)}><i className='fa-solid fa-gear' /></button>
-                                <button className={`btn-click ${openedVectorId.includes(vector.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenVector(vector.id)}><i className='fa-solid fa-hand' /></button>
+                                <button className={`btn-click ${selectedLineId == line.id ? 'selected' : ''}`} onClick={() => toggleSelectLine(line.id)}><i className='fa-solid fa-gear' /></button>
+                                <button className={`btn-click ${openedLineId.includes(line.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenLine(line.id)}><i className='fa-solid fa-hand' /></button>
                                 <div className='collapse-hidden'>
-                                    <button className={`btn-click ${vector.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateVector(vector.id, 'visible', vector.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                    <button className='btn-click remove-click' onClick={() => removeVector(vector.id)}><i className='fa-solid fa-trash-can' /></button>
+                                    <button className={`btn-click ${line.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateLine(line.id, 'visible', line.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                    <button className='btn-click remove-click' onClick={() => removeLine(line.id)}><i className='fa-solid fa-trash-can' /></button>
                                 </div>
                             </div>
                         </div>
 
-                        {openedVectorId.includes(vector.id) &&
-                            <div className='locations'>
+                        {openedLineId.includes(line.id) &&
+                            <div className='parameters'>
                                 <div className='row row-1'>
                                     <div className='input-group'>
                                         <input
                                             type='number'
                                             placeholder=''
-                                            value={vector?.xCoordinateA || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'xCoordinateA', e.target.value)}
+                                            value={line?.parameterA || 0}
+                                            onChange={(e) => updateLine(line?.id, 'parameterA', e.target.value)}
                                             className='input'
                                         />
                                         <label htmlFor='X'>X</label>
@@ -180,8 +182,8 @@ export default function VectorControllerPanel({
                                         <input
                                             type='number'
                                             placeholder=''
-                                            value={vector?.yCoordinateA || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'yCoordinateA', e.target.value)}
+                                            value={line?.parameterB || 0}
+                                            onChange={(e) => updateLine(line?.id, 'parameterB', e.target.value)}
                                             className='input'
                                         />
                                         <label htmlFor='Y'>Y</label>
@@ -190,8 +192,8 @@ export default function VectorControllerPanel({
                                         <input
                                             type='number'
                                             placeholder=''
-                                            value={vector?.zCoordinateA || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'zCoordinateA', e.target.value)}
+                                            value={line?.parameterC || 0}
+                                            onChange={(e) => updateLine(line?.id, 'parameterC', e.target.value)}
                                             className='input'
                                         />
                                         <label htmlFor='Z'>Z</label>
@@ -200,17 +202,20 @@ export default function VectorControllerPanel({
                                         onChange={(e) => {
                                             const value = e.target.value;
                                             const selectDot = dots.find(dot => dot.id == value);
-                                            const X = selectDot?.xCoordinate || 0;
-                                            const Y = selectDot?.yCoordinate || 0;
-                                            const Z = selectDot?.zCoordinate || 0;
-                                            const name = selectDot?.name || 'O';
-                                            updateVectorLocation(vector?.id, X, Y, Z, vector?.xCoordinateB, vector?.yCoordinateB, vector?.zCoordinateB, name, 1);
+                                            const selectVector = vectors.find(vector => vector.id == value);
+                                            const X = selectDot?.xCoordinate || selectVector?.xCoordinateB - selectVector?.xCoordinateA || 0;
+                                            const Y = selectDot?.yCoordinate || selectVector?.yCoordinateB - selectVector?.yCoordinateA || 0;
+                                            const Z = selectDot?.zCoordinate || selectVector?.zCoordinateB - selectVector?.zCoordinateA || 0;
+                                            updateLineParameter(line?.id, X, Y, Z, line?.pointX0, line?.pointY0, line?.pointZ0);
                                         }}
                                         className='select'
                                     >
                                         <option value={''} className='option'>O</option>
                                         {dots.map((dot, index) => (
                                             <option key={index} value={dot.id} className='option'>{dot.name}</option>
+                                        ))}
+                                        {vectors.map((vector, index) => (
+                                            <option key={index} value={vector.id} className='option'>{vector.name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -219,8 +224,8 @@ export default function VectorControllerPanel({
                                         <input
                                             type='number'
                                             placeholder=''
-                                            value={vector?.xCoordinateB || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'xCoordinateB', e.target.value)}
+                                            value={line?.pointX0 || 0}
+                                            onChange={(e) => updateLine(line?.id, 'pointX0', e.target.value)}
                                             className='input'
                                         />
                                         <label htmlFor='X'>X</label>
@@ -229,8 +234,8 @@ export default function VectorControllerPanel({
                                         <input
                                             type='number'
                                             placeholder=''
-                                            value={vector?.yCoordinateB || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'yCoordinateB', e.target.value)}
+                                            value={line?.pointY0 || 0}
+                                            onChange={(e) => updateLine(line?.id, 'pointY0', e.target.value)}
                                             className='input'
                                         />
                                         <label htmlFor='Y'>Y</label>
@@ -239,8 +244,8 @@ export default function VectorControllerPanel({
                                         <input
                                             type='number'
                                             placeholder=''
-                                            value={vector?.zCoordinateB || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'zCoordinateB', e.target.value)}
+                                            value={line?.pointZ0 || 0}
+                                            onChange={(e) => updateLine(line?.id, 'pointZ0', e.target.value)}
                                             className='input'
                                         />
                                         <label htmlFor='Z'>Z</label>
@@ -252,8 +257,7 @@ export default function VectorControllerPanel({
                                             const X = selectDot?.xCoordinate || 0;
                                             const Y = selectDot?.yCoordinate || 0;
                                             const Z = selectDot?.zCoordinate || 0;
-                                            const name = selectDot?.name || 'O';
-                                            updateVectorLocation(vector?.id, vector?.xCoordinateA, vector?.yCoordinateA, vector?.zCoordinateA, X, Y, Z, name, 2);
+                                            updateLineParameter(line?.id, line?.parameterA, line?.parameterB, line?.parameterC, X, Y, Z);
                                         }}
                                         className='select'
                                     >

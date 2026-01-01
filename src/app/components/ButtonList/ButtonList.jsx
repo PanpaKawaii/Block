@@ -10,6 +10,7 @@ export default function ButtonList({
         { value: 'face', icon: '' },
         { value: 'dot', icon: '' },
         { value: 'vector', icon: '' },
+        { value: 'line', icon: '' },
         { value: 'function', icon: '' }
     ];
     const handleClick = (item) => {

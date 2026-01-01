@@ -6,13 +6,16 @@ export default function GenerateObject({
     faces,
     dots,
     vectors,
-    sceneStyle,
+    lines,
     selectedFaceId,
-    setSelectedFaceId,
     selectedDotId,
-    setSelectedDotId,
     selectedVectorId,
+    selectedLineId,
+    setSelectedFaceId,
+    setSelectedDotId,
     setSelectedVectorId,
+    setSelectedLineId,
+    sceneStyle,
     showCoordinateAxes
 }) {
     const containerRef = useRef(null);
@@ -304,6 +307,68 @@ export default function GenerateObject({
                                         />
                                         <text
                                             x={vectorLength / 2}
+                                            y='0'
+                                            textAnchor='middle'
+                                            dominantBaseline='middle'
+                                            fill={vector.nameColor}
+                                            fontSize={vector.nameSize}
+                                        >
+                                            {vector.nameVisible === 1 ? vector.name : ''}
+                                        </text>
+                                    </svg>
+                                }
+                            </React.Fragment>
+                        )
+                    })}
+                    {lines.map(vector => {
+                        const width = 3000;
+                        const height = 20;
+                        const X = vector.parameterA;
+                        const Y = vector.parameterB;
+                        const Z = vector.parameterC;
+                        const X0 = vector.pointX0;
+                        const Y0 = vector.pointY0;
+                        const Z0 = vector.pointZ0;
+                        const underY = Math.sqrt(X * X + Z * Z);
+                        let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
+                        xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
+                        xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
+                        xOz = (Z < 0 && X >= 0) ? 0 - xOz : xOz;
+                        xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz;
+                        xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : xOz;
+                        const Oxyz = (underY == 0) ? (Y >= 0 ? 90 : -90) : Math.atan(Y / underY) * 180 / Math.PI;
+                        return (
+                            <React.Fragment key={vector.id}>
+                                {vector.visible == 1 &&
+                                    <svg
+                                        className='vector-svg'
+                                        width={`${width || '0'}`}
+                                        height={`${height || '0'}`}
+                                        viewBox={`0 0 ${width || '0'} ${height || '0'}`}
+                                        style={{ transform: `translateX(${X0}px) translateY(${Y0}px) translateZ(${Z0}px) rotateY(${xOz}deg) rotateZ(${Oxyz}deg)` }}
+                                    >
+                                        <path
+                                            d={`M 0 ${height / 2 - 1} L ${width} ${height / 2 - 1} L ${width} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
+                                            fill={vector.color || '#FFFFFF'}
+                                            stroke='#FFFFFF'
+                                            strokeWidth={vector.id == selectedLineId ? '1' : '0'}
+                                            vectorEffect='non-scaling-stroke'
+                                            filter={`url(#glow-${vector.id})`}
+
+                                            strokeLinecap={vector.id == selectedLineId ? 'round' : ''}
+                                            strokeDasharray={vector.id == selectedLineId ? '2 3' : ''}
+                                            className={vector.id == selectedLineId ? 'dashoffset' : ''}
+
+                                            onClick={() => setSelectedLineId(prev => {
+                                                if (prev && prev == vector.id) {
+                                                    return null;
+                                                } else {
+                                                    return vector.id;
+                                                }
+                                            })}
+                                        />
+                                        <text
+                                            x={width}
                                             y='0'
                                             textAnchor='middle'
                                             dominantBaseline='middle'

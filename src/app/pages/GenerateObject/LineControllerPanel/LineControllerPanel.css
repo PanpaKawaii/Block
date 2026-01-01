@@ -1,0 +1,77 @@
+.line-controller-panel-container {
+    .list {
+        .card {
+            padding: 12px !important;
+
+            .header {
+                .collapse-hidden {
+                    display: flex;
+                }
+
+                .input-group {
+                    flex: 1;
+                    position: relative;
+
+                    input {
+                        width: 100%;
+                        font-size: 16px;
+                        text-align: center;
+                    }
+
+                    label {
+                        padding: 0 4px;
+                        position: absolute;
+                        top: -10px;
+                        left: 50%;
+                        transform: translate(-50%);
+                        background: var(--background-1);
+                        border: 2px solid var(--border);
+                        border-radius: 10px;
+                        font-size: 12px;
+                        font-weight: bold;
+                        transition: 0.2s ease;
+                        pointer-events: none;
+                    }
+                }
+            }
+
+            .parameters {
+                margin: 12px 0 0;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                .row {
+                    display: flex;
+                    gap: 8px;
+
+                    .input-group {
+                        flex: 1;
+                        position: relative;
+
+                        input {
+                            width: 100%;
+                            font-size: 16px;
+                            text-align: center;
+                        }
+
+                        label {
+                            padding: 0 4px;
+                            position: absolute;
+                            top: -10px;
+                            left: 50%;
+                            transform: translate(-50%);
+                            background: var(--background-1);
+                            border: 2px solid var(--border);
+                            border-radius: 10px;
+                            font-size: 12px;
+                            font-weight: bold;
+                            transition: 0.2s ease;
+                            pointer-events: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
