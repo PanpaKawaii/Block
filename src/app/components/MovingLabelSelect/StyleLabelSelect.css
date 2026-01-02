@@ -1,0 +1,39 @@
+.style-label-select-container {
+    flex: 1;
+    position: relative;
+
+    select {
+        width: 100%;
+        padding: 8px 4px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    label {
+        width: fit-content;
+        white-space: nowrap;
+        padding: 0 4px;
+        position: absolute;
+        font-weight: bold;
+        pointer-events: none;
+
+        top: -10px;
+        background: var(--background-1);
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        font-size: 12px;
+
+        &.center {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        &.left {
+            left: 10px;
+        }
+
+        &.right {
+            right: 10px;
+        }
+    }
+}

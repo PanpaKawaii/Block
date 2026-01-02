@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState, useMemo } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import './LineControllerPanel.css';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
+import StyleLabelSelect from '../../../components/MovingLabelSelect/StyleLabelSelect.jsx';
 
 export default function LineControllerPanel({
     dots,
@@ -114,6 +116,27 @@ export default function LineControllerPanel({
         );
     };
 
+    const mergedCoordinates = useMemo(() => {
+        return [
+            ...dots.map(dot => ({
+                id: dot.id,
+                type: 'dot',
+                name: dot.name,
+                xCoordinate: dot.xCoordinate,
+                yCoordinate: dot.yCoordinate,
+                zCoordinate: dot.zCoordinate,
+            })),
+            ...vectors.map(vector => ({
+                id: vector.id,
+                type: 'vector',
+                name: vector.name,
+                xCoordinate: vector.xCoordinateB - vector.xCoordinateA,
+                yCoordinate: vector.yCoordinateB - vector.yCoordinateA,
+                zCoordinate: vector.zCoordinateB - vector.zCoordinateA,
+            }))
+        ];
+    }, [dots, vectors]);
+
     return (
         <div className={`line-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'line' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
@@ -145,7 +168,7 @@ export default function LineControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(line.color || '#FFFFFFFF') || 1 }}
                             />
-                            <div className='input-group'>
+                            {/* <div className='input-group'>
                                 <input
                                     type='text'
                                     placeholder=''
@@ -154,7 +177,16 @@ export default function LineControllerPanel({
                                     className='input'
                                 />
                                 <label htmlFor='Name'>Name</label>
-                            </div>
+                            </div> */}
+                            <MovingLabelInput
+                                type={'text'}
+                                value={line?.name}
+                                onValueChange={(propE) => updateLine(line?.id, 'name', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{}}
+                                label={'Name'}
+                                labelStyle={'left moving'}
+                            />
                             <div className='btns'>
                                 <button className={`btn-click ${selectedLineId == line.id ? 'selected' : ''}`} onClick={() => toggleSelectLine(line.id)}><i className='fa-solid fa-gear' /></button>
                                 <button className={`btn-click ${openedLineId.includes(line.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenLine(line.id)}><i className='fa-solid fa-hand' /></button>
@@ -167,105 +199,113 @@ export default function LineControllerPanel({
 
                         {openedLineId.includes(line.id) &&
                             <div className='parameters'>
+                                {/* <div className='row'>
+                                    <MovingLabelInput
+                                        onValueChange={(propE) => { }}
+                                        label={'L S'}
+                                        labelStyle={'left stay'}
+                                    />
+                                    <MovingLabelInput
+                                        onValueChange={(propE) => { }}
+                                        label={'C S'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        onValueChange={(propE) => { }}
+                                        label={'R S'}
+                                        labelStyle={'right stay'}
+                                    />
+                                </div>
+                                <div className='row'>
+                                    <MovingLabelInput
+                                        onValueChange={(propE) => { }}
+                                        label={'L M'}
+                                        labelStyle={'left moving'}
+                                    />
+                                    <MovingLabelInput
+                                        onValueChange={(propE) => { }}
+                                        label={'C M'}
+                                        labelStyle={'center moving'}
+                                    />
+                                    <MovingLabelInput
+                                        onValueChange={(propE) => { }}
+                                        label={'R M'}
+                                        labelStyle={'right moving'}
+                                    />
+                                </div> */}
                                 <div className='row row-1'>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={line?.parameterA || 0}
-                                            onChange={(e) => updateLine(line?.id, 'parameterA', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='X'>X</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={line?.parameterB || 0}
-                                            onChange={(e) => updateLine(line?.id, 'parameterB', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Y'>Y</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={line?.parameterC || 0}
-                                            onChange={(e) => updateLine(line?.id, 'parameterC', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Z'>Z</label>
-                                    </div>
-                                    <select
-                                        onChange={(e) => {
-                                            const value = e.target.value;
-                                            const selectDot = dots.find(dot => dot.id == value);
-                                            const selectVector = vectors.find(vector => vector.id == value);
-                                            const X = selectDot?.xCoordinate || selectVector?.xCoordinateB - selectVector?.xCoordinateA || 0;
-                                            const Y = selectDot?.yCoordinate || selectVector?.yCoordinateB - selectVector?.yCoordinateA || 0;
-                                            const Z = selectDot?.zCoordinate || selectVector?.zCoordinateB - selectVector?.zCoordinateA || 0;
-                                            updateLineParameter(line?.id, X, Y, Z, line?.pointX0, line?.pointY0, line?.pointZ0);
-                                        }}
-                                        className='select'
-                                    >
-                                        <option value={''} className='option'>O</option>
-                                        {dots.map((dot, index) => (
-                                            <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                        ))}
-                                        {vectors.map((vector, index) => (
-                                            <option key={index} value={vector.id} className='option'>{vector.name}</option>
-                                        ))}
-                                    </select>
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.parameterA}
+                                        onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'ParamA'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.parameterB}
+                                        onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'ParamB'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.parameterC}
+                                        onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'ParamC'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <StyleLabelSelect
+                                        list={mergedCoordinates}
+                                        onValueChange={(propE) => updateLineParameter(line?.id, propE.X, propE.Y, propE.Z, line?.pointX0, line?.pointY0, line?.pointZ0)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Vector'}
+                                        labelStyle={'center'}
+                                    />
                                 </div>
                                 <div className='row row-2'>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={line?.pointX0 || 0}
-                                            onChange={(e) => updateLine(line?.id, 'pointX0', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='X'>X</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={line?.pointY0 || 0}
-                                            onChange={(e) => updateLine(line?.id, 'pointY0', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Y'>Y</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={line?.pointZ0 || 0}
-                                            onChange={(e) => updateLine(line?.id, 'pointZ0', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Z'>Z</label>
-                                    </div>
-                                    <select
-                                        onChange={(e) => {
-                                            const value = e.target.value;
-                                            const selectDot = dots.find(dot => dot.id == value);
-                                            const X = selectDot?.xCoordinate || 0;
-                                            const Y = selectDot?.yCoordinate || 0;
-                                            const Z = selectDot?.zCoordinate || 0;
-                                            updateLineParameter(line?.id, line?.parameterA, line?.parameterB, line?.parameterC, X, Y, Z);
-                                        }}
-                                        className='select'
-                                    >
-                                        <option value={''} className='option'>O</option>
-                                        {dots.map((dot, index) => (
-                                            <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                        ))}
-                                    </select>
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.pointX0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'pointX0', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Point X0'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.pointY0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'pointY0', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Point Y0'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.pointZ0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'pointZ0', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Point Z0'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <StyleLabelSelect
+                                        list={dots}
+                                        onValueChange={(propE) => updateLineParameter(line?.id, line?.parameterA, line?.parameterB, line?.parameterC, propE.X, propE.Y, propE.Z)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Point'}
+                                        labelStyle={'center'}
+                                    />
                                 </div>
                             </div>
                         }
