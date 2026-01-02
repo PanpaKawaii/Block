@@ -75,7 +75,7 @@ export default function GenerateObject({
                         translateZ(${sceneStyle?.translateZ || 0}px)
                         rotateZ(${-sceneStyle?.rotateZ || 0}deg)
                     `,
-                    perspective: sceneStyle?.perspective || 600,
+                    perspective: sceneStyle?.perspective ?? 600,
                 }}
             >
                 <div
