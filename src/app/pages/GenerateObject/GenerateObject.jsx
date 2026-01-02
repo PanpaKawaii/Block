@@ -174,7 +174,7 @@ export default function GenerateObject({
                             <React.Fragment key={dot.id}>
                                 {dot.visible == 1 &&
                                     <svg
-                                        className='vector-svg'
+                                        className='dot-svg'
                                         width={`${width || '0'}`}
                                         height={`${height || '0'}`}
                                         viewBox={`0 0 ${width || '0'} ${height || '0'}`}
@@ -320,16 +320,17 @@ export default function GenerateObject({
                             </React.Fragment>
                         )
                     })}
-                    {lines.map(vector => {
+                    {lines.map(line => {
                         const width = 3000;
                         const height = 20;
-                        const X = vector.parameterA;
-                        const Y = vector.parameterB;
-                        const Z = vector.parameterC;
-                        const X0 = vector.pointX0;
-                        const Y0 = vector.pointY0;
-                        const Z0 = vector.pointZ0;
+                        const X = line.parameterA;
+                        const Y = line.parameterB;
+                        const Z = line.parameterC;
+                        const X0 = line.pointX0;
+                        const Y0 = line.pointY0;
+                        const Z0 = line.pointZ0;
                         const underY = Math.sqrt(X * X + Z * Z);
+                        const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z) || 0;
                         let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
                         xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
                         xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
@@ -338,10 +339,10 @@ export default function GenerateObject({
                         xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : xOz;
                         const Oxyz = (underY == 0) ? (Y >= 0 ? 90 : -90) : Math.atan(Y / underY) * 180 / Math.PI;
                         return (
-                            <React.Fragment key={vector.id}>
-                                {vector.visible == 1 &&
+                            <React.Fragment key={line.id}>
+                                {(line.visible == 1 && vectorLength != 0) &&
                                     <svg
-                                        className='vector-svg'
+                                        className='line-svg'
                                         width={`${width || '0'}`}
                                         height={`${height || '0'}`}
                                         viewBox={`0 0 ${width || '0'} ${height || '0'}`}
@@ -349,21 +350,21 @@ export default function GenerateObject({
                                     >
                                         <path
                                             d={`M 0 ${height / 2 - 1} L ${width} ${height / 2 - 1} L ${width} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
-                                            fill={vector.color || '#FFFFFF'}
+                                            fill={line.color || '#FFFFFF'}
                                             stroke='#FFFFFF'
-                                            strokeWidth={vector.id == selectedLineId ? '1' : '0'}
+                                            strokeWidth={line.id == selectedLineId ? '1' : '0'}
                                             vectorEffect='non-scaling-stroke'
-                                            filter={`url(#glow-${vector.id})`}
+                                            filter={`url(#glow-${line.id})`}
 
-                                            strokeLinecap={vector.id == selectedLineId ? 'round' : ''}
-                                            strokeDasharray={vector.id == selectedLineId ? '2 3' : ''}
-                                            className={vector.id == selectedLineId ? 'dashoffset' : ''}
+                                            strokeLinecap={line.id == selectedLineId ? 'round' : ''}
+                                            strokeDasharray={line.id == selectedLineId ? '2 3' : ''}
+                                            className={line.id == selectedLineId ? 'dashoffset' : ''}
 
                                             onClick={() => setSelectedLineId(prev => {
-                                                if (prev && prev == vector.id) {
+                                                if (prev && prev == line.id) {
                                                     return null;
                                                 } else {
-                                                    return vector.id;
+                                                    return line.id;
                                                 }
                                             })}
                                         />
@@ -372,10 +373,10 @@ export default function GenerateObject({
                                             y='0'
                                             textAnchor='middle'
                                             dominantBaseline='middle'
-                                            fill={vector.nameColor}
-                                            fontSize={vector.nameSize}
+                                            fill={line.nameColor}
+                                            fontSize={line.nameSize}
                                         >
-                                            {vector.nameVisible === 1 ? vector.name : ''}
+                                            {line.nameVisible === 1 ? line.name : ''}
                                         </text>
                                     </svg>
                                 }

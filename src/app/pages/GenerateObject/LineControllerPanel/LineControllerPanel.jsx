@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
-import './LineControllerPanel.css';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
-import StyleLabelSelect from '../../../components/MovingLabelSelect/StyleLabelSelect.jsx';
+import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
+import './LineControllerPanel.css';
 
 export default function LineControllerPanel({
     dots,
@@ -116,6 +116,9 @@ export default function LineControllerPanel({
         );
     };
 
+    const selectRefVector = useRef(null);
+    const selectRefPoint = useRef(null);
+    const selectRefSecondPoint = useRef(null);
     const mergedCoordinates = useMemo(() => {
         return [
             ...dots.map(dot => ({
@@ -168,16 +171,6 @@ export default function LineControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(line.color || '#FFFFFFFF') || 1 }}
                             />
-                            {/* <div className='input-group'>
-                                <input
-                                    type='text'
-                                    placeholder=''
-                                    value={line?.name || ''}
-                                    onChange={(e) => updateLine(line?.id, 'name', e.target.value)}
-                                    className='input'
-                                />
-                                <label htmlFor='Name'>Name</label>
-                            </div> */}
                             <MovingLabelInput
                                 type={'text'}
                                 value={line?.name}
@@ -199,40 +192,6 @@ export default function LineControllerPanel({
 
                         {openedLineId.includes(line.id) &&
                             <div className='parameters'>
-                                {/* <div className='row'>
-                                    <MovingLabelInput
-                                        onValueChange={(propE) => { }}
-                                        label={'L S'}
-                                        labelStyle={'left stay'}
-                                    />
-                                    <MovingLabelInput
-                                        onValueChange={(propE) => { }}
-                                        label={'C S'}
-                                        labelStyle={'center stay'}
-                                    />
-                                    <MovingLabelInput
-                                        onValueChange={(propE) => { }}
-                                        label={'R S'}
-                                        labelStyle={'right stay'}
-                                    />
-                                </div>
-                                <div className='row'>
-                                    <MovingLabelInput
-                                        onValueChange={(propE) => { }}
-                                        label={'L M'}
-                                        labelStyle={'left moving'}
-                                    />
-                                    <MovingLabelInput
-                                        onValueChange={(propE) => { }}
-                                        label={'C M'}
-                                        labelStyle={'center moving'}
-                                    />
-                                    <MovingLabelInput
-                                        onValueChange={(propE) => { }}
-                                        label={'R M'}
-                                        labelStyle={'right moving'}
-                                    />
-                                </div> */}
                                 <div className='row row-1'>
                                     <MovingLabelInput
                                         type={'number'}
@@ -262,10 +221,17 @@ export default function LineControllerPanel({
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
+                                        reference={selectRefVector}
                                         list={mergedCoordinates}
-                                        onValueChange={(propE) => updateLineParameter(line?.id, propE.X, propE.Y, propE.Z, line?.pointX0, line?.pointY0, line?.pointZ0)}
+                                        value={line}
+                                        onValueChange={(propE) => {
+                                            updateLineParameter(line?.id, propE.X, propE.Y, propE.Z, line?.pointX0, line?.pointY0, line?.pointZ0);
+                                            if (selectRefSecondPoint.current) {
+                                                selectRefSecondPoint.current.value = '';
+                                            }
+                                        }}
                                         extraClassName={''}
-                                        extraStyle={{}}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefVector.current.value ? 1 : 0.4 }}
                                         label={'Vector'}
                                         labelStyle={'center'}
                                     />
@@ -299,11 +265,63 @@ export default function LineControllerPanel({
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
+                                        reference={selectRefPoint}
                                         list={dots}
-                                        onValueChange={(propE) => updateLineParameter(line?.id, line?.parameterA, line?.parameterB, line?.parameterC, propE.X, propE.Y, propE.Z)}
+                                        value={line}
+                                        onValueChange={(propE) => {
+                                            updateLineParameter(line?.id, line?.parameterA, line?.parameterB, line?.parameterC, propE.X, propE.Y, propE.Z);
+                                            if (selectRefSecondPoint.current) {
+                                                selectRefSecondPoint.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefPoint.current.value ? 1 : 0.4 }}
+                                        label={'Point'}
+                                        labelStyle={'center'}
+                                    />
+                                </div>
+                                <div className='row row-3'>
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.pointX0 + line?.parameterA}
+                                        onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value - line?.pointX0)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point'}
+                                        label={'Point X1'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.pointY0 + line?.parameterB}
+                                        onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value - line?.pointY0)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Point Y1'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={line?.pointZ0 + line?.parameterC}
+                                        onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value - line?.pointZ0)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Point Z1'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <StyleLabelSelect
+                                        reference={selectRefSecondPoint}
+                                        list={mergedCoordinates}
+                                        value={line}
+                                        onValueChange={(propE) => {
+                                            updateLineParameter(line?.id, propE.X - line?.pointX0, propE.Y - line?.pointY0, propE.Z - line?.pointZ0, line?.pointX0, line?.pointY0, line?.pointZ0);
+                                            if (selectRefVector.current) {
+                                                // selectRefVector.current.selectedIndex = 0;
+                                                selectRefVector.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefSecondPoint.current.value ? 1 : 0.4 }}
+                                        label={'Second Point'}
                                         labelStyle={'center'}
                                     />
                                 </div>

@@ -27,7 +27,8 @@
 
             .face-svg,
             .dot-svg,
-            .vector-svg {
+            .vector-svg,
+            .line-svg  {
                 position: absolute;
                 overflow: initial;
 
