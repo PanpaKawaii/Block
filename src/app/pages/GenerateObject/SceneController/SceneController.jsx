@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
 import './SceneController.css';
 
@@ -7,12 +8,16 @@ export default function SceneController({
     showCoordinateAxes,
     handleShowCoordinateAxes
 }) {
+    const [toggleMenu, setToggleMenu] = useState(false);
+    const collapseController = () => {
+        setToggleMenu(p => !p);
+    };
     return (
         <div className='scene-controller-container'>
-            <form>
-                <button type='button' className={`btn btn-xyz ${!showCoordinateAxes.includes('Oxyz') ? 'off' : ''}`} onClick={() => handleShowCoordinateAxes('Oxyz')}>Oxyz</button>
+            <button type='button' className={`btn btn-xyz ${!showCoordinateAxes.includes('Oxyz') ? 'off' : ''}`} onClick={() => handleShowCoordinateAxes('Oxyz')}>Oxyz</button>
+            <form className={`${toggleMenu ? '' : 'collapsed'}`}>
                 <div className='form-group'>
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) - 0.5), 10)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) - 0.5), 10)) }))}>
                         <i className='fa-solid fa-minus' />
                     </button>
                     <MovingLabelInput
@@ -24,12 +29,12 @@ export default function SceneController({
                         label={'Zoom'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) + 0.5), 10)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, scale: Math.max(0.1, Math.min(Number(Number(p.scale) + 0.5), 10)) }))}>
                         <i className='fa-solid fa-plus' />
                     </button>
                 </div>
                 <div className='form-group'>
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) - 50), 1000)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) - 50), 1000)) }))}>
                         <i className='fa-solid fa-chevron-left' />
                     </button>
                     <MovingLabelInput
@@ -41,12 +46,12 @@ export default function SceneController({
                         label={'Left/Right'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) + 50), 1000)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, translateX: Math.max(-1000, Math.min(Number(Number(p.translateX) + 50), 1000)) }))}>
                         <i className='fa-solid fa-chevron-right' />
                     </button>
                 </div>
                 <div className='form-group'>
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) - 50), 500)) }))}>
                         <i className='fa-solid fa-chevron-up' />
                     </button>
                     <MovingLabelInput
@@ -58,12 +63,12 @@ export default function SceneController({
                         label={'Up/Down'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, translateY: Math.max(-500, Math.min(Number(Number(p.translateY) + 50), 500)) }))}>
                         <i className='fa-solid fa-chevron-down' />
                     </button>
                 </div>
                 <div className='form-group'>
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) + 50), 500)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) + 50), 500)) }))}>
                         <i className='fa-regular fa-circle-dot' />
                     </button>
                     <MovingLabelInput
@@ -75,12 +80,12 @@ export default function SceneController({
                         label={'Forward/Backward'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) - 50), 500)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, translateZ: Math.max(-500, Math.min(Number(Number(p.translateZ) - 50), 500)) }))}>
                         <i className='fa-regular fa-circle-xmark' />
                     </button>
                 </div>
                 <div className='form-group'>
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) + 60), 720)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) + 60), 720)) }))}>
                         <i className='fa-solid fa-rotate-left' />
                     </button>
                     <MovingLabelInput
@@ -92,12 +97,12 @@ export default function SceneController({
                         label={'Rotate'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) - 60), 720)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) - 60), 720)) }))}>
                         <i className='fa-solid fa-rotate-right' />
                     </button>
                 </div>
                 <div className='form-group'>
-                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(Number(p.perspective) - 100), 2000)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(Number(p.perspective) - 100), 2000)) }))}>
                         <i className='fa-solid fa-minus' />
                     </button>
                     <MovingLabelInput
@@ -109,14 +114,15 @@ export default function SceneController({
                         label={'Perspective'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn btn-right' onClick={() => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(Number(p.perspective) + 100), 2000)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(Number(p.perspective) + 100), 2000)) }))}>
                         <i className='fa-solid fa-plus' />
                     </button>
                 </div>
-                <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0, translateZ: 0, rotateZ: 0, perspective: 600 })}>
+                <button type='button' className='btn btn-reset' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0, translateZ: 0, rotateZ: 0, perspective: 600 })}>
                     <i className='fa-solid fa-arrows-rotate' />
                 </button>
             </form>
+            <button className={`btn btn-collapsed ${toggleMenu ? '' : 'cls'}`} onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
         </div>
     )
 }
