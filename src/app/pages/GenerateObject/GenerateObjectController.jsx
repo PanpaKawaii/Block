@@ -61,6 +61,7 @@ export default function GenerateObjectController() {
         translateY: 0,
         translateZ: 0,
         rotateZ: 0,
+        perspective: 600,
     });
 
     return (

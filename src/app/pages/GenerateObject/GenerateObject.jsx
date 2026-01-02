@@ -67,7 +67,16 @@ export default function GenerateObject({
             <div
                 ref={containerRef}
                 className='scene-object'
-                style={{ transform: `scale(${sceneStyle?.scale || 1}) translateX(${sceneStyle?.translateX || 0}px) translateY(${sceneStyle?.translateY || 0}px) translateZ(${sceneStyle?.translateZ || 0}px) rotateZ(${-sceneStyle?.rotateZ || 0}deg)` }}
+                style={{
+                    transform: `
+                        scale(${sceneStyle?.scale || 1})
+                        translateX(${sceneStyle?.translateX || 0}px)
+                        translateY(${sceneStyle?.translateY || 0}px)
+                        translateZ(${sceneStyle?.translateZ || 0}px)
+                        rotateZ(${-sceneStyle?.rotateZ || 0}deg)
+                    `,
+                    perspective: sceneStyle?.perspective || 600,
+                }}
             >
                 <div
                     ref={objectRef}
@@ -275,50 +284,48 @@ export default function GenerateObject({
                         xOz = (zAB >= 0 && xAB < 0) ? 180 - xOz : xOz;
                         xOz = (xAB == 0) ? (zAB == 0 ? 0 : (zAB > 0 ? -90 : 90)) : xOz;
                         const Oxyz = (underY == 0) ? (yAB >= 0 ? 90 : -90) : Math.atan(yAB / underY) * 180 / Math.PI;
-                        return (
+                        return vector.visible == 1 ? (
                             <React.Fragment key={vector.id}>
-                                {vector.visible == 1 &&
-                                    <svg
-                                        className='vector-svg'
-                                        width={`${vectorLength || '0'}`}
-                                        height={`${height || '0'}`}
-                                        viewBox={`0 0 ${vectorLength || '0'} ${height || '0'}`}
-                                        style={{ transform: `translateX(${xA}px) translateY(${yA}px) translateZ(${zA}px) rotateY(${xOz}deg) rotateZ(${Oxyz}deg) translateX(${vectorLength / 2}px)` }}
+                                <svg
+                                    className='vector-svg'
+                                    width={`${vectorLength || '0'}`}
+                                    height={`${height || '0'}`}
+                                    viewBox={`0 0 ${vectorLength || '0'} ${height || '0'}`}
+                                    style={{ transform: `translateX(${xA}px) translateY(${yA}px) translateZ(${zA}px) rotateY(${xOz}deg) rotateZ(${Oxyz}deg) translateX(${vectorLength / 2}px)` }}
+                                >
+                                    <path
+                                        d={`M 0 ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 4} L ${vectorLength} ${height / 2} L ${vectorLength - 8} ${height / 2 + 4} L ${vectorLength - 8} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
+                                        fill={vector.color || '#FFFFFF'}
+                                        stroke='#FFFFFF'
+                                        strokeWidth={vector.id == selectedVectorId ? '1' : '0'}
+                                        vectorEffect='non-scaling-stroke'
+                                        filter={`url(#glow-${vector.id})`}
+
+                                        strokeLinecap={vector.id == selectedVectorId ? 'round' : ''}
+                                        strokeDasharray={vector.id == selectedVectorId ? '2 3' : ''}
+                                        className={vector.id == selectedVectorId ? 'dashoffset' : ''}
+
+                                        onClick={() => setSelectedVectorId(prev => {
+                                            if (prev && prev == vector.id) {
+                                                return null;
+                                            } else {
+                                                return vector.id;
+                                            }
+                                        })}
+                                    />
+                                    <text
+                                        x={vectorLength / 2}
+                                        y='0'
+                                        textAnchor='middle'
+                                        dominantBaseline='middle'
+                                        fill={vector.nameColor}
+                                        fontSize={vector.nameSize}
                                     >
-                                        <path
-                                            d={`M 0 ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 1} L ${vectorLength - 8} ${height / 2 - 4} L ${vectorLength} ${height / 2} L ${vectorLength - 8} ${height / 2 + 4} L ${vectorLength - 8} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
-                                            fill={vector.color || '#FFFFFF'}
-                                            stroke='#FFFFFF'
-                                            strokeWidth={vector.id == selectedVectorId ? '1' : '0'}
-                                            vectorEffect='non-scaling-stroke'
-                                            filter={`url(#glow-${vector.id})`}
-
-                                            strokeLinecap={vector.id == selectedVectorId ? 'round' : ''}
-                                            strokeDasharray={vector.id == selectedVectorId ? '2 3' : ''}
-                                            className={vector.id == selectedVectorId ? 'dashoffset' : ''}
-
-                                            onClick={() => setSelectedVectorId(prev => {
-                                                if (prev && prev == vector.id) {
-                                                    return null;
-                                                } else {
-                                                    return vector.id;
-                                                }
-                                            })}
-                                        />
-                                        <text
-                                            x={vectorLength / 2}
-                                            y='0'
-                                            textAnchor='middle'
-                                            dominantBaseline='middle'
-                                            fill={vector.nameColor}
-                                            fontSize={vector.nameSize}
-                                        >
-                                            {vector.nameVisible === 1 ? vector.name : ''}
-                                        </text>
-                                    </svg>
-                                }
+                                        {vector.nameVisible === 1 ? vector.name : ''}
+                                    </text>
+                                </svg>
                             </React.Fragment>
-                        )
+                        ) : null
                     })}
                     {lines.map(line => {
                         const width = 3000;
@@ -338,50 +345,48 @@ export default function GenerateObject({
                         xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz;
                         xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : xOz;
                         const Oxyz = (underY == 0) ? (Y >= 0 ? 90 : -90) : Math.atan(Y / underY) * 180 / Math.PI;
-                        return (
+                        return (line.visible == 1 && vectorLength != 0) ? (
                             <React.Fragment key={line.id}>
-                                {(line.visible == 1 && vectorLength != 0) &&
-                                    <svg
-                                        className='line-svg'
-                                        width={`${width || '0'}`}
-                                        height={`${height || '0'}`}
-                                        viewBox={`0 0 ${width || '0'} ${height || '0'}`}
-                                        style={{ transform: `translateX(${X0}px) translateY(${Y0}px) translateZ(${Z0}px) rotateY(${xOz}deg) rotateZ(${Oxyz}deg)` }}
+                                <svg
+                                    className='line-svg'
+                                    width={`${width || '0'}`}
+                                    height={`${height || '0'}`}
+                                    viewBox={`0 0 ${width || '0'} ${height || '0'}`}
+                                    style={{ transform: `translateX(${X0}px) translateY(${Y0}px) translateZ(${Z0}px) rotateY(${xOz}deg) rotateZ(${Oxyz}deg)` }}
+                                >
+                                    <path
+                                        d={`M 0 ${height / 2 - 1} L ${width} ${height / 2 - 1} L ${width} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
+                                        fill={line.color || '#FFFFFF'}
+                                        stroke='#FFFFFF'
+                                        strokeWidth={line.id == selectedLineId ? '1' : '0'}
+                                        vectorEffect='non-scaling-stroke'
+                                        filter={`url(#glow-${line.id})`}
+
+                                        strokeLinecap={line.id == selectedLineId ? 'round' : ''}
+                                        strokeDasharray={line.id == selectedLineId ? '2 3' : ''}
+                                        className={line.id == selectedLineId ? 'dashoffset' : ''}
+
+                                        onClick={() => setSelectedLineId(prev => {
+                                            if (prev && prev == line.id) {
+                                                return null;
+                                            } else {
+                                                return line.id;
+                                            }
+                                        })}
+                                    />
+                                    <text
+                                        x={width}
+                                        y='0'
+                                        textAnchor='middle'
+                                        dominantBaseline='middle'
+                                        fill={line.nameColor}
+                                        fontSize={line.nameSize}
                                     >
-                                        <path
-                                            d={`M 0 ${height / 2 - 1} L ${width} ${height / 2 - 1} L ${width} ${height / 2 + 1} L 0 ${height / 2 + 1} Z`}
-                                            fill={line.color || '#FFFFFF'}
-                                            stroke='#FFFFFF'
-                                            strokeWidth={line.id == selectedLineId ? '1' : '0'}
-                                            vectorEffect='non-scaling-stroke'
-                                            filter={`url(#glow-${line.id})`}
-
-                                            strokeLinecap={line.id == selectedLineId ? 'round' : ''}
-                                            strokeDasharray={line.id == selectedLineId ? '2 3' : ''}
-                                            className={line.id == selectedLineId ? 'dashoffset' : ''}
-
-                                            onClick={() => setSelectedLineId(prev => {
-                                                if (prev && prev == line.id) {
-                                                    return null;
-                                                } else {
-                                                    return line.id;
-                                                }
-                                            })}
-                                        />
-                                        <text
-                                            x={width}
-                                            y='0'
-                                            textAnchor='middle'
-                                            dominantBaseline='middle'
-                                            fill={line.nameColor}
-                                            fontSize={line.nameSize}
-                                        >
-                                            {line.nameVisible === 1 ? line.name : ''}
-                                        </text>
-                                    </svg>
-                                }
+                                        {line.nameVisible === 1 ? line.name : ''}
+                                    </text>
+                                </svg>
                             </React.Fragment>
-                        )
+                        ) : null
                     })}
                 </div>
             </div>

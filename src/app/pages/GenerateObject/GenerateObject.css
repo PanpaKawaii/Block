@@ -1,6 +1,4 @@
 .generate-object-container {
-    perspective: 600px;
-
     .scene-object {
         width: 100%;
         height: 100vh;

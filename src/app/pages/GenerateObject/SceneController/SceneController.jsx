@@ -1,3 +1,4 @@
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
 import './SceneController.css';
 
 export default function SceneController({
@@ -100,7 +101,25 @@ export default function SceneController({
                         <i className='fa-solid fa-rotate-right' />
                     </button>
                 </div>
-                <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0, translateZ: 0, rotateZ: 0 })}>
+                <div className='form-group'>
+                    <button type='button' className='btn' onClick={() => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(Number(p.perspective) - 100), 2000)) }))}>
+                        <i className='fa-solid fa-rotate-left' />
+                    </button>
+                    <div className='input-group'>
+                        <input
+                            type='number'
+                            placeholder=''
+                            value={sceneStyle.perspective || 0}
+                            onChange={(e) => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(e.target.value), 2000)) }))}
+                            className='input'
+                        />
+                        <label htmlFor='Perspective'>Perspective</label>
+                    </div>
+                    <button type='button' className='btn btn-right' onClick={() => setSceneStyle(p => ({ ...p, perspective: Math.max(0, Math.min(Number(Number(p.perspective) + 100), 2000)) }))}>
+                        <i className='fa-solid fa-rotate-right' />
+                    </button>
+                </div>
+                <button type='button' className='btn' onClick={() => setSceneStyle({ scale: 1, translateX: 0, translateY: 0, translateZ: 0, rotateZ: 0, perspective: 600 })}>
                     <i className='fa-solid fa-arrows-rotate' />
                 </button>
             </form>
