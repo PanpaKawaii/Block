@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
+import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './FunctionControllerPanel.css';
 
@@ -610,12 +611,7 @@ export default function FunctionControllerPanel({
                 <h2>Function  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <input
-                        type='text'
-                        value={JSON.stringify(faces, null, 0)}
-                        onChange={(e) => setFaces(JSON.parse(e.target.value))}
-                        className='input json-output'
-                    />
+                    <CopyPasteButton data={faces} setData={setFaces} />
                     <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
                     <button className='btn btn-remove' onClick={() => setFaces([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList

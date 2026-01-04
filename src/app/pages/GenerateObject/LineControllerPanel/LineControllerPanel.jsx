@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
+import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './LineControllerPanel.css';
@@ -146,12 +147,7 @@ export default function LineControllerPanel({
                 <h2>Line  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <input
-                        type='text'
-                        value={JSON.stringify(lines, null, 0)}
-                        onChange={(e) => setLines(JSON.parse(e.target.value))}
-                        className='input json-output'
-                    />
+                    <CopyPasteButton data={lines} setData={setLines} />
                     <button className='btn' onClick={addLine}><i className='fa-solid fa-plus' /></button>
                     <button className='btn btn-remove' onClick={() => setLines([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList

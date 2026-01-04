@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
+import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import './DotControllerPanel.css';
 
 export default function DotControllerPanel({
@@ -109,12 +110,7 @@ export default function DotControllerPanel({
                 <h2>Dot  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <input
-                        type='text'
-                        value={JSON.stringify(dots, null, 0)}
-                        onChange={(e) => setDots(JSON.parse(e.target.value))}
-                        className='input json-output'
-                    />
+                    <CopyPasteButton data={dots} setData={setDots} />
                     <button className='btn' onClick={addDot}><i className='fa-solid fa-plus' /></button>
                     <button className='btn btn-remove' onClick={() => setDots([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList

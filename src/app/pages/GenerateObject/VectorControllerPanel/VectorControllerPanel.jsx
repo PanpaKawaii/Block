@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
+import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import './VectorControllerPanel.css';
 
 export default function VectorControllerPanel({
@@ -117,12 +118,7 @@ export default function VectorControllerPanel({
                 <h2>Vector  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <input
-                        type='text'
-                        value={JSON.stringify(vectors, null, 0)}
-                        onChange={(e) => setVectors(JSON.parse(e.target.value))}
-                        className='input json-output'
-                    />
+                    <CopyPasteButton data={vectors} setData={setVectors} />
                     <button className='btn' onClick={addVector}><i className='fa-solid fa-plus' /></button>
                     <button className='btn btn-remove' onClick={() => setVectors([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList

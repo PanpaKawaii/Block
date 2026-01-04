@@ -14,7 +14,7 @@ export default function ClickPercentBox({
     const [stringPoints, setStringPoints] = useState('');
 
     const handleClick = (e) => {
-        if (stringPoints.includes('Z')) return;
+        if (stringPoints?.includes('Z')) return;
         const rect = boxRef.current.getBoundingClientRect();
 
         const x = Number((e.clientX - rect.left)?.toFixed(2));
@@ -34,7 +34,7 @@ export default function ClickPercentBox({
     };
 
     useEffect(() => {
-        setStringPoints(shape.includes('M') ? shape : polygonToPath(shape));
+        setStringPoints(shape?.includes('M') ? shape : polygonToPath(shape));
     }, []);
 
     const resetPoints = () => {
@@ -143,7 +143,7 @@ export default function ClickPercentBox({
                     </div>
                     <div className='btns'>
                         <button className='btn' onClick={resetPoints}>RESET</button>
-                        <button className='btn' onClick={endDrawing} disabled={stringPoints.includes('Z') || stringPoints == ''}>END</button>
+                        <button className='btn' onClick={endDrawing} disabled={stringPoints?.includes('Z') || stringPoints == ''}>END</button>
                     </div>
                 </div>
                 <button className='btn btn-approve' onClick={approveShape}>APPROVE</button>

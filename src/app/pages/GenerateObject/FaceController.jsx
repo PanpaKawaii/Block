@@ -2,6 +2,7 @@ import { useState } from 'react';
 // import { Link } from 'react-router-dom';
 import ButtonList from '../../components/ButtonList/ButtonList.jsx';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
+import CopyPasteButton from '../../components/CopyPasteButton/CopyPasteButton.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
 import FunctionControllerPanel from './FunctionControllerPanel/FunctionControllerPanel.jsx';
@@ -262,13 +263,7 @@ export default function FaceController({
                     <h2>Face  Ctrler</h2>
                     <div className='control'>
                         <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                        <input
-                            type='text'
-                            value={JSON.stringify(faces, null, 0)}
-                            // value={jsonToState(JSON.stringify(faces, null, 0)) || ''}
-                            onChange={(e) => setFaces(JSON.parse(e.target.value))}
-                            className='input json-output'
-                        />
+                        <CopyPasteButton data={faces} setData={setFaces} />
                         <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
                         <button className='btn btn-remove' onClick={() => setFaces([])}><i className='fa-solid fa-trash-can' /></button>
                         <ButtonList
