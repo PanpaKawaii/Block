@@ -75,18 +75,14 @@ export default function FunctionControllerPanel({
 
     const getEquationString = (dotsLocation, FaceEquation) => {
         let n = {};
-        let A = {};
-        let B = {};
-        let C = {};
+        let A = dotsLocation?.[0];
         if (dotsLocation?.length == 3) {
-            A = dotsLocation?.[0];
-            B = dotsLocation?.[1];
-            C = dotsLocation?.[2];
+            let B = dotsLocation?.[1];
+            let C = dotsLocation?.[2];
             const AB = createVectorFromPoint(A, B);
             const AC = createVectorFromPoint(A, C);
             n = crossProductVector(AB, AC);
         } else {
-            A = dotsLocation?.[0];
             n = {
                 x: FaceEquation.x,
                 y: FaceEquation.y,
@@ -103,18 +99,14 @@ export default function FunctionControllerPanel({
 
     const getEquationWallString = (dotsLocation, FaceEquation) => {
         let n = {};
-        let A = {};
-        let B = {};
-        let C = {};
+        let A = dotsLocation?.[0];
         if (dotsLocation?.length == 3) {
-            A = dotsLocation?.[0];
-            B = dotsLocation?.[1];
-            C = dotsLocation?.[2];
+            let B = dotsLocation?.[1];
+            let C = dotsLocation?.[2];
             const AB = createVectorFromPoint(A, B);
             const AC = createVectorFromPoint(A, C);
             n = crossProductVector(AB, AC);
         } else {
-            A = dotsLocation?.[0];
             n = {
                 x: FaceEquation.x,
                 y: FaceEquation.y,
@@ -130,8 +122,6 @@ export default function FunctionControllerPanel({
     };
 
     const getEquationObjectVector = (A, vector) => {
-        console.log('A', A);
-        console.log('vector', vector);
         const n = {
             x: 0 - Number(vector.xCoordinate),
             y: 0 - Number(vector.yCoordinate),
@@ -173,7 +163,7 @@ export default function FunctionControllerPanel({
         return `${number >= 0 ? (position != 1 ? '+ ' : '') : (position != 1 ? '- ' : '-')}${Math.abs(number)}`;
     };
 
-    const findFaceEquationAndCenterGravityPoint = (faceId) => {
+    const findFaceEquationAndCenterGravityPoint = (faceId, action) => {
         const relatedDots = groupFacesDotsVectors?.find(g => g.faceId == faceId);
         console.log('relatedDots', relatedDots);
         if (
@@ -198,7 +188,7 @@ export default function FunctionControllerPanel({
         let dotsLocation = [];
         let FaceEquation = {};
         let dotG = {};
-        if (selectedVector) {
+        if (selectedVector && action == 'move') {
             dotsLocation = [
                 { x: dotA.xCoordinate, y: dotA.yCoordinate, z: dotA.zCoordinate },
             ];
@@ -314,17 +304,26 @@ export default function FunctionControllerPanel({
         return point;
     };
 
+    const checkUpDown = (d_AG_y, Z, X, yD0, zD0, yG, zG) => {
+        d_AG_y = (Z == 0 && X == 0) ?
+            (zD0 >= zG ?
+                -Math.abs(d_AG_y)
+                : Math.abs(d_AG_y)
+            )
+            : (yD0 >= yG ?
+                Math.abs(d_AG_y)
+                : -Math.abs(d_AG_y)
+            );
+        // console.log(d_AG_y);
+        return d_AG_y;
+    };
+
     const checkLeftRight = (d_AG_x, Z, X, xD0, xRA, zD0, zRA) => {
-        // d_AG_x = (Z >= 0 && X >= 0) ? ((xD0 >= xRA || zRA >= zD0) ? Math.abs(d_AG_x) : -Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (Z < 0 && X < 0) ? ((xD0 >= xRA || zRA >= zD0) ? -Math.abs(d_AG_x) : Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (Z < 0 && X >= 0) ? ((xD0 >= xRA || zD0 >= zRA) ? -Math.abs(d_AG_x) : Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (Z >= 0 && X < 0) ? ((xD0 >= xRA || zD0 >= zRA) ? Math.abs(d_AG_x) : -Math.abs(d_AG_x)) : d_AG_x;
-        // ==FIX==
         d_AG_x = (X == 0) ?
             (Z == 0 ?
-                (zD0 >= zRA ?
-                    -Math.abs(d_AG_x)
-                    : Math.abs(d_AG_x)
+                (xD0 >= xRA ?
+                    Math.abs(d_AG_x)
+                    : -Math.abs(d_AG_x)
                 )
                 : (Z > 0 ?
                     (xD0 >= xRA ?
@@ -371,17 +370,19 @@ export default function FunctionControllerPanel({
                     )
                 )
             );
+        // console.log(d_AG_x);
         return d_AG_x;
     };
 
-    const distanceToG = (faceId) => {
-        const result = findFaceEquationAndCenterGravityPoint(faceId);
+    const distanceToG = (faceId, action) => {
+        const result = findFaceEquationAndCenterGravityPoint(faceId, action);
         const { dotsLocation, FaceEquation, dotG } = result ?? {};
         console.log('{ dotsLocation, FaceEquation, dotG }', dotsLocation, FaceEquation, dotG);
         if (!dotsLocation || !FaceEquation || !dotG) return;
 
         //Vector phap tuyen n
         const n = { x: FaceEquation.x, y: FaceEquation.y, z: FaceEquation.z };
+        console.log('---------------------------------VectorN', n);
 
         //Vector go to G
         const AG = createVectorFromPoint(dotsLocation?.[0], dotG);
@@ -389,8 +390,8 @@ export default function FunctionControllerPanel({
         const CG = createVectorFromPoint(dotsLocation?.[2], dotG);
 
         //Vector chi phuong u
-        const u = crossProductVector(n, { x: 0, y: 1, z: 0 });
-        console.log('---------------------------------u', u);
+        const u = crossProductVector(n, ((n.x == 0 && n.z == 0) ? { x: 0, y: 0, z: 1 } : { x: 0, y: 1, z: 0 }));
+        console.log('---------------------------------VectorU', u);
         const AGxU = crossProductVector(AG, u);
         const BGxU = crossProductVector(BG, u);
         const CGxU = crossProductVector(CG, u);
@@ -405,9 +406,13 @@ export default function FunctionControllerPanel({
         // console.log('d_AG_y', d_AG_y);
         // console.log('d_BG_y', d_BG_y);
         // console.log('d_CG_y', d_CG_y);
+        const yD0 = dotsLocation?.[0]?.y;
+        const yD1 = dotsLocation?.[1]?.y;
+        const yD2 = dotsLocation?.[2]?.y;
 
         //Vector chi phuong v
         const v = crossProductVector(u, n);
+        console.log('---------------------------------VectorV', v);
         const AGxV = crossProductVector(AG, v);
         const BGxV = crossProductVector(BG, v);
         const CGxV = crossProductVector(CG, v);
@@ -422,19 +427,12 @@ export default function FunctionControllerPanel({
         // console.log('d_AG_x', d_AG_x);
         // console.log('d_BG_x', d_BG_x);
         // console.log('d_CG_x', d_CG_x);
-
-        // const xG = dotG.x;
-        // const zG = dotG.z;
         const xD0 = dotsLocation?.[0]?.x;
         const zD0 = dotsLocation?.[0]?.z;
         const xD1 = dotsLocation?.[1]?.x;
         const zD1 = dotsLocation?.[1]?.z;
         const xD2 = dotsLocation?.[2]?.x;
         const zD2 = dotsLocation?.[2]?.z;
-        // d_AG_x = xG >= 0 ? (zD0 >= zG ? -d_AG_x : d_AG_x) : (xD0 >= 0 ? -d_AG_x : (zD0 >= zG ? d_AG_x : -d_AG_x));
-        // d_BG_x = xG >= 0 ? (zD1 >= zG ? -d_BG_x : d_BG_x) : (xD1 >= 0 ? -d_BG_x : (zD1 >= zG ? d_BG_x : -d_BG_x));
-        // d_CG_x = xG >= 0 ? (zD2 >= zG ? -d_CG_x : d_CG_x) : (xD2 >= 0 ? -d_CG_x : (zD2 >= zG ? d_CG_x : -d_CG_x));
-
 
         const D = FaceEquation.D;
         const X = FaceEquation.x / (D == 0 ? 0.000001 : -D);
@@ -446,29 +444,23 @@ export default function FunctionControllerPanel({
         const { x: xRA, z: zRA } = refA ?? {};
         const { x: xRB, z: zRB } = refB ?? {};
         const { x: xRC, z: zRC } = refC ?? {};
-        console.log('{ x: xRA, z: zRA }', { x: xRA, z: zRA });
-        console.log('{ x: xRB, z: zRB }', { x: xRB, z: zRB });
-        console.log('{ x: xRC, z: zRC }', { x: xRC, z: zRC });
-        // d_AG_x = xRA >= 0 ? (xD0 >= xRA ? -d_AG_x : (zD0 >= zRA ? -d_AG_x : d_AG_x)) : (xD0 >= xRA ? -d_AG_x : (zD0 >= zRA ? d_AG_x : -d_AG_x));
-        // d_BG_x = xRB >= 0 ? (xD1 >= xRB ? -d_BG_x : (zD1 >= zRB ? -d_BG_x : d_BG_x)) : (xD1 >= xRB ? -d_BG_x : (zD1 >= zRB ? d_BG_x : -d_BG_x));
-        // d_CG_x = xRC >= 0 ? (xD2 >= xRC ? -d_CG_x : (zD2 >= zRC ? -d_CG_x : d_CG_x)) : (xD2 >= xRC ? -d_CG_x : (zD2 >= zRC ? d_CG_x : -d_CG_x));
-
-        // d_AG_x = (Z >= 0 && X >= 0) ? ((xD0 >= xRA || zRA >= zD0) ? Math.abs(d_AG_x) : -Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (Z < 0 && X < 0) ? ((xD0 >= xRA || zRA >= zD0) ? -Math.abs(d_AG_x) : Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (Z < 0 && X >= 0) ? ((xD0 >= xRA || zD0 >= zRA) ? -Math.abs(d_AG_x) : Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (Z >= 0 && X < 0) ? ((xD0 >= xRA || zD0 >= zRA) ? Math.abs(d_AG_x) : -Math.abs(d_AG_x)) : d_AG_x;
-        // d_AG_x = (X == 0) ? (Z == 0 ? (zD0 >= zRA ? -Math.abs(d_AG_x) : Math.abs(d_AG_x)) : (Z > 0 ? (xD0 >= xRA ? Math.abs(d_AG_x) : -Math.abs(d_AG_x)) : (xD0 >= xRA ? -Math.abs(d_AG_x) : Math.abs(d_AG_x)))) : d_AG_x;
+        // console.log('{ x: xRA, z: zRA }', { x: xRA, z: zRA });
+        // console.log('{ x: xRB, z: zRB }', { x: xRB, z: zRB });
+        // console.log('{ x: xRC, z: zRC }', { x: xRC, z: zRC });
 
         d_AG_x = checkLeftRight(d_AG_x, Z, X, xD0, xRA, zD0, zRA);
         d_BG_x = checkLeftRight(d_BG_x, Z, X, xD1, xRB, zD1, zRB);
         d_CG_x = checkLeftRight(d_CG_x, Z, X, xD2, xRC, zD2, zRC);
+        d_AG_y = checkUpDown(d_AG_y, Z, X, yD0, zD0, dotG.y, dotG.z);
+        d_BG_y = checkUpDown(d_BG_y, Z, X, yD1, zD1, dotG.y, dotG.z);
+        d_CG_y = checkUpDown(d_CG_y, Z, X, yD2, zD2, dotG.y, dotG.z);
 
         setFaces((prev) =>
             prev.map((face) =>
                 face.id === faceId
                     ? {
                         ...face,
-                        shape: `${face.width / 2 + d_AG_x},${face.height / 2 + d_AG_y * (dotsLocation?.[0]?.y >= dotG.y ? 1 : -1)} ${face.width / 2 + d_BG_x},${face.height / 2 + d_BG_y * (dotsLocation?.[1]?.y >= dotG.y ? 1 : -1)} ${face.width / 2 + d_CG_x},${face.height / 2 + d_CG_y * (dotsLocation?.[2]?.y >= dotG.y ? 1 : -1)}`,
+                        shape: `${face.width / 2 + d_AG_x},${face.height / 2 + d_AG_y} ${face.width / 2 + d_BG_x},${face.height / 2 + d_BG_y} ${face.width / 2 + d_CG_x},${face.height / 2 + d_CG_y}`,
                     }
                     : face
             )
@@ -503,21 +495,40 @@ export default function FunctionControllerPanel({
         const Z = FaceEquation.z / (D == 0 ? 0.000001 : -D);
         const underY = calculateVectorLength(X, Z);
         const vectorLength = calculateVectorLength(X, Y, Z);
-        let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
-        xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
-        xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
-        xOz = (Z < 0 && X >= 0) ? 0 - xOz : xOz;
-        xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz
-        xOz = (X == 0) ? (Z == 0 ? 90 : (Z > 0 ? 0 : 180)) : xOz + 90;
-        const Oxyz = (underY == 0) ? 90 : Math.atan(Y / underY) * 180 / Math.PI;
+        let xOz = Math.abs(Math.atan(X / (Z == 0 ? 0.000001 : Z)) * 180 / Math.PI);
+        xOz = (X == 0) ?
+            (Z == 0 ?
+                0
+                : (Z > 0 ?
+                    0
+                    : 180
+                )
+            )
+            : (X > 0 ?
+                (Z == 0 ?
+                    90
+                    : (Z > 0 ?
+                        xOz
+                        : 180 - xOz
+                    )
+                )
+                : (Z == 0 ?
+                    -90
+                    : (Z > 0 ?
+                        -xOz
+                        : 180 + xOz
+                    )
+                )
+            );
+        const Oxyz = (underY == 0) ? 90 : Math.abs(Math.atan(Y / underY) * 180 / Math.PI);
 
         return axe == 'y' ? xOz
-            : (axe == 'x' ? (Y >= 0 ? 0 - Number(Math.abs(Oxyz)) : Number(Math.abs(Oxyz)))
+            : (axe == 'x' ? (Y >= 0 ? -Oxyz : Oxyz)
                 : (axe == 'z' ? 1 / vectorLength : 0));
     };
 
-    const updateFaceEquation = (faceId) => {
-        const result = findFaceEquationAndCenterGravityPoint(faceId);
+    const updateFaceEquation = (faceId, action) => {
+        const result = findFaceEquationAndCenterGravityPoint(faceId, action);
         const { dotsLocation, FaceEquation, dotG } = result ?? {};
         console.log('{ dotsLocation, FaceEquation, dotG }', dotsLocation, FaceEquation, dotG);
         if (!dotsLocation || !FaceEquation || !dotG) return;
@@ -696,7 +707,7 @@ export default function FunctionControllerPanel({
                                         <option key={index} value={dot.id} className='option'>{dot.name}</option>
                                     ))}
                                 </select>
-                                <button className='btn' onClick={() => updateFaceEquation(face.id)}
+                                <button className='btn' onClick={() => updateFaceEquation(face.id, 'cut')}
                                     disabled={(() => {
                                         const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
                                         return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
@@ -704,7 +715,7 @@ export default function FunctionControllerPanel({
                                 >
                                     <i className='fa-solid fa-arrows-up-down-left-right' />
                                 </button>
-                                <button className='btn' onClick={() => distanceToG(face.id)}
+                                <button className='btn' onClick={() => distanceToG(face.id, 'cut')}
                                     disabled={(() => {
                                         const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
                                         return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
@@ -756,7 +767,7 @@ export default function FunctionControllerPanel({
                                         <option key={index} value={m.id} className='option'>{m.name}</option>
                                     ))}
                                 </select>
-                                <button className='btn' onClick={() => updateFaceEquation(face.id)}
+                                <button className='btn' onClick={() => updateFaceEquation(face.id, 'move')}
                                     disabled={(() => {
                                         const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
                                         return !FaceInGroup?.dotA || !FaceInGroup?.vectorId;
