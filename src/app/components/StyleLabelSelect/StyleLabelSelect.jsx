@@ -21,12 +21,12 @@ export default function StyleLabelSelect({
                     const X = select?.xCoordinate || 0;
                     const Y = select?.yCoordinate || 0;
                     const Z = select?.zCoordinate || 0;
-                    onValueChange({ X: X, Y: Y, Z: Z });
+                    onValueChange({ X: X, Y: Y, Z: Z, value: val });
                 }}
                 className={`select ${extraClassName}`}
             >
-                <option value={''} className='option' disabled>--</option>
-                <option value={'Oxyz'} className='option'>O</option>
+                <option value={''} className='option'>--</option>
+                {/* <option value={'Oxyz'} className='option'>O</option> */}
                 {list.map((item, index) => (
                     <option key={index} value={item.id} className='option'>{item.name}</option>
                 ))}

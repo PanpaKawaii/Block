@@ -47,7 +47,6 @@ export default function LineControllerPanel({
     const addLine = () => {
         const newId = crypto.randomUUID();
         setLines((prev) => [
-            ...prev,
             {
                 id: newId,
                 parameterA: 0,
@@ -64,7 +63,8 @@ export default function LineControllerPanel({
                 nameColor: '#80FCFF',
                 visible: 1,
                 nameVisible: 1,
-            }
+            },
+            ...prev,
         ]);
     };
 
@@ -143,7 +143,7 @@ export default function LineControllerPanel({
     return (
         <div className={`line-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'line' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Line Controller</h2>
+                <h2>Line  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
@@ -155,7 +155,7 @@ export default function LineControllerPanel({
                     <button className='btn' onClick={addLine}><i className='fa-solid fa-plus' /></button>
                     <button className='btn btn-remove' onClick={() => setLines([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList
-                        icon={'arrows-rotate'}
+                        icon={'arrow-right-arrow-left'}
                         onToggle={swapController}
                     />
                 </div>
@@ -311,7 +311,7 @@ export default function LineControllerPanel({
                                     />
                                     <StyleLabelSelect
                                         reference={selectRefSecondPoint}
-                                        list={mergedCoordinates}
+                                        list={dots}
                                         value={line}
                                         onValueChange={(propE) => {
                                             updateLineParameter(line?.id, propE.X - line?.pointX0, propE.Y - line?.pointY0, propE.Z - line?.pointZ0, line?.pointX0, line?.pointY0, line?.pointZ0);

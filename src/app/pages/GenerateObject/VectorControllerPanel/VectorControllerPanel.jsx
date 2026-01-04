@@ -41,7 +41,6 @@ export default function VectorControllerPanel({
     const addVector = () => {
         const newId = crypto.randomUUID();
         setVectors((prev) => [
-            ...prev,
             {
                 id: newId,
                 xCoordinateA: 0,
@@ -58,7 +57,8 @@ export default function VectorControllerPanel({
                 nameColor: '#80FCFF',
                 visible: 1,
                 nameVisible: 1,
-            }
+            },
+            ...prev,
         ]);
     };
 
@@ -114,7 +114,7 @@ export default function VectorControllerPanel({
     return (
         <div className={`vector-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'vector' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Vector Controller</h2>
+                <h2>Vector  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
@@ -124,8 +124,9 @@ export default function VectorControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addVector}><i className='fa-solid fa-plus' /></button>
+                    <button className='btn btn-remove' onClick={() => setVectors([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList
-                        icon={'arrows-rotate'}
+                        icon={'arrow-right-arrow-left'}
                         onToggle={swapController}
                     />
                 </div>

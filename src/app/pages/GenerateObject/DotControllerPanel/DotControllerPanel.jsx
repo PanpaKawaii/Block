@@ -40,7 +40,6 @@ export default function DotControllerPanel({
     const addDot = () => {
         const newId = crypto.randomUUID();
         setDots((prev) => [
-            ...prev,
             {
                 id: newId,
                 size: 4,
@@ -57,7 +56,8 @@ export default function DotControllerPanel({
                 nameVisible: 1,
                 vectorVisible: 1,
                 vectorNameVisible: 1,
-            }
+            },
+            ...prev,
         ]);
     };
 
@@ -106,7 +106,7 @@ export default function DotControllerPanel({
     return (
         <div className={`dot-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'dot' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Dot Controller</h2>
+                <h2>Dot  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
@@ -116,8 +116,9 @@ export default function DotControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addDot}><i className='fa-solid fa-plus' /></button>
+                    <button className='btn btn-remove' onClick={() => setDots([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList
-                        icon={'arrows-rotate'}
+                        icon={'arrow-right-arrow-left'}
                         onToggle={swapController}
                     />
                 </div>

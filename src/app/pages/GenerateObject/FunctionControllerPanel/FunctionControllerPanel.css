@@ -1,9 +1,7 @@
 .function-controller-panel-container {
     .list {
         .card {
-            .header {
-                margin: 0 0 8px;
-            }
+            padding: 12px !important;
 
             .function-dots-vector {
                 margin: 12px 0 0;
@@ -15,19 +13,38 @@
                     display: flex;
                     gap: 8px;
 
-                    select {
-                        flex: 1;
-                    }
-
                     &.row-1 {
-                        .btn {
-                            flex: 1;
+                        .selects {
+                            flex: 3;
+                            display: flex;
+                            gap: 8px;
+                        }
+
+                        .btns {
+                            flex: 2;
+                            display: flex;
+                            gap: 8px;
+
+                            .btn {
+                                flex: 1;
+                            }
                         }
                     }
 
                     &.row-2 {
-                        .btn {
-                            flex: 5;
+                        .selects {
+                            flex: 3;
+                            display: flex;
+                            gap: 8px;
+                        }
+
+                        .btns {
+                            flex: 2;
+                            display: flex;
+
+                            .btn {
+                                flex: 1;
+                            }
                         }
                     }
                 }

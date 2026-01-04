@@ -93,7 +93,6 @@ export default function FaceController({
     const addFace = () => {
         const newId = crypto.randomUUID();
         setFaces((prev) => [
-            ...prev,
             {
                 id: newId,
                 shape: '0,0 200,0 200,200 0,200',
@@ -111,7 +110,8 @@ export default function FaceController({
                 borderVisible: 1,
                 glowVisible: 1,
                 steps: []
-            }
+            },
+            ...prev,
         ]);
         toggleOpenFace(newId);
     };
@@ -259,7 +259,7 @@ export default function FaceController({
 
             <div className={`face-controller-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'face' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
                 <div className='heading'>
-                    <h2>Face Controller</h2>
+                    <h2>Face  Ctrler</h2>
                     <div className='control'>
                         <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                         <input
@@ -270,8 +270,9 @@ export default function FaceController({
                             className='input json-output'
                         />
                         <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
+                        <button className='btn btn-remove' onClick={() => setFaces([])}><i className='fa-solid fa-trash-can' /></button>
                         <ButtonList
-                            icon={'arrows-rotate'}
+                            icon={'arrow-right-arrow-left'}
                             onToggle={swapController}
                         />
                     </div>

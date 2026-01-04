@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
+import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './FunctionControllerPanel.css';
 
 export default function FunctionControllerPanel({
@@ -577,6 +578,11 @@ export default function FunctionControllerPanel({
         // ]);
     };
 
+    const selectRefPoint = useRef(null);
+    const selectRefPoint1 = useRef(null);
+    const selectRefPoint2 = useRef(null);
+    const selectRefPoint3 = useRef(null);
+    const selectRefVector = useRef(null);
     const mergedCoordinates = useMemo(() => {
         return [
             ...dots.map(dot => ({
@@ -601,7 +607,7 @@ export default function FunctionControllerPanel({
     return (
         <div className={`function-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'function' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Function Controller</h2>
+                <h2>Function  Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <input
@@ -611,8 +617,9 @@ export default function FunctionControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
+                    <button className='btn btn-remove' onClick={() => setFaces([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList
-                        icon={'arrows-rotate'}
+                        icon={'arrow-right-arrow-left'}
                         onToggle={swapController}
                     />
                 </div>
@@ -642,141 +649,172 @@ export default function FunctionControllerPanel({
                             </div>
                         </div>
 
-                        <div className='function-dots-vector'>
-                            <div className='row row-1'>
-                                <select
-                                    value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA || ''}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setGroupFacesDotsVectors(prev => {
-                                            const index = prev.findIndex(g => g.faceId == face.id);
-                                            if (index !== -1) {
-                                                const newArr = [...prev];
-                                                newArr[index] = { ...newArr[index], dotA: value };
-                                                return newArr;
-                                            }
-                                            return [...prev, { faceId: face.id, dotA: value, dotB: '', dotC: '', vectorId: '', }];
-                                        });
-                                    }}
-                                    className='select'
-                                >
-                                    <option value={''} className='option'>--</option>
-                                    {dots.map((dot, index) => (
-                                        <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                    ))}
-                                </select>
-                                <select
-                                    value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotB || ''}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setGroupFacesDotsVectors(prev => {
-                                            const index = prev.findIndex(g => g.faceId == face.id);
-                                            if (index !== -1) {
-                                                const newArr = [...prev];
-                                                newArr[index] = { ...newArr[index], dotB: value };
-                                                return newArr;
-                                            }
-                                            return [...prev, { faceId: face.id, dotA: '', dotB: value, dotC: '', vectorId: '', }];
-                                        });
-                                    }}
-                                    className='select'
-                                >
-                                    <option value={''} className='option'>--</option>
-                                    {dots.map((dot, index) => (
-                                        <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                    ))}
-                                </select>
-                                <select
-                                    value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotC || ''}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setGroupFacesDotsVectors(prev => {
-                                            const index = prev.findIndex(g => g.faceId == face.id);
-                                            if (index !== -1) {
-                                                const newArr = [...prev];
-                                                newArr[index] = { ...newArr[index], dotC: value };
-                                                return newArr;
-                                            }
-                                            return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: value, vectorId: '', }];
-                                        });
-                                    }}
-                                    className='select'
-                                >
-                                    <option value={''} className='option'>--</option>
-                                    {dots.map((dot, index) => (
-                                        <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                    ))}
-                                </select>
-                                <button className='btn' onClick={() => updateFaceEquation(face.id, 'cut')}
-                                    disabled={(() => {
-                                        const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
-                                        return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
-                                    })()}
-                                >
-                                    <i className='fa-solid fa-arrows-up-down-left-right' />
-                                </button>
-                                <button className='btn' onClick={() => distanceToG(face.id, 'cut')}
-                                    disabled={(() => {
-                                        const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
-                                        return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
-                                    })()}
-                                >
-                                    <i className='fa-solid fa-cut' />
-                                </button>
+                        {openedFaceId.includes(face.id) &&
+                            <div className='function-dots-vector'>
+                                <div className='row row-1'>
+                                    <div className='selects'>
+                                        <StyleLabelSelect
+                                            reference={selectRefPoint1}
+                                            list={dots}
+                                            value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA || ''}
+                                            onValueChange={(propE) => {
+                                                const value = propE.value;
+                                                setGroupFacesDotsVectors(prev => {
+                                                    const index = prev.findIndex(g => g.faceId == face.id);
+                                                    if (index !== -1) {
+                                                        const newArr = [...prev];
+                                                        newArr[index] = { ...newArr[index], dotA: value };
+                                                        return newArr;
+                                                    }
+                                                    return [...prev, { faceId: face.id, dotA: value, dotB: '', dotC: '', vectorId: '', }];
+                                                });
+                                                if (selectRefVector.current) {
+                                                    selectRefVector.current.value = '';
+                                                }
+                                            }}
+                                            extraClassName={''}
+                                            extraStyle={{ flex: 1.5, opacity: selectRefPoint1.current?.value ? 1 : 0.4 }}
+                                            label={'Point 1'}
+                                            labelStyle={'center'}
+                                        />
+                                        <StyleLabelSelect
+                                            reference={selectRefPoint2}
+                                            list={dots}
+                                            value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotB || ''}
+                                            onValueChange={(propE) => {
+                                                const value = propE.value;
+                                                setGroupFacesDotsVectors(prev => {
+                                                    const index = prev.findIndex(g => g.faceId == face.id);
+                                                    if (index !== -1) {
+                                                        const newArr = [...prev];
+                                                        newArr[index] = { ...newArr[index], dotB: value };
+                                                        return newArr;
+                                                    }
+                                                    return [...prev, { faceId: face.id, dotA: '', dotB: value, dotC: '', vectorId: '', }];
+                                                });
+                                                if (selectRefVector.current) {
+                                                    selectRefVector.current.value = '';
+                                                }
+                                            }}
+                                            extraClassName={''}
+                                            extraStyle={{ flex: 1.5, opacity: selectRefPoint2.current?.value ? 1 : 0.4 }}
+                                            label={'Point 2'}
+                                            labelStyle={'center'}
+                                        />
+                                        <StyleLabelSelect
+                                            reference={selectRefPoint3}
+                                            list={dots}
+                                            value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotC || ''}
+                                            onValueChange={(propE) => {
+                                                const value = propE.value;
+                                                setGroupFacesDotsVectors(prev => {
+                                                    const index = prev.findIndex(g => g.faceId == face.id);
+                                                    if (index !== -1) {
+                                                        const newArr = [...prev];
+                                                        newArr[index] = { ...newArr[index], dotC: value };
+                                                        return newArr;
+                                                    }
+                                                    return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: value, vectorId: '', }];
+                                                });
+                                                if (selectRefVector.current) {
+                                                    selectRefVector.current.value = '';
+                                                }
+                                            }}
+                                            extraClassName={''}
+                                            extraStyle={{ flex: 1.5, opacity: selectRefPoint3.current?.value ? 1 : 0.4 }}
+                                            label={'Point 3'}
+                                            labelStyle={'center'}
+                                        />
+                                    </div>
+                                    <div className='btns'>
+                                        <button className='btn' onClick={() => updateFaceEquation(face.id, 'cut')}
+                                            disabled={(() => {
+                                                const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
+                                                return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
+                                            })()}
+                                        >
+                                            <i className='fa-solid fa-arrows-up-down-left-right' />
+                                        </button>
+                                        <button className='btn' onClick={() => distanceToG(face.id, 'cut')}
+                                            disabled={(() => {
+                                                const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
+                                                return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
+                                            })()}
+                                        >
+                                            <i className='fa-solid fa-cut' />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className='row row-2'>
+                                    <div className='selects'>
+                                        <StyleLabelSelect
+                                            reference={selectRefPoint}
+                                            list={dots}
+                                            value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA || ''}
+                                            onValueChange={(propE) => {
+                                                const value = propE.value;
+                                                setGroupFacesDotsVectors(prev => {
+                                                    const index = prev.findIndex(g => g.faceId == face.id);
+                                                    if (index !== -1) {
+                                                        const newArr = [...prev];
+                                                        newArr[index] = { ...newArr[index], dotA: value };
+                                                        return newArr;
+                                                    }
+                                                    return [...prev, { faceId: face.id, dotA: value, dotB: '', dotC: '', vectorId: '', }];
+                                                });
+                                                if (selectRefVector.current) {
+                                                    selectRefVector.current.value = '';
+                                                }
+                                            }}
+                                            extraClassName={''}
+                                            extraStyle={{ flex: 1, opacity: selectRefPoint.current?.value ? 1 : 0.4 }}
+                                            label={'Point'}
+                                            labelStyle={'center'}
+                                        />
+                                        <StyleLabelSelect
+                                            reference={selectRefVector}
+                                            list={mergedCoordinates}
+                                            value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.vectorId || ''}
+                                            onValueChange={(propE) => {
+                                                const value = propE.value;
+                                                setGroupFacesDotsVectors(prev => {
+                                                    const index = prev.findIndex(g => g.faceId == face.id);
+                                                    if (index !== -1) {
+                                                        const newArr = [...prev];
+                                                        newArr[index] = { ...newArr[index], vectorId: value };
+                                                        return newArr;
+                                                    }
+                                                    return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: '', vectorId: value, }];
+                                                });
+                                                if (selectRefPoint1.current) {
+                                                    selectRefPoint1.current.value = '';
+                                                }
+                                                if (selectRefPoint2.current) {
+                                                    selectRefPoint2.current.value = '';
+                                                }
+                                                if (selectRefPoint3.current) {
+                                                    selectRefPoint3.current.value = '';
+                                                }
+                                            }}
+                                            extraClassName={''}
+                                            extraStyle={{ flex: 2, opacity: selectRefVector.current?.value ? 1 : 0.4 }}
+                                            label={'Vector'}
+                                            labelStyle={'center'}
+                                        />
+                                    </div>
+                                    <div className='btns'>
+                                        <button className='btn' onClick={() => updateFaceEquation(face.id, 'move')}
+                                            disabled={(() => {
+                                                const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
+                                                return !FaceInGroup?.dotA || !FaceInGroup?.vectorId;
+                                            })()}
+                                        >
+                                            <i className='fa-solid fa-arrows-up-down-left-right' />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div className='row row-2'>
-                                <select
-                                    value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA || ''}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setGroupFacesDotsVectors(prev => {
-                                            const index = prev.findIndex(g => g.faceId == face.id);
-                                            if (index !== -1) {
-                                                const newArr = [...prev];
-                                                newArr[index] = { ...newArr[index], dotA: value };
-                                                return newArr;
-                                            }
-                                            return [...prev, { faceId: face.id, dotA: value, dotB: '', dotC: '', vectorId: '', }];
-                                        });
-                                    }}
-                                    className='select'
-                                >
-                                    <option value={''} className='option'>--</option>
-                                    {dots.map((dot, index) => (
-                                        <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                    ))}
-                                </select>
-                                <select
-                                    value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.vectorId || ''}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setGroupFacesDotsVectors(prev => {
-                                            const index = prev.findIndex(g => g.faceId == face.id);
-                                            if (index !== -1) {
-                                                const newArr = [...prev];
-                                                newArr[index] = { ...newArr[index], vectorId: value };
-                                                return newArr;
-                                            }
-                                            return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: '', vectorId: value, }];
-                                        });
-                                    }}
-                                    className='select'
-                                >
-                                    <option value={''} className='option'>--</option>
-                                    {mergedCoordinates.map((m, index) => (
-                                        <option key={index} value={m.id} className='option'>{m.name}</option>
-                                    ))}
-                                </select>
-                                <button className='btn' onClick={() => updateFaceEquation(face.id, 'move')}
-                                    disabled={(() => {
-                                        const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
-                                        return !FaceInGroup?.dotA || !FaceInGroup?.vectorId;
-                                    })()}
-                                >
-                                    <i className='fa-solid fa-arrows-up-down-left-right' />
-                                </button>
-                            </div>
-                        </div>
+                        }
                     </div>
                 ))}
             </div>
