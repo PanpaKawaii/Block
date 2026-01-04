@@ -6,16 +6,30 @@
             }
 
             .function-dots-vector {
+                margin: 12px 0 0;
                 display: flex;
-                gap: 8px;
+                flex-direction: column;
+                gap: 12px;
 
-                select {
-                    width: 60px;
-                    padding: 6px 8px;
-                }
+                .row {
+                    display: flex;
+                    gap: 8px;
 
-                .btn {
-                    flex: 1;
+                    select {
+                        flex: 1;
+                    }
+
+                    &.row-1 {
+                        .btn {
+                            flex: 1;
+                        }
+                    }
+
+                    &.row-2 {
+                        .btn {
+                            flex: 5;
+                        }
+                    }
                 }
             }
         }

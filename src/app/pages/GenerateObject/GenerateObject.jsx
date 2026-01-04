@@ -328,7 +328,7 @@ export default function GenerateObject({
                         ) : null
                     })}
                     {lines.map(line => {
-                        const width = 3000;
+                        const width = 2000;
                         const height = 20;
                         const X = line.parameterA;
                         const Y = line.parameterB;

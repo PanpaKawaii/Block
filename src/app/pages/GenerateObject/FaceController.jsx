@@ -406,8 +406,10 @@ export default function FaceController({
                 addFace={addFace}
                 removeFace={removeFace}
                 updateFace={updateFace}
+                vectors={vectors}
                 dots={dots}
                 setDots={setDots}
+                setLines={setLines}
                 toggleMenu={toggleMenu}
                 toggleStepFunction={toggleStepFunction}
                 collapseController={collapseController}

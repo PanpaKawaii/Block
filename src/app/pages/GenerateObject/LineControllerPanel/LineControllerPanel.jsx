@@ -153,6 +153,7 @@ export default function LineControllerPanel({
                         className='input json-output'
                     />
                     <button className='btn' onClick={addLine}><i className='fa-solid fa-plus' /></button>
+                    <button className='btn btn-remove' onClick={() => setLines([])}><i className='fa-solid fa-trash-can' /></button>
                     <ButtonList
                         icon={'arrows-rotate'}
                         onToggle={swapController}
@@ -231,7 +232,7 @@ export default function LineControllerPanel({
                                             }
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefVector.current.value ? 1 : 0.4 }}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefVector.current?.value ? 1 : 0.4 }}
                                         label={'Vector'}
                                         labelStyle={'center'}
                                     />
@@ -275,7 +276,7 @@ export default function LineControllerPanel({
                                             }
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefPoint.current.value ? 1 : 0.4 }}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefPoint.current?.value ? 1 : 0.4 }}
                                         label={'Point'}
                                         labelStyle={'center'}
                                     />
@@ -283,7 +284,7 @@ export default function LineControllerPanel({
                                 <div className='row row-3'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointX0 + line?.parameterA}
+                                        value={Number(line?.pointX0) + Number(line?.parameterA)}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value - line?.pointX0)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -292,7 +293,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointY0 + line?.parameterB}
+                                        value={Number(line?.pointY0) + Number(line?.parameterB)}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value - line?.pointY0)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -301,7 +302,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointZ0 + line?.parameterC}
+                                        value={Number(line?.pointZ0) + Number(line?.parameterC)}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value - line?.pointZ0)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -315,12 +316,11 @@ export default function LineControllerPanel({
                                         onValueChange={(propE) => {
                                             updateLineParameter(line?.id, propE.X - line?.pointX0, propE.Y - line?.pointY0, propE.Z - line?.pointZ0, line?.pointX0, line?.pointY0, line?.pointZ0);
                                             if (selectRefVector.current) {
-                                                // selectRefVector.current.selectedIndex = 0;
                                                 selectRefVector.current.value = '';
                                             }
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefSecondPoint.current.value ? 1 : 0.4 }}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefSecondPoint.current?.value ? 1 : 0.4 }}
                                         label={'Second Point'}
                                         labelStyle={'center'}
                                     />
