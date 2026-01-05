@@ -163,7 +163,6 @@ export default function GenerateObject({
                     })}
                     {showCoordinateAxes.includes('Oxyz') && <CoordinateAxes width={800} height={40} styleObj={{}} />}
                     {dots.map(dot => {
-                        const size = dot.size;
                         const radius = dot.size;
                         const width = 20;
                         const height = 20;
@@ -172,12 +171,31 @@ export default function GenerateObject({
                         const Z = dot.zCoordinate;
                         const underY = Math.sqrt(X * X + Z * Z);
                         const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z);
-                        let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
-                        xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
-                        xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
-                        xOz = (Z < 0 && X >= 0) ? 0 - xOz : xOz;
-                        xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz;
-                        xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : xOz;
+                        let xOz = Math.abs(Math.atan(X / (Z == 0 ? 0.000001 : Z)) * 180 / Math.PI);
+                        xOz = (X == 0) ?
+                            (Z == 0 ?
+                                0
+                                : (Z > 0 ?
+                                    -90
+                                    : 90
+                                )
+                            )
+                            : (X > 0 ?
+                                (Z == 0 ?
+                                    0
+                                    : (Z > 0 ?
+                                        xOz - 90
+                                        : 90 - xOz
+                                    )
+                                )
+                                : (Z == 0 ?
+                                    180
+                                    : (Z > 0 ?
+                                        -90 - xOz
+                                        : 90 + xOz
+                                    )
+                                )
+                            );
                         const Oxyz = (underY == 0) ? (Y >= 0 ? 90 : -90) : Math.atan(Y / underY) * 180 / Math.PI;
                         return (
                             <React.Fragment key={dot.id}>
@@ -277,12 +295,31 @@ export default function GenerateObject({
                         const zAB = zB - zA;
                         const underY = Math.sqrt(xAB * xAB + zAB * zAB);
                         const vectorLength = Math.sqrt(xAB * xAB + yAB * yAB + zAB * zAB);
-                        let xOz = (xAB == 0) ? (zAB == 0 ? 0 : (zAB > 0 ? -90 : 90)) : Math.atan(zAB / xAB) * 180 / Math.PI;
-                        xOz = (zAB >= 0 && xAB >= 0) ? 0 - xOz : xOz;
-                        xOz = (zAB < 0 && xAB < 0) ? 180 - xOz : xOz;
-                        xOz = (zAB < 0 && xAB >= 0) ? 0 - xOz : xOz;
-                        xOz = (zAB >= 0 && xAB < 0) ? 180 - xOz : xOz;
-                        xOz = (xAB == 0) ? (zAB == 0 ? 0 : (zAB > 0 ? -90 : 90)) : xOz;
+                        let xOz = Math.abs(Math.atan(xAB / (zAB == 0 ? 0.000001 : zAB)) * 180 / Math.PI);
+                        xOz = (xAB == 0) ?
+                            (zAB == 0 ?
+                                0
+                                : (zAB > 0 ?
+                                    -90
+                                    : 90
+                                )
+                            )
+                            : (xAB > 0 ?
+                                (zAB == 0 ?
+                                    0
+                                    : (zAB > 0 ?
+                                        xOz - 90
+                                        : 90 - xOz
+                                    )
+                                )
+                                : (zAB == 0 ?
+                                    180
+                                    : (zAB > 0 ?
+                                        -90 - xOz
+                                        : 90 + xOz
+                                    )
+                                )
+                            );
                         const Oxyz = (underY == 0) ? (yAB >= 0 ? 90 : -90) : Math.atan(yAB / underY) * 180 / Math.PI;
                         return vector.visible == 1 ? (
                             <React.Fragment key={vector.id}>
@@ -338,12 +375,31 @@ export default function GenerateObject({
                         const Z0 = line.pointZ0;
                         const underY = Math.sqrt(X * X + Z * Z);
                         const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z) || 0;
-                        let xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : Math.atan(Z / X) * 180 / Math.PI;
-                        xOz = (Z >= 0 && X >= 0) ? 0 - xOz : xOz;
-                        xOz = (Z < 0 && X < 0) ? 180 - xOz : xOz;
-                        xOz = (Z < 0 && X >= 0) ? 0 - xOz : xOz;
-                        xOz = (Z >= 0 && X < 0) ? 180 - xOz : xOz;
-                        xOz = (X == 0) ? (Z == 0 ? 0 : (Z > 0 ? -90 : 90)) : xOz;
+                        let xOz = Math.abs(Math.atan(X / (Z == 0 ? 0.000001 : Z)) * 180 / Math.PI);
+                        xOz = (X == 0) ?
+                            (Z == 0 ?
+                                0
+                                : (Z > 0 ?
+                                    -90
+                                    : 90
+                                )
+                            )
+                            : (X > 0 ?
+                                (Z == 0 ?
+                                    0
+                                    : (Z > 0 ?
+                                        xOz - 90
+                                        : 90 - xOz
+                                    )
+                                )
+                                : (Z == 0 ?
+                                    180
+                                    : (Z > 0 ?
+                                        -90 - xOz
+                                        : 90 + xOz
+                                    )
+                                )
+                            );
                         const Oxyz = (underY == 0) ? (Y >= 0 ? 90 : -90) : Math.atan(Y / underY) * 180 / Math.PI;
                         return (line.visible == 1 && vectorLength != 0) ? (
                             <React.Fragment key={line.id}>
