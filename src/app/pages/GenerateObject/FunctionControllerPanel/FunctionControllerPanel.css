@@ -3,7 +3,7 @@
         .card {
             padding: 12px !important;
 
-            .row-1 {
+            .row {
                 .selects {
                     flex: 3;
                     display: flex;
@@ -13,24 +13,7 @@
                 .btns {
                     flex: 2;
                     display: flex;
-                    gap: 8px;
-
-                    .btn {
-                        flex: 1;
-                    }
-                }
-            }
-
-            .row-2 {
-                .selects {
-                    flex: 3;
-                    display: flex;
-                    gap: 8px;
-                }
-
-                .btns {
-                    flex: 2;
-                    display: flex;
+                    gap: 8px !important;
 
                     .btn {
                         flex: 1;

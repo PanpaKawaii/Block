@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
@@ -490,6 +490,19 @@ export default function FunctionControllerPanel({
         // ]);
     };
 
+    const resetShape = (faceId) => {
+        setFaces((prev) =>
+            prev.map((face) =>
+                face.id === faceId
+                    ? {
+                        ...face,
+                        shape: `0,0 ${face.width},0 ${face.width},${face.height} 0,${face.height}`,
+                    }
+                    : face
+            )
+        );
+    };
+
     const calculateAngle = (axe, FaceEquation) => {
         const D = FaceEquation.D;
         const X = FaceEquation.x / (D == 0 ? 0.000001 : -D);
@@ -576,11 +589,6 @@ export default function FunctionControllerPanel({
         // ]);
     };
 
-    const selectRefPoint = useRef(null);
-    const selectRefPoint1 = useRef(null);
-    const selectRefPoint2 = useRef(null);
-    const selectRefPoint3 = useRef(null);
-    const selectRefVector = useRef(null);
     const mergedCoordinates = useMemo(() => {
         return [
             ...dots.map(dot => ({
@@ -647,7 +655,6 @@ export default function FunctionControllerPanel({
                                 <div className='row row-1'>
                                     <div className='selects'>
                                         <StyleLabelSelect
-                                            reference={selectRefPoint1}
                                             list={dots}
                                             value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA || ''}
                                             onValueChange={(propE) => {
@@ -661,17 +668,13 @@ export default function FunctionControllerPanel({
                                                     }
                                                     return [...prev, { faceId: face.id, dotA: value, dotB: '', dotC: '', vectorId: '', }];
                                                 });
-                                                if (selectRefVector.current) {
-                                                    selectRefVector.current.value = '';
-                                                }
                                             }}
                                             extraClassName={''}
-                                            extraStyle={{ flex: 1.5, opacity: selectRefPoint1.current?.value ? 1 : 0.4 }}
+                                            extraStyle={{ flex: 1.5, opacity: groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA ? 1 : 0.4 }}
                                             label={'Point 1'}
                                             labelStyle={'center'}
                                         />
                                         <StyleLabelSelect
-                                            reference={selectRefPoint2}
                                             list={dots}
                                             value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotB || ''}
                                             onValueChange={(propE) => {
@@ -680,22 +683,18 @@ export default function FunctionControllerPanel({
                                                     const index = prev.findIndex(g => g.faceId == face.id);
                                                     if (index !== -1) {
                                                         const newArr = [...prev];
-                                                        newArr[index] = { ...newArr[index], dotB: value };
+                                                        newArr[index] = { ...newArr[index], dotB: value, vectorId: '' };
                                                         return newArr;
                                                     }
                                                     return [...prev, { faceId: face.id, dotA: '', dotB: value, dotC: '', vectorId: '', }];
                                                 });
-                                                if (selectRefVector.current) {
-                                                    selectRefVector.current.value = '';
-                                                }
                                             }}
                                             extraClassName={''}
-                                            extraStyle={{ flex: 1.5, opacity: selectRefPoint2.current?.value ? 1 : 0.4 }}
+                                            extraStyle={{ flex: 1.5, opacity: groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotB ? 1 : 0.4 }}
                                             label={'Point 2'}
                                             labelStyle={'center'}
                                         />
                                         <StyleLabelSelect
-                                            reference={selectRefPoint3}
                                             list={dots}
                                             value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotC || ''}
                                             onValueChange={(propE) => {
@@ -704,17 +703,14 @@ export default function FunctionControllerPanel({
                                                     const index = prev.findIndex(g => g.faceId == face.id);
                                                     if (index !== -1) {
                                                         const newArr = [...prev];
-                                                        newArr[index] = { ...newArr[index], dotC: value };
+                                                        newArr[index] = { ...newArr[index], dotC: value, vectorId: '' };
                                                         return newArr;
                                                     }
                                                     return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: value, vectorId: '', }];
                                                 });
-                                                if (selectRefVector.current) {
-                                                    selectRefVector.current.value = '';
-                                                }
                                             }}
                                             extraClassName={''}
-                                            extraStyle={{ flex: 1.5, opacity: selectRefPoint3.current?.value ? 1 : 0.4 }}
+                                            extraStyle={{ flex: 1.5, opacity: groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotC ? 1 : 0.4 }}
                                             label={'Point 3'}
                                             labelStyle={'center'}
                                         />
@@ -741,7 +737,6 @@ export default function FunctionControllerPanel({
                                 <div className='row row-2'>
                                     <div className='selects'>
                                         <StyleLabelSelect
-                                            reference={selectRefPoint}
                                             list={dots}
                                             value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA || ''}
                                             onValueChange={(propE) => {
@@ -755,17 +750,13 @@ export default function FunctionControllerPanel({
                                                     }
                                                     return [...prev, { faceId: face.id, dotA: value, dotB: '', dotC: '', vectorId: '', }];
                                                 });
-                                                if (selectRefVector.current) {
-                                                    selectRefVector.current.value = '';
-                                                }
                                             }}
                                             extraClassName={''}
-                                            extraStyle={{ flex: 1, opacity: selectRefPoint.current?.value ? 1 : 0.4 }}
+                                            extraStyle={{ flex: 1, opacity: groupFacesDotsVectors.find(g => g.faceId == face.id)?.dotA ? 1 : 0.4 }}
                                             label={'Point'}
                                             labelStyle={'center'}
                                         />
                                         <StyleLabelSelect
-                                            reference={selectRefVector}
                                             list={mergedCoordinates}
                                             value={groupFacesDotsVectors.find(g => g.faceId == face.id)?.vectorId || ''}
                                             onValueChange={(propE) => {
@@ -774,23 +765,14 @@ export default function FunctionControllerPanel({
                                                     const index = prev.findIndex(g => g.faceId == face.id);
                                                     if (index !== -1) {
                                                         const newArr = [...prev];
-                                                        newArr[index] = { ...newArr[index], vectorId: value };
+                                                        newArr[index] = { ...newArr[index], vectorId: value, dotB: '', dotC: '' };
                                                         return newArr;
                                                     }
                                                     return [...prev, { faceId: face.id, dotA: '', dotB: '', dotC: '', vectorId: value, }];
                                                 });
-                                                if (selectRefPoint1.current) {
-                                                    selectRefPoint1.current.value = '';
-                                                }
-                                                if (selectRefPoint2.current) {
-                                                    selectRefPoint2.current.value = '';
-                                                }
-                                                if (selectRefPoint3.current) {
-                                                    selectRefPoint3.current.value = '';
-                                                }
                                             }}
                                             extraClassName={''}
-                                            extraStyle={{ flex: 2, opacity: selectRefVector.current?.value ? 1 : 0.4 }}
+                                            extraStyle={{ flex: 2, opacity: groupFacesDotsVectors.find(g => g.faceId == face.id)?.vectorId ? 1 : 0.4 }}
                                             label={'Vector'}
                                             labelStyle={'center'}
                                         />
@@ -803,6 +785,9 @@ export default function FunctionControllerPanel({
                                             })()}
                                         >
                                             <i className='fa-solid fa-arrows-up-down-left-right' />
+                                        </button>
+                                        <button type='button' className='btn' onClick={() => resetShape(face.id)}>
+                                            <i className='fa-solid fa-square' />
                                         </button>
                                     </div>
                                 </div>

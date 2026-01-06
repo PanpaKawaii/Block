@@ -146,7 +146,7 @@ export default function FaceController({
         );
     };
 
-    const addStep = (faceId, type) => {
+    const addStep = (faceId, type, index) => {
         const defaultValue =
             type.includes('translate') ? '0'
                 : type.includes('rotate') ? '0'
@@ -160,9 +160,10 @@ export default function FaceController({
                     ? {
                         ...face,
                         steps: [
-                            ...face.steps,
-                            { id: crypto.randomUUID(), type, value: defaultValue, visible: 1 }
-                        ]
+                            ...face.steps?.slice(0, index + 1),
+                            { id: crypto.randomUUID(), type: type, value: defaultValue, visible: 1 },
+                            ...face.steps?.slice(index + 1),
+                        ],
                     }
                     : face
             )
@@ -304,7 +305,7 @@ export default function FaceController({
                             {openedFaceId.includes(face.id) &&
                                 <>
                                     <form className='steps'>
-                                        {face.steps?.map((step) => (
+                                        {face.steps?.map((step, index) => (
                                             <div key={step.id} className={`row ${step.visible == 0 ? 'invisible' : ''}`}>
                                                 <select
                                                     value={step.type}
@@ -357,12 +358,13 @@ export default function FaceController({
 
                                                 <div className='btns'>
                                                     <button type='button' className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(face.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                                    <button type='button' className='btn-step' onClick={() => addStep(face.id, 'translateX', index)}><i className='fa-solid fa-plus' /></button>
                                                     <button type='button' className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-ban' /></button>
                                                 </div>
                                             </div>
                                         ))}
                                     </form>
-                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
+                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX', face.steps?.length - 1)}>ADD STEP</button>
                                 </>
                             }
                         </div>
