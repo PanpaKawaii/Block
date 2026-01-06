@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
@@ -114,9 +114,6 @@ export default function VectorControllerPanel({
         );
     };
 
-    const selectRefVector1 = useRef(null);
-    const selectRefVector2 = useRef(null);
-
     return (
         <div className={`vector-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'vector' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
@@ -169,12 +166,7 @@ export default function VectorControllerPanel({
                                     <MovingLabelInput
                                         type={'number'}
                                         value={vector?.xCoordinateA || 0}
-                                        onValueChange={(propE) => {
-                                            updateVector(vector?.id, 'xCoordinateA', propE.value);
-                                            if (selectRefVector1.current) {
-                                                selectRefVector1.current.value = '';
-                                            }
-                                        }}
+                                        onValueChange={(propE) => updateVector(vector?.id, 'xCoordinateA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
                                         label={'X1'}
@@ -183,12 +175,7 @@ export default function VectorControllerPanel({
                                     <MovingLabelInput
                                         type={'number'}
                                         value={vector?.yCoordinateA || 0}
-                                        onValueChange={(propE) => {
-                                            updateVector(vector?.id, 'yCoordinateA', propE.value);
-                                            if (selectRefVector1.current) {
-                                                selectRefVector1.current.value = '';
-                                            }
-                                        }}
+                                        onValueChange={(propE) => updateVector(vector?.id, 'yCoordinateA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
                                         label={'Y1'}
@@ -197,32 +184,22 @@ export default function VectorControllerPanel({
                                     <MovingLabelInput
                                         type={'number'}
                                         value={vector?.zCoordinateA || 0}
-                                        onValueChange={(propE) => {
-                                            updateVector(vector?.id, 'zCoordinateA', propE.value);
-                                            if (selectRefVector1.current) {
-                                                selectRefVector1.current.value = '';
-                                            }
-                                        }}
+                                        onValueChange={(propE) => updateVector(vector?.id, 'zCoordinateA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
                                         label={'Z1'}
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
-                                        reference={selectRefVector1}
                                         list={dots}
-                                        value={vector}
+                                        value={dots.find(d => d.xCoordinate == vector.xCoordinateA && d.yCoordinate == vector.yCoordinateA && d.zCoordinate == vector.zCoordinateA)?.id}
                                         onValueChange={(propE) => {
                                             const value = propE.value;
-                                            const selectDot = dots.find(dot => dot.id == value);
-                                            const X = selectDot?.xCoordinate || 0;
-                                            const Y = selectDot?.yCoordinate || 0;
-                                            const Z = selectDot?.zCoordinate || 0;
-                                            const name = selectDot?.name || 'O';
-                                            updateVectorLocation(vector?.id, X, Y, Z, vector?.xCoordinateB, vector?.yCoordinateB, vector?.zCoordinateB, name, 1);
+                                            const name = dots.find(dot => dot.id == value)?.name || 'O';
+                                            updateVectorLocation(vector?.id, propE.X, propE.Y, propE.Z, vector?.xCoordinateB, vector?.yCoordinateB, vector?.zCoordinateB, name, 1);
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefVector1.current?.value ? 1 : 0.4 }}
+                                        extraStyle={{ flex: 1.5, opacity: dots.find(d => d.xCoordinate == vector.xCoordinateA && d.yCoordinate == vector.yCoordinateA && d.zCoordinate == vector.zCoordinateA) ? 1 : 0.4 }}
                                         label={'Point 1'}
                                         labelStyle={'center'}
                                     />
@@ -231,12 +208,7 @@ export default function VectorControllerPanel({
                                     <MovingLabelInput
                                         type={'number'}
                                         value={vector?.xCoordinateB || 0}
-                                        onValueChange={(propE) => {
-                                            updateVector(vector?.id, 'xCoordinateB', propE.value);
-                                            if (selectRefVector2.current) {
-                                                selectRefVector2.current.value = '';
-                                            }
-                                        }}
+                                        onValueChange={(propE) => updateVector(vector?.id, 'xCoordinateB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
                                         label={'X2'}
@@ -245,12 +217,7 @@ export default function VectorControllerPanel({
                                     <MovingLabelInput
                                         type={'number'}
                                         value={vector?.yCoordinateB || 0}
-                                        onValueChange={(propE) => {
-                                            updateVector(vector?.id, 'yCoordinateB', propE.value);
-                                            if (selectRefVector2.current) {
-                                                selectRefVector2.current.value = '';
-                                            }
-                                        }}
+                                        onValueChange={(propE) => updateVector(vector?.id, 'yCoordinateB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
                                         label={'Y2'}
@@ -259,32 +226,22 @@ export default function VectorControllerPanel({
                                     <MovingLabelInput
                                         type={'number'}
                                         value={vector?.zCoordinateB || 0}
-                                        onValueChange={(propE) => {
-                                            updateVector(vector?.id, 'zCoordinateB', propE.value);
-                                            if (selectRefVector2.current) {
-                                                selectRefVector2.current.value = '';
-                                            }
-                                        }}
+                                        onValueChange={(propE) => updateVector(vector?.id, 'zCoordinateB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
                                         label={'Z2'}
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
-                                        reference={selectRefVector2}
                                         list={dots}
-                                        value={vector}
+                                        value={dots.find(d => d.xCoordinate == vector.xCoordinateB && d.yCoordinate == vector.yCoordinateB && d.zCoordinate == vector.zCoordinateB)?.id}
                                         onValueChange={(propE) => {
                                             const value = propE.value;
-                                            const selectDot = dots.find(dot => dot.id == value);
-                                            const X = selectDot?.xCoordinate || 0;
-                                            const Y = selectDot?.yCoordinate || 0;
-                                            const Z = selectDot?.zCoordinate || 0;
-                                            const name = selectDot?.name || 'O';
-                                            updateVectorLocation(vector?.id, vector?.xCoordinateA, vector?.yCoordinateA, vector?.zCoordinateA, X, Y, Z, name, 2);
+                                            const name = dots.find(dot => dot.id == value)?.name || 'O';
+                                            updateVectorLocation(vector?.id, vector?.xCoordinateA, vector?.yCoordinateA, vector?.zCoordinateA, propE.X, propE.Y, propE.Z, name, 2);
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefVector2.current?.value ? 1 : 0.4 }}
+                                        extraStyle={{ flex: 1.5, opacity: dots.find(d => d.xCoordinate == vector.xCoordinateB && d.yCoordinate == vector.yCoordinateB && d.zCoordinate == vector.zCoordinateB) ? 1 : 0.4 }}
                                         label={'Point 2'}
                                         labelStyle={'center'}
                                     />
