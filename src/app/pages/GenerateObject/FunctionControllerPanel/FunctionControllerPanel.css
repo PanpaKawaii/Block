@@ -3,49 +3,37 @@
         .card {
             padding: 12px !important;
 
-            .function-dots-vector {
-                margin: 12px 0 0;
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
+            .row-1 {
+                .selects {
+                    flex: 3;
+                    display: flex;
+                    gap: 8px;
+                }
 
-                .row {
+                .btns {
+                    flex: 2;
                     display: flex;
                     gap: 8px;
 
-                    &.row-1 {
-                        .selects {
-                            flex: 3;
-                            display: flex;
-                            gap: 8px;
-                        }
-
-                        .btns {
-                            flex: 2;
-                            display: flex;
-                            gap: 8px;
-
-                            .btn {
-                                flex: 1;
-                            }
-                        }
+                    .btn {
+                        flex: 1;
                     }
+                }
+            }
 
-                    &.row-2 {
-                        .selects {
-                            flex: 3;
-                            display: flex;
-                            gap: 8px;
-                        }
+            .row-2 {
+                .selects {
+                    flex: 3;
+                    display: flex;
+                    gap: 8px;
+                }
 
-                        .btns {
-                            flex: 2;
-                            display: flex;
+                .btns {
+                    flex: 2;
+                    display: flex;
 
-                            .btn {
-                                flex: 1;
-                            }
-                        }
+                    .btn {
+                        flex: 1;
                     }
                 }
             }

@@ -154,38 +154,40 @@ export default function DotControllerPanel({
                         </div>
 
                         {openedDotId.includes(dot.id) &&
-                            <div className='coordinates'>
-                                <div className='input-group'>
-                                    <input
-                                        type='number'
-                                        placeholder=''
-                                        value={dot?.xCoordinate || 0}
-                                        onChange={(e) => updateDot(dot?.id, 'xCoordinate', e.target.value)}
-                                        className='input'
-                                    />
-                                    <label htmlFor='X'>X</label>
+                            <form>
+                                <div className='row'>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={dot?.xCoordinate || 0}
+                                            onChange={(e) => updateDot(dot?.id, 'xCoordinate', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='X'>X</label>
+                                    </div>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={dot?.yCoordinate || 0}
+                                            onChange={(e) => updateDot(dot?.id, 'yCoordinate', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='Y'>Y</label>
+                                    </div>
+                                    <div className='input-group'>
+                                        <input
+                                            type='number'
+                                            placeholder=''
+                                            value={dot?.zCoordinate || 0}
+                                            onChange={(e) => updateDot(dot?.id, 'zCoordinate', e.target.value)}
+                                            className='input'
+                                        />
+                                        <label htmlFor='Z'>Z</label>
+                                    </div>
                                 </div>
-                                <div className='input-group'>
-                                    <input
-                                        type='number'
-                                        placeholder=''
-                                        value={dot?.yCoordinate || 0}
-                                        onChange={(e) => updateDot(dot?.id, 'yCoordinate', e.target.value)}
-                                        className='input'
-                                    />
-                                    <label htmlFor='Y'>Y</label>
-                                </div>
-                                <div className='input-group'>
-                                    <input
-                                        type='number'
-                                        placeholder=''
-                                        value={dot?.zCoordinate || 0}
-                                        onChange={(e) => updateDot(dot?.id, 'zCoordinate', e.target.value)}
-                                        className='input'
-                                    />
-                                    <label htmlFor='Z'>Z</label>
-                                </div>
-                            </div>
+                            </form>
                         }
                     </div>
                 ))}

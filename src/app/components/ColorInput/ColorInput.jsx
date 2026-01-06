@@ -1,6 +1,13 @@
 import './ColorInput.css';
 
-export default function ColorInput({ selectedFace, attribute, label, updateFace, hexRgbaToPercent, updateHexAlphaByPercent }) {
+export default function ColorInput({
+    selectedFace,
+    attribute,
+    label,
+    updateFace,
+    hexRgbaToPercent,
+    updateHexAlphaByPercent
+}) {
     return (
         <div className='color-input-container'>
             <input

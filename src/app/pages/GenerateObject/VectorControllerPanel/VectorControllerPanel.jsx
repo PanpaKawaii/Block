@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
+import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './VectorControllerPanel.css';
 
 export default function VectorControllerPanel({
@@ -139,17 +141,15 @@ export default function VectorControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(vector.color || '#FFFFFFFF') || 1 }}
                             />
-                            <div className='input-group'>
-                                <input
-                                    type='text'
-                                    placeholder=''
-                                    value={vector?.name || ''}
-                                    onChange={(e) => updateVector(vector?.id, 'name', e.target.value)}
-                                    className='input'
-                                    disabled
-                                />
-                                <label htmlFor='Name'>Name</label>
-                            </div>
+                            <MovingLabelInput
+                                type={'text'}
+                                value={vector?.name}
+                                onValueChange={(propE) => updateVector(vector?.id, 'name', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{}}
+                                label={'Name'}
+                                labelStyle={'left moving'}
+                            />
                             <div className='btns'>
                                 <button className={`btn-click ${selectedVectorId == vector.id ? 'selected' : ''}`} onClick={() => toggleSelectVector(vector.id)}><i className='fa-solid fa-gear' /></button>
                                 <button className={`btn-click ${openedVectorId.includes(vector.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenVector(vector.id)}><i className='fa-solid fa-hand' /></button>
@@ -161,7 +161,7 @@ export default function VectorControllerPanel({
                         </div>
 
                         {openedVectorId.includes(vector.id) &&
-                            <div className='locations'>
+                            <form>
                                 <div className='row row-1'>
                                     <div className='input-group'>
                                         <input
@@ -260,7 +260,7 @@ export default function VectorControllerPanel({
                                         ))}
                                     </select>
                                 </div>
-                            </div>
+                            </form>
                         }
                     </div>
                 ))}

@@ -188,7 +188,7 @@ export default function LineControllerPanel({
                         </div>
 
                         {openedLineId.includes(line.id) &&
-                            <div className='parameters'>
+                            <form>
                                 <div className='row row-1'>
                                     <MovingLabelInput
                                         type={'number'}
@@ -321,7 +321,7 @@ export default function LineControllerPanel({
                                         labelStyle={'center'}
                                     />
                                 </div>
-                            </div>
+                            </form>
                         }
                     </div>
                 ))}

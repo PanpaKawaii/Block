@@ -646,7 +646,7 @@ export default function FunctionControllerPanel({
                         </div>
 
                         {openedFaceId.includes(face.id) &&
-                            <div className='function-dots-vector'>
+                            <form>
                                 <div className='row row-1'>
                                     <div className='selects'>
                                         <StyleLabelSelect
@@ -809,7 +809,7 @@ export default function FunctionControllerPanel({
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         }
                     </div>
                 ))}

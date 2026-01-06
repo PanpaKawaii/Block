@@ -301,21 +301,21 @@ export default function FaceController({
 
                             {openedFaceId.includes(face.id) &&
                                 <>
-                                    <div className='steps'>
+                                    <form>
                                         {face.steps?.map((step) => (
-                                            <div key={step.id} className={`step-row ${step.visible == 0 ? 'invisible' : ''}`}>
+                                            <div key={step.id} className={`row ${step.visible == 0 ? 'invisible' : ''}`}>
                                                 <select
                                                     value={step.type}
                                                     onChange={(e) => updateStep(face.id, step.id, e.target.value, step.value, step.visible)}
                                                     className='select'
                                                 >
-                                                    <option value='translateX' className='option'>translateX</option>
-                                                    <option value='translateY' className='option'>translateY</option>
-                                                    <option value='translateZ' className='option'>translateZ</option>
-                                                    <option value='rotateX' className='option'>rotateX</option>
-                                                    <option value='rotateY' className='option'>rotateY</option>
-                                                    <option value='rotateZ' className='option'>rotateZ</option>
-                                                    <option value='scale' className='option'>scale</option>
+                                                    <option value='translateX' className='option'>Translate X</option>
+                                                    <option value='translateY' className='option'>Translate Y</option>
+                                                    <option value='translateZ' className='option'>Translate Z</option>
+                                                    <option value='rotateX' className='option'>Rotate X</option>
+                                                    <option value='rotateY' className='option'>Rotate Y</option>
+                                                    <option value='rotateZ' className='option'>Rotate Z</option>
+                                                    <option value='scale' className='option'>Scale</option>
                                                 </select>
 
                                                 <input
@@ -326,12 +326,12 @@ export default function FaceController({
                                                 />
 
                                                 <div className='btns'>
-                                                    <button className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(face.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                                    <button className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-ban' /></button>
+                                                    <button type='button' className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(face.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                                    <button type='button' className='btn-step remove-step' onClick={() => removeStep(face.id, step.id)}><i className='fa-solid fa-ban' /></button>
                                                 </div>
                                             </div>
                                         ))}
-                                    </div>
+                                    </form>
                                     <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX')}>ADD STEP</button>
                                 </>
                             }

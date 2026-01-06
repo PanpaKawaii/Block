@@ -2,24 +2,6 @@
     .list {
         .card {
             padding: 12px !important;
-
-            .header {
-                .collapse-hidden {
-                    display: flex;
-                }
-            }
-
-            .parameters {
-                margin: 12px 0 0;
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-
-                .row {
-                    display: flex;
-                    gap: 8px;
-                }
-            }
         }
     }
 }
