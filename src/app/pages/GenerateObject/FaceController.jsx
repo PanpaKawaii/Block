@@ -482,7 +482,7 @@ export default function FaceController({
                     <div className='form-group form-size'>
                         <MovingLabelInput
                             type={'number'}
-                            value={selectedFace?.width}
+                            value={selectedFace?.width || 0}
                             onValueChange={(propE) => updateFace(selectedFace?.id, 'width', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}
@@ -491,7 +491,7 @@ export default function FaceController({
                         />
                         <MovingLabelInput
                             type={'number'}
-                            value={selectedFace?.height}
+                            value={selectedFace?.height || 0}
                             onValueChange={(propE) => updateFace(selectedFace?.id, 'height', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}
@@ -502,7 +502,7 @@ export default function FaceController({
                     <div className={`form-group form-name ${selectedFace?.nameVisible == 0 ? 'invisible' : ''}`}>
                         <MovingLabelInput
                             type={'text'}
-                            value={selectedFace?.name}
+                            value={selectedFace?.name || ''}
                             onValueChange={(propE) => updateFace(selectedFace?.id, 'name', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}
@@ -511,7 +511,7 @@ export default function FaceController({
                         />
                         <MovingLabelInput
                             type={'number'}
-                            value={selectedFace?.nameSize}
+                            value={selectedFace?.nameSize || 0}
                             onValueChange={(propE) => updateFace(selectedFace?.id, 'nameSize', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}
@@ -523,7 +523,7 @@ export default function FaceController({
                     <div className={`form-group form-border ${selectedFace?.borderVisible == 0 ? 'invisible' : ''}`}>
                         <MovingLabelInput
                             type={'number'}
-                            value={selectedFace?.borderWidth}
+                            value={selectedFace?.borderWidth || 0}
                             onValueChange={(propE) => updateFace(selectedFace?.id, 'borderWidth', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}
@@ -535,7 +535,7 @@ export default function FaceController({
                     <div className={`form-group form-glow ${selectedFace?.glowVisible == 0 ? 'invisible' : ''}`}>
                         <MovingLabelInput
                             type={'number'}
-                            value={selectedFace?.glow}
+                            value={selectedFace?.glow || 0}
                             onValueChange={(propE) => updateFace(selectedFace?.id, 'glow', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}

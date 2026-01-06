@@ -541,9 +541,6 @@ export default function FunctionControllerPanel({
                     ? {
                         ...face,
                         name: getEquationString(dotsLocation, FaceEquation),
-                        width: 500,
-                        height: 500,
-                        shape: '0,0 500,0 500,500 0,500',
                         steps: [
                             { id: crypto.randomUUID(), type: 'translateX', value: dotG.x, visible: 1 },
                             { id: crypto.randomUUID(), type: 'translateY', value: dotG.y, visible: 1 },
@@ -723,7 +720,7 @@ export default function FunctionControllerPanel({
                                         />
                                     </div>
                                     <div className='btns'>
-                                        <button className='btn' onClick={() => updateFaceEquation(face.id, 'cut')}
+                                        <button type='button' className='btn' onClick={() => updateFaceEquation(face.id, 'cut')}
                                             disabled={(() => {
                                                 const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
                                                 return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
@@ -731,7 +728,7 @@ export default function FunctionControllerPanel({
                                         >
                                             <i className='fa-solid fa-arrows-up-down-left-right' />
                                         </button>
-                                        <button className='btn' onClick={() => distanceToG(face.id, 'cut')}
+                                        <button type='button' className='btn' onClick={() => distanceToG(face.id, 'cut')}
                                             disabled={(() => {
                                                 const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
                                                 return !FaceInGroup?.dotA || !FaceInGroup?.dotB || !FaceInGroup?.dotC;
@@ -799,7 +796,7 @@ export default function FunctionControllerPanel({
                                         />
                                     </div>
                                     <div className='btns'>
-                                        <button className='btn' onClick={() => updateFaceEquation(face.id, 'move')}
+                                        <button type='button' className='btn' onClick={() => updateFaceEquation(face.id, 'move')}
                                             disabled={(() => {
                                                 const FaceInGroup = groupFacesDotsVectors.find(g => g.faceId === face.id);
                                                 return !FaceInGroup?.dotA || !FaceInGroup?.vectorId;

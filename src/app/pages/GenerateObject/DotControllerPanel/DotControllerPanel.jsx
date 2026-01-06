@@ -135,7 +135,7 @@ export default function DotControllerPanel({
                             <div className={`name-group ${(openedDotId.includes(dot.id) || toggleMenu) ? 'expanse' : ''}`}>
                                 <MovingLabelInput
                                     type={'text'}
-                                    value={dot?.name}
+                                    value={dot?.name || ''}
                                     onValueChange={(propE) => updateDot(dot?.id, 'name', propE.value)}
                                     extraClassName={''}
                                     extraStyle={{}}
@@ -160,7 +160,7 @@ export default function DotControllerPanel({
                                 <div className='row'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={dot?.xCoordinate}
+                                        value={dot?.xCoordinate || 0}
                                         onValueChange={(propE) => updateDot(dot?.id, 'xCoordinate', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -169,7 +169,7 @@ export default function DotControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={dot?.yCoordinate}
+                                        value={dot?.yCoordinate || 0}
                                         onValueChange={(propE) => updateDot(dot?.id, 'yCoordinate', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -178,7 +178,7 @@ export default function DotControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={dot?.zCoordinate}
+                                        value={dot?.zCoordinate || 0}
                                         onValueChange={(propE) => updateDot(dot?.id, 'zCoordinate', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}

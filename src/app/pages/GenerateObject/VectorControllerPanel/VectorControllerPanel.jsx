@@ -146,7 +146,7 @@ export default function VectorControllerPanel({
                             />
                             <MovingLabelInput
                                 type={'text'}
-                                value={vector?.name}
+                                value={vector?.name || ''}
                                 onValueChange={(propE) => updateVector(vector?.id, 'name', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{}}
@@ -168,7 +168,7 @@ export default function VectorControllerPanel({
                                 <div className='row row-1'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={vector?.xCoordinateA}
+                                        value={vector?.xCoordinateA || 0}
                                         onValueChange={(propE) => {
                                             updateVector(vector?.id, 'xCoordinateA', propE.value);
                                             if (selectRefVector1.current) {
@@ -182,7 +182,7 @@ export default function VectorControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={vector?.yCoordinateA}
+                                        value={vector?.yCoordinateA || 0}
                                         onValueChange={(propE) => {
                                             updateVector(vector?.id, 'yCoordinateA', propE.value);
                                             if (selectRefVector1.current) {
@@ -196,7 +196,7 @@ export default function VectorControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={vector?.zCoordinateA}
+                                        value={vector?.zCoordinateA || 0}
                                         onValueChange={(propE) => {
                                             updateVector(vector?.id, 'zCoordinateA', propE.value);
                                             if (selectRefVector1.current) {
@@ -230,7 +230,7 @@ export default function VectorControllerPanel({
                                 <div className='row row-2'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={vector?.xCoordinateB}
+                                        value={vector?.xCoordinateB || 0}
                                         onValueChange={(propE) => {
                                             updateVector(vector?.id, 'xCoordinateB', propE.value);
                                             if (selectRefVector2.current) {
@@ -244,7 +244,7 @@ export default function VectorControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={vector?.yCoordinateB}
+                                        value={vector?.yCoordinateB || 0}
                                         onValueChange={(propE) => {
                                             updateVector(vector?.id, 'yCoordinateB', propE.value);
                                             if (selectRefVector2.current) {
@@ -258,7 +258,7 @@ export default function VectorControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={vector?.zCoordinateB}
+                                        value={vector?.zCoordinateB || 0}
                                         onValueChange={(propE) => {
                                             updateVector(vector?.id, 'zCoordinateB', propE.value);
                                             if (selectRefVector2.current) {

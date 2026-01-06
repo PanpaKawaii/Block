@@ -170,7 +170,7 @@ export default function LineControllerPanel({
                             />
                             <MovingLabelInput
                                 type={'text'}
-                                value={line?.name}
+                                value={line?.name || ''}
                                 onValueChange={(propE) => updateLine(line?.id, 'name', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{}}
@@ -192,7 +192,7 @@ export default function LineControllerPanel({
                                 <div className='row row-1'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.parameterA}
+                                        value={line?.parameterA || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -201,7 +201,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.parameterB}
+                                        value={line?.parameterB || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -210,7 +210,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.parameterC}
+                                        value={line?.parameterC || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -236,7 +236,7 @@ export default function LineControllerPanel({
                                 <div className='row row-2'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointX0}
+                                        value={line?.pointX0 || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'pointX0', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -245,7 +245,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointY0}
+                                        value={line?.pointY0 || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'pointY0', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -254,7 +254,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointZ0}
+                                        value={line?.pointZ0 || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'pointZ0', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -280,7 +280,7 @@ export default function LineControllerPanel({
                                 <div className='row row-3'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={Number(line?.pointX0) + Number(line?.parameterA)}
+                                        value={Number(line?.pointX0) + Number(line?.parameterA) || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value - line?.pointX0)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -289,7 +289,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={Number(line?.pointY0) + Number(line?.parameterB)}
+                                        value={Number(line?.pointY0) + Number(line?.parameterB) || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value - line?.pointY0)}
                                         extraClassName={''}
                                         extraStyle={{}}
@@ -298,7 +298,7 @@ export default function LineControllerPanel({
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={Number(line?.pointZ0) + Number(line?.parameterC)}
+                                        value={Number(line?.pointZ0) + Number(line?.parameterC) || 0}
                                         onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value - line?.pointZ0)}
                                         extraClassName={''}
                                         extraStyle={{}}
