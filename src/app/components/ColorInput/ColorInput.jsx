@@ -1,3 +1,4 @@
+import MovingLabelInput from '../MovingLabelInput/MovingLabelInput.jsx';
 import './ColorInput.css';
 
 export default function ColorInput({
@@ -18,26 +19,24 @@ export default function ColorInput({
                 className='input color-input'
                 style={{ opacity: hexRgbaToPercent(selectedFace?.[attribute] || '#FFFFFFFF') || 1 }}
             />
-            <div className='input-group flex-2'>
-                <input
-                    type='text'
-                    placeholder=''
-                    value={selectedFace?.[attribute] || ''}
-                    onChange={(e) => updateFace(selectedFace?.id, attribute, e.target.value?.toUpperCase())}
-                    className='input hex-input'
-                />
-                <label htmlFor={label}>{label}</label>
-            </div>
-            <div className='input-group'>
-                <input
-                    type='number'
-                    placeholder=''
-                    value={(hexRgbaToPercent(selectedFace?.[attribute] || '#FFFFFFFF') * 100)?.toFixed(0) || 100}
-                    onChange={(e) => updateFace(selectedFace?.id, attribute, updateHexAlphaByPercent(selectedFace?.[attribute], e.target.value || 100))}
-                    className='input alpha-input'
-                />
-                <label htmlFor='Alpha'>Alpha</label>
-            </div>
+            <MovingLabelInput
+                type={'text'}
+                value={selectedFace?.[attribute] || ''}
+                onValueChange={(propE) => updateFace(selectedFace?.id, attribute, propE.value?.toUpperCase())}
+                extraClassName={'hex-input'}
+                extraStyle={{ flex: 2 }}
+                label={label}
+                labelStyle={'left moving'}
+            />
+            <MovingLabelInput
+                type={'number'}
+                value={(hexRgbaToPercent(selectedFace?.[attribute] || '#FFFFFFFF') * 100)?.toFixed(0) || 100}
+                onValueChange={(propE) => updateFace(selectedFace?.id, attribute, updateHexAlphaByPercent(selectedFace?.[attribute], propE.value || 100))}
+                extraClassName={'alpha-input'}
+                extraStyle={{ flex: 1 }}
+                label={'Alpha'}
+                labelStyle={'left moving'}
+            />
         </div>
     )
 }

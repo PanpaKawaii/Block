@@ -3,6 +3,8 @@ import { useState } from 'react';
 import ButtonList from '../../components/ButtonList/ButtonList.jsx';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import CopyPasteButton from '../../components/CopyPasteButton/CopyPasteButton.jsx';
+import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
+import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
 import FunctionControllerPanel from './FunctionControllerPanel/FunctionControllerPanel.jsx';
@@ -238,7 +240,7 @@ export default function FaceController({
         const type = steps?.replaceAll('"type"', 'type');
         const value = type?.replaceAll('"value"', 'value');
         return value;
-    }
+    };
 
     const changeUUID = () => {
         setFaces(prev => prev.map((face, index) => ({
@@ -301,7 +303,7 @@ export default function FaceController({
 
                             {openedFaceId.includes(face.id) &&
                                 <>
-                                    <form>
+                                    <form className='steps'>
                                         {face.steps?.map((step) => (
                                             <div key={step.id} className={`row ${step.visible == 0 ? 'invisible' : ''}`}>
                                                 <select
@@ -318,9 +320,37 @@ export default function FaceController({
                                                     <option value='scale' className='option'>Scale</option>
                                                 </select>
 
-                                                <input
-                                                    type='number'
+                                                {/* <StyleLabelSelect
+                                                    reference={null}
+                                                    list={[
+                                                        { name: 'Translate X', id: 'translateX' },
+                                                        { name: 'Translate Y', id: 'translateY' },
+                                                        { name: 'Translate Z', id: 'translateZ' },
+                                                        { name: 'Rotate X', id: 'rotateX' },
+                                                        { name: 'Rotate Y', id: 'rotateY' },
+                                                        { name: 'Rotate Z', id: 'rotateZ' },
+                                                        { name: 'Scale', id: 'scale' },
+                                                    ]}
+                                                    value={step.type}
+                                                    onValueChange={(propE) => updateStep(face.id, step.id, propE.value, step.value, step.visible)}
+                                                    extraClassName={''}
+                                                    extraStyle={{}}
+                                                    label={'Attribute'}
+                                                    labelStyle={'left'}
+                                                /> */}
+
+                                                {/* <MovingLabelInput
+                                                    type={'number'}
                                                     value={step.value}
+                                                    onValueChange={(propE) => updateStep(face.id, step.id, step.type, propE.value, step.visible)}
+                                                    extraClassName={''}
+                                                    extraStyle={{}}
+                                                    label={'Value'}
+                                                    labelStyle={'left stay'}
+                                                /> */}
+
+                                                <input
+                                                    type='number' value={step.value}
                                                     onChange={(e) => updateStep(face.id, step.id, step.type, e.target.value, step.visible)}
                                                     className={`input ${step.type}`}
                                                 />
@@ -450,78 +480,72 @@ export default function FaceController({
                     </div>
 
                     <div className='form-group form-size'>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.width || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'width', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='Width'>Width</label>
-                        </div>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.height || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'height', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='Height'>Height</label>
-                        </div>
+                        <MovingLabelInput
+                            type={'number'}
+                            value={selectedFace?.width}
+                            onValueChange={(propE) => updateFace(selectedFace?.id, 'width', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Width'}
+                            labelStyle={'left stay'}
+                        />
+                        <MovingLabelInput
+                            type={'number'}
+                            value={selectedFace?.height}
+                            onValueChange={(propE) => updateFace(selectedFace?.id, 'height', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Height'}
+                            labelStyle={'left stay'}
+                        />
                     </div>
                     <div className={`form-group form-name ${selectedFace?.nameVisible == 0 ? 'invisible' : ''}`}>
-                        <div className='input-group flex-2'>
-                            <input
-                                type='text'
-                                placeholder=''
-                                value={selectedFace?.name || ''}
-                                onChange={(e) => updateFace(selectedFace?.id, 'name', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='Name'>Name</label>
-                        </div>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.nameSize || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'nameSize', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='nameSize'>Name Size</label>
-                        </div>
+                        <MovingLabelInput
+                            type={'text'}
+                            value={selectedFace?.name}
+                            onValueChange={(propE) => updateFace(selectedFace?.id, 'name', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Name'}
+                            labelStyle={'left moving'}
+                        />
+                        <MovingLabelInput
+                            type={'number'}
+                            value={selectedFace?.nameSize}
+                            onValueChange={(propE) => updateFace(selectedFace?.id, 'nameSize', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Name Size'}
+                            labelStyle={'left stay'}
+                        />
                         <button type='button' className={`btn-name ${selectedFace?.nameVisible == 1 ? 'visible-name' : ''}`} onClick={() => updateFace(selectedFace?.id, 'nameVisible', selectedFace?.nameVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
                     <div className={`form-group form-border ${selectedFace?.borderVisible == 0 ? 'invisible' : ''}`}>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.borderWidth || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'borderWidth', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='borderWidth'>Border Width</label>
-                        </div>
+                        <MovingLabelInput
+                            type={'number'}
+                            value={selectedFace?.borderWidth}
+                            onValueChange={(propE) => updateFace(selectedFace?.id, 'borderWidth', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Border Width'}
+                            labelStyle={'left stay'}
+                        />
                         <button type='button' className={`btn-border ${selectedFace?.borderVisible == 1 ? 'visible-border' : ''}`} onClick={() => updateFace(selectedFace?.id, 'borderVisible', selectedFace?.borderVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
                     <div className={`form-group form-glow ${selectedFace?.glowVisible == 0 ? 'invisible' : ''}`}>
-                        <div className='input-group'>
-                            <input
-                                type='number'
-                                placeholder=''
-                                value={selectedFace?.glow || 0}
-                                onChange={(e) => updateFace(selectedFace?.id, 'glow', e.target.value)}
-                                className='input'
-                            />
-                            <label htmlFor='glow'>Glow</label>
-                        </div>
+                        <MovingLabelInput
+                            type={'number'}
+                            value={selectedFace?.glow}
+                            onValueChange={(propE) => updateFace(selectedFace?.id, 'glow', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Glow'}
+                            labelStyle={'left stay'}
+                        />
                         <button type='button' className={`btn-glow ${selectedFace?.glowVisible == 1 ? 'visible-glow' : ''}`} onClick={() => updateFace(selectedFace?.id, 'glowVisible', selectedFace?.glowVisible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                     </div>
                     <div className='form-group form-shape'>
-                        <div className='input-group'>
+                        <div className='textarea-group'>
                             <textarea
                                 type='textarea'
                                 placeholder=''

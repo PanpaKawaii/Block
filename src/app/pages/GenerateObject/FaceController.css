@@ -58,8 +58,11 @@
 
         .card {
             position: relative;
-            padding: 8px;
             border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
 
             .header {
                 display: flex;
@@ -112,12 +115,23 @@
             }
 
             form {
-                margin: 12px 0;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 gap: 12px;
+
+                &.steps {
+                    gap: 8px;
+
+                    .row {
+                        input {
+                            width: 0;
+                            flex: 1;
+                            text-align: center;
+                        }
+                    }
+                }
 
                 .row {
                     width: 100%;
@@ -237,51 +251,47 @@
                 gap: 14px;
             }
 
-            .input-group {
-                flex: 1;
-                display: flex;
-                position: relative;
+            &.form-shape {
+                align-items: start;
 
-                input {
-                    width: 100%;
-                    font-size: 16px;
-                    text-align: center;
-                }
+                .textarea-group {
+                    flex: 1;
+                    display: flex;
+                    position: relative;
 
-                label {
-                    position: absolute;
-                    top: 10px;
-                    left: 10px;
-                    opacity: 0.4;
-                    font-weight: bold;
-                    padding: 0 4px;
-                    transition: 0.2s ease;
-                    pointer-events: none;
-                }
+                    textarea {
+                        flex: 1;
+                        overflow: hidden;
+                        resize: vertical;
+                    }
 
-                input:focus+label,
-                input:not(:placeholder-shown)+label,
-                textarea:focus+label,
-                textarea:not(:placeholder-shown)+label {
-                    left: 8px;
-                    border-radius: 10px;
-                    font-size: 12px;
-                    opacity: 1;
+                    label {
+                        position: absolute;
+                        top: 10px;
+                        left: 10px;
+                        opacity: 0.4;
+                        font-weight: bold;
+                        padding: 0 4px;
+                        transition: 0.2s ease;
+                        pointer-events: none;
+                    }
 
-                    /* top: -7px;
+                    textarea:focus+label,
+                    textarea:not(:placeholder-shown)+label {
+                        left: 8px;
+                        border-radius: 10px;
+                        font-size: 12px;
+                        opacity: 1;
+
+                        /* top: -7px;
                     color: var(--background-1);
                     background: var(--border); */
 
-                    top: -10px;
-                    border: 2px solid var(--border);
-                    background: var(--background-1);
-                    /* box-shadow: 0 0 6px var(--border-glow), 0 0 0 3px #38BDF866, inset 0 0 6px var(--border-glow); */
-                }
-
-                textarea {
-                    flex: 1;
-                    overflow: hidden;
-                    resize: vertical;
+                        top: -10px;
+                        border: 2px solid var(--border);
+                        background: var(--background-1);
+                        /* box-shadow: 0 0 6px var(--border-glow), 0 0 0 3px #38BDF866, inset 0 0 6px var(--border-glow); */
+                    }
                 }
             }
 

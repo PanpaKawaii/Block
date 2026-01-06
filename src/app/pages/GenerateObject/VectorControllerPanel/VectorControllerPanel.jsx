@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
@@ -114,6 +114,9 @@ export default function VectorControllerPanel({
         );
     };
 
+    const selectRefVector1 = useRef(null);
+    const selectRefVector2 = useRef(null);
+
     return (
         <div className={`vector-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'vector' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
@@ -163,39 +166,54 @@ export default function VectorControllerPanel({
                         {openedVectorId.includes(vector.id) &&
                             <form>
                                 <div className='row row-1'>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={vector?.xCoordinateA || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'xCoordinateA', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='X'>X</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={vector?.yCoordinateA || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'yCoordinateA', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Y'>Y</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={vector?.zCoordinateA || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'zCoordinateA', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Z'>Z</label>
-                                    </div>
-                                    <select
-                                        onChange={(e) => {
-                                            const value = e.target.value;
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={vector?.xCoordinateA}
+                                        onValueChange={(propE) => {
+                                            updateVector(vector?.id, 'xCoordinateA', propE.value);
+                                            if (selectRefVector1.current) {
+                                                selectRefVector1.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'X1'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={vector?.yCoordinateA}
+                                        onValueChange={(propE) => {
+                                            updateVector(vector?.id, 'yCoordinateA', propE.value);
+                                            if (selectRefVector1.current) {
+                                                selectRefVector1.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Y1'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={vector?.zCoordinateA}
+                                        onValueChange={(propE) => {
+                                            updateVector(vector?.id, 'zCoordinateA', propE.value);
+                                            if (selectRefVector1.current) {
+                                                selectRefVector1.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Z1'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <StyleLabelSelect
+                                        reference={selectRefVector1}
+                                        list={dots}
+                                        value={vector}
+                                        onValueChange={(propE) => {
+                                            const value = propE.value;
                                             const selectDot = dots.find(dot => dot.id == value);
                                             const X = selectDot?.xCoordinate || 0;
                                             const Y = selectDot?.yCoordinate || 0;
@@ -203,48 +221,61 @@ export default function VectorControllerPanel({
                                             const name = selectDot?.name || 'O';
                                             updateVectorLocation(vector?.id, X, Y, Z, vector?.xCoordinateB, vector?.yCoordinateB, vector?.zCoordinateB, name, 1);
                                         }}
-                                        className='select'
-                                    >
-                                        <option value={''} className='option'>O</option>
-                                        {dots.map((dot, index) => (
-                                            <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                        ))}
-                                    </select>
+                                        extraClassName={''}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefVector1.current?.value ? 1 : 0.4 }}
+                                        label={'Point 1'}
+                                        labelStyle={'center'}
+                                    />
                                 </div>
                                 <div className='row row-2'>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={vector?.xCoordinateB || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'xCoordinateB', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='X'>X</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={vector?.yCoordinateB || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'yCoordinateB', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Y'>Y</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={vector?.zCoordinateB || 0}
-                                            onChange={(e) => updateVector(vector?.id, 'zCoordinateB', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Z'>Z</label>
-                                    </div>
-                                    <select
-                                        onChange={(e) => {
-                                            const value = e.target.value;
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={vector?.xCoordinateB}
+                                        onValueChange={(propE) => {
+                                            updateVector(vector?.id, 'xCoordinateB', propE.value);
+                                            if (selectRefVector2.current) {
+                                                selectRefVector2.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'X2'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={vector?.yCoordinateB}
+                                        onValueChange={(propE) => {
+                                            updateVector(vector?.id, 'yCoordinateB', propE.value);
+                                            if (selectRefVector2.current) {
+                                                selectRefVector2.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Y2'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={vector?.zCoordinateB}
+                                        onValueChange={(propE) => {
+                                            updateVector(vector?.id, 'zCoordinateB', propE.value);
+                                            if (selectRefVector2.current) {
+                                                selectRefVector2.current.value = '';
+                                            }
+                                        }}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Z2'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <StyleLabelSelect
+                                        reference={selectRefVector2}
+                                        list={dots}
+                                        value={vector}
+                                        onValueChange={(propE) => {
+                                            const value = propE.value;
                                             const selectDot = dots.find(dot => dot.id == value);
                                             const X = selectDot?.xCoordinate || 0;
                                             const Y = selectDot?.yCoordinate || 0;
@@ -252,13 +283,11 @@ export default function VectorControllerPanel({
                                             const name = selectDot?.name || 'O';
                                             updateVectorLocation(vector?.id, vector?.xCoordinateA, vector?.yCoordinateA, vector?.zCoordinateA, X, Y, Z, name, 2);
                                         }}
-                                        className='select'
-                                    >
-                                        <option value={''} className='option'>O</option>
-                                        {dots.map((dot, index) => (
-                                            <option key={index} value={dot.id} className='option'>{dot.name}</option>
-                                        ))}
-                                    </select>
+                                        extraClassName={''}
+                                        extraStyle={{ flex: 1.5, opacity: selectRefVector2.current?.value ? 1 : 0.4 }}
+                                        label={'Point 2'}
+                                        labelStyle={'center'}
+                                    />
                                 </div>
                             </form>
                         }

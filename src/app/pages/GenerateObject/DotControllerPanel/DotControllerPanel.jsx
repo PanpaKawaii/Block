@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
 import './DotControllerPanel.css';
 
 export default function DotControllerPanel({
@@ -131,15 +132,16 @@ export default function DotControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(dot.color || '#FFFFFFFF') || 1 }}
                             />
-                            <div className={`input-group ${(openedDotId.includes(dot.id) || toggleMenu) ? 'expanse' : ''}`} title={`(${dot.xCoordinate}, ${dot.yCoordinate}, ${dot.zCoordinate})`}>
-                                <input
-                                    type='text'
-                                    placeholder=''
-                                    value={dot?.name || ''}
-                                    onChange={(e) => updateDot(dot?.id, 'name', e.target.value)}
-                                    className='input'
+                            <div className={`name-group ${(openedDotId.includes(dot.id) || toggleMenu) ? 'expanse' : ''}`}>
+                                <MovingLabelInput
+                                    type={'text'}
+                                    value={dot?.name}
+                                    onValueChange={(propE) => updateDot(dot?.id, 'name', propE.value)}
+                                    extraClassName={''}
+                                    extraStyle={{}}
+                                    label={'Name'}
+                                    labelStyle={'left moving'}
                                 />
-                                <label htmlFor='Name'>Name</label>
                                 {!openedDotId.includes(dot.id) && <div className='tag'>({dot.xCoordinate}, {dot.yCoordinate}, {dot.zCoordinate})</div>}
                             </div>
                             <div className='btns'>
@@ -156,36 +158,33 @@ export default function DotControllerPanel({
                         {openedDotId.includes(dot.id) &&
                             <form>
                                 <div className='row'>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={dot?.xCoordinate || 0}
-                                            onChange={(e) => updateDot(dot?.id, 'xCoordinate', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='X'>X</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={dot?.yCoordinate || 0}
-                                            onChange={(e) => updateDot(dot?.id, 'yCoordinate', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Y'>Y</label>
-                                    </div>
-                                    <div className='input-group'>
-                                        <input
-                                            type='number'
-                                            placeholder=''
-                                            value={dot?.zCoordinate || 0}
-                                            onChange={(e) => updateDot(dot?.id, 'zCoordinate', e.target.value)}
-                                            className='input'
-                                        />
-                                        <label htmlFor='Z'>Z</label>
-                                    </div>
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={dot?.xCoordinate}
+                                        onValueChange={(propE) => updateDot(dot?.id, 'xCoordinate', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'X'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={dot?.yCoordinate}
+                                        onValueChange={(propE) => updateDot(dot?.id, 'yCoordinate', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Y'}
+                                        labelStyle={'center stay'}
+                                    />
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={dot?.zCoordinate}
+                                        onValueChange={(propE) => updateDot(dot?.id, 'zCoordinate', propE.value)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={'Z'}
+                                        labelStyle={'center stay'}
+                                    />
                                 </div>
                             </form>
                         }
