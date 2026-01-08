@@ -1,0 +1,21 @@
+.keyframes-controller-panel-container {
+    .list {
+        .card {
+            padding: 12px !important;
+
+            .header {
+                .name-group {
+                    flex: 1;
+                    max-width: 90px;
+                    position: relative;
+                    transition: 0.3s ease;
+
+                    &.expanse {
+                        max-width: 200px;
+                        transition: 0.6s ease;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -6,11 +6,14 @@ import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import CopyPasteButton from '../../components/CopyPasteButton/CopyPasteButton.jsx';
 import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
+import SceneController from './SceneController/SceneController.jsx';
+
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
 import FunctionControllerPanel from './FunctionControllerPanel/FunctionControllerPanel.jsx';
+import KeyframesControllerPanel from './KeyframesControllerPanel/KeyframesControllerPanel.jsx';
 import LineControllerPanel from './LineControllerPanel/LineControllerPanel.jsx';
-import SceneController from './SceneController/SceneController.jsx';
 import VectorControllerPanel from './VectorControllerPanel/VectorControllerPanel.jsx';
+
 
 import './FaceController.css';
 
@@ -114,7 +117,36 @@ export default function FaceController({
                 glowVisible: 1,
                 steps: [
                     { id: crypto.randomUUID(), type: 'translateX', value: '0', visible: 1 },
-                ]
+                ],
+                animation: {
+                    id: crypto.randomUUID(),
+                    faceId: newId,
+                    name: 'faceMove',
+                    duration: '2s',
+                    timingFunction: 'ease-in-out',
+                    delay: '0s',
+                    iterationCount: 'infinite',
+                    direction: 'normal',
+                    fillMode: 'forwards',
+                    actions: [
+                        {
+                            id: crypto.randomUUID(),
+                            timeline: 0,
+                            steps: [
+                                { id: crypto.randomUUID(), type: 'translateX', value: '0px', visible: 1 },
+                                { id: crypto.randomUUID(), type: 'opacity', value: '1', visible: 1 },
+                            ]
+                        },
+                        {
+                            id: crypto.randomUUID(),
+                            timeline: 100,
+                            steps: [
+                                { id: crypto.randomUUID(), type: 'translateX', value: '200px', visible: 1 },
+                                { id: crypto.randomUUID(), type: 'opacity', value: '0.2', visible: 1 },
+                            ]
+                        }
+                    ]
+                }
             },
             ...prev,
         ]);
@@ -445,6 +477,37 @@ export default function FaceController({
                 hexRgbaToPercent={hexRgbaToPercent}
                 handleShowCoordinateAxes={handleShowCoordinateAxes}
                 showCoordinateAxes={showCoordinateAxes}
+            />
+
+            <KeyframesControllerPanel
+                faces={faces}
+                setFaces={setFaces}
+                dots={dots}
+                setDots={setDots}
+                vectors={vectors}
+                setVectors={setVectors}
+                sceneStyle={sceneStyle}
+                setSceneStyle={setSceneStyle}
+                selectedFaceId={selectedFaceId}
+                setSelectedFaceId={setSelectedFaceId}
+                selectedDotId={selectedDotId}
+                setSelectedDotId={setSelectedDotId}
+                selectedVectorId={selectedVectorId}
+                setSelectedVectorId={setSelectedVectorId}
+                showCoordinateAxes={showCoordinateAxes}
+                setShowCoordinateAxes={setShowCoordinateAxes}
+                openedFaceId={openedFaceId}
+                lines={lines}
+                setLines={setLines}
+                selectedLineId={selectedLineId}
+                setSelectedLineId={setSelectedLineId}
+                selectedFace={selectedFace}
+                selectedDot={selectedDot}
+                toggleMenu={toggleMenu}
+                toggleStepFunction={toggleStepFunction}
+                collapseController={collapseController}
+                swapController={swapController}
+                hexRgbaToPercent={hexRgbaToPercent}
             />
 
             <div className={`sub-face-controller-container face-dot-vector-function-controller-container card ${selectedFace ? 'size_2_1' : 'size_2_2'}`}>

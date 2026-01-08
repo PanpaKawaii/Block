@@ -11,7 +11,8 @@ export default function ButtonList({
         { value: 'dot', icon: '' },
         { value: 'vector', icon: '' },
         { value: 'line', icon: '' },
-        { value: 'function', icon: '' }
+        { value: 'function', icon: '' },
+        { value: 'keyframes', icon: '' },
     ];
     const handleClick = (item) => {
         onToggle(item);
