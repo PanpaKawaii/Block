@@ -101,7 +101,7 @@ export default function VectorControllerPanel({
                 vector.id === vectorId
                     ? {
                         ...vector,
-                        name: index == 1 ? name + '-' + vector.name?.split('-')?.[1] : vector.name?.split('-')?.[0] + '-' + name,
+                        name: `${index == 1 ? name + '-' + vector.name?.split('-')?.[1] : vector.name?.split('-')?.[0] + '-' + name} (${xB - xA},${yB - yA},${zB - zA})`,
                         xCoordinateA: xA,
                         yCoordinateA: yA,
                         zCoordinateA: zA,

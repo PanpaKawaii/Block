@@ -250,15 +250,15 @@ export default function FunctionControllerPanel({
         // console.log('t3', t3);
         // console.log('s3', s3);
 
-        const x = x1 + (a1 * (t1 || t2 || t3));
-        const y = y1 + (b1 * (t1 || t2 || t3));
-        const z = z1 + (c1 * (t1 || t2 || t3));
+        // const x = x1 + (a1 * (t1 || t2 || t3));
+        // const y = y1 + (b1 * (t1 || t2 || t3));
+        // const z = z1 + (c1 * (t1 || t2 || t3));
 
         const point = {
             x: x1 + (a1 * (t1 || t2 || t3)),
             y: y1 + (b1 * (t1 || t2 || t3)),
             z: z1 + (c1 * (t1 || t2 || t3)),
-        }
+        };
 
         // setDots((prev) => [
         //     ...prev,
@@ -627,7 +627,7 @@ export default function FunctionControllerPanel({
             </div>
 
             <div className='list'>
-                {faces.map((face) => (
+                {faces.map((face, index) => (
                     <div key={face.id} className={`card ${face.visible == 0 ? 'invisible' : ''} ${face.id == selectedFaceId ? 'dash-box' : ''}`}>
                         <div className='header'>
                             <input

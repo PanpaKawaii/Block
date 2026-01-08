@@ -1,7 +1,7 @@
 import './StyleLabelSelect.css';
 
 export default function StyleLabelSelect({
-    reference = null,
+    id = '',
     list = [],
     value = '',
     onValueChange,
@@ -13,7 +13,7 @@ export default function StyleLabelSelect({
     return (
         <div className='style-label-select-container' style={extraStyle}>
             <select
-                ref={reference}
+                id={id}
                 value={list?.find(m => m.id == value)?.id}
                 onChange={(e) => {
                     const val = e.target.value;

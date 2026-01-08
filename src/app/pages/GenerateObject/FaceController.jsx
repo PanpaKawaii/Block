@@ -1,10 +1,10 @@
 import { useState } from 'react';
 // import { Link } from 'react-router-dom';
+// import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import ButtonList from '../../components/ButtonList/ButtonList.jsx';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import CopyPasteButton from '../../components/CopyPasteButton/CopyPasteButton.jsx';
 import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
-import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import DotControllerPanel from './DotControllerPanel/DotControllerPanel.jsx';
 import FunctionControllerPanel from './FunctionControllerPanel/FunctionControllerPanel.jsx';
@@ -112,7 +112,9 @@ export default function FaceController({
                 nameVisible: 1,
                 borderVisible: 1,
                 glowVisible: 1,
-                steps: []
+                steps: [
+                    { id: crypto.randomUUID(), type: 'translateX', value: '0', visible: 1 },
+                ]
             },
             ...prev,
         ]);
@@ -151,7 +153,6 @@ export default function FaceController({
             type.includes('translate') ? '0'
                 : type.includes('rotate') ? '0'
                     : type.includes('scale') ? '1'
-                        // : '0% 0%, 100% 0, 100% 100%, 0% 100%';
                         : '0,0 100,0 100,100 0,100';
 
         setFaces((prev) =>
@@ -322,7 +323,6 @@ export default function FaceController({
                                                 </select>
 
                                                 {/* <StyleLabelSelect
-                                                    reference={null}
                                                     list={[
                                                         { name: 'Translate X', id: 'translateX' },
                                                         { name: 'Translate Y', id: 'translateY' },

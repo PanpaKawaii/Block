@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
@@ -50,12 +50,12 @@ export default function LineControllerPanel({
         setLines((prev) => [
             {
                 id: newId,
-                parameterA: 0,
-                parameterB: 0,
-                parameterC: 0,
-                pointX0: 0,
-                pointY0: 0,
-                pointZ0: 0,
+                xCoordinateA: 0,
+                yCoordinateA: 0,
+                zCoordinateA: 0,
+                xCoordinateB: 0,
+                yCoordinateB: 0,
+                zCoordinateB: 0,
                 name: `Line ${prev.length + 1}`,
                 nameSize: 12,
                 xCoordinateName: 0,
@@ -84,14 +84,14 @@ export default function LineControllerPanel({
                             || attribute == 'visible'
                             || attribute == 'nameVisible'
                         ) ? Math.max(0, Number(newValue)) : (
-                            attribute == 'parameterA'
-                            || attribute == 'parameterB'
-                            || attribute == 'parameterC'
+                            attribute == 'xCoordinateA'
+                            || attribute == 'yCoordinateA'
+                            || attribute == 'zCoordinateA'
+                            || attribute == 'xCoordinateB'
+                            || attribute == 'yCoordinateB'
+                            || attribute == 'zCoordinateB'
                             || attribute == 'xCoordinateName'
                             || attribute == 'yCoordinateName'
-                            || attribute == 'pointX0'
-                            || attribute == 'pointY0'
-                            || attribute == 'pointZ0'
                         ) ? Number(newValue) : newValue
                     }
                     : line
@@ -99,27 +99,24 @@ export default function LineControllerPanel({
         );
     };
 
-    const updateLineParameter = (lineId, A, B, C, X0, Y0, Z0) => {
+    const updateLineParameter = (lineId, xA, yA, zA, xB, yB, zB) => {
         setLines((prev) =>
             prev.map((line) =>
                 line.id === lineId
                     ? {
                         ...line,
-                        parameterA: A,
-                        parameterB: B,
-                        parameterC: C,
-                        pointX0: X0,
-                        pointY0: Y0,
-                        pointZ0: Z0,
+                        xCoordinateA: xA,
+                        yCoordinateA: yA,
+                        zCoordinateA: zA,
+                        xCoordinateB: xB,
+                        yCoordinateB: yB,
+                        zCoordinateB: zB,
                     }
                     : line
             )
         );
     };
 
-    const selectRefVector = useRef(null);
-    const selectRefPoint = useRef(null);
-    const selectRefSecondPoint = useRef(null);
     const mergedCoordinates = useMemo(() => {
         return [
             ...dots.map(dot => ({
@@ -158,7 +155,7 @@ export default function LineControllerPanel({
             </div>
 
             <div className='list'>
-                {lines.map((line) => (
+                {lines.map((line, index) => (
                     <div key={line.id} className={`card ${line.visible == 0 ? 'invisible' : ''} ${line.id == selectedLineId ? 'dash-box' : ''}`}>
                         <div className='header'>
                             <input
@@ -192,132 +189,144 @@ export default function LineControllerPanel({
                                 <div className='row row-1'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.parameterA || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value)}
+                                        value={line?.xCoordinateA || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'xCoordinateA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'ParamA'}
+                                        label={'X1'}
                                         labelStyle={'center stay'}
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.parameterB || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value)}
+                                        value={line?.yCoordinateA || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'yCoordinateA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'ParamB'}
+                                        label={'Y1'}
                                         labelStyle={'center stay'}
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.parameterC || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value)}
+                                        value={line?.zCoordinateA || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'zCoordinateA', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'ParamC'}
+                                        label={'Z1'}
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
-                                        reference={selectRefVector}
-                                        list={mergedCoordinates}
-                                        value={line}
+                                        id={`point-1-${index}`}
+                                        list={dots}
+                                        value={dots.find(d => d.xCoordinate == line.xCoordinateA && d.yCoordinate == line.yCoordinateA && d.zCoordinate == line.zCoordinateA)?.id}
                                         onValueChange={(propE) => {
-                                            updateLineParameter(line?.id, propE.X, propE.Y, propE.Z, line?.pointX0, line?.pointY0, line?.pointZ0);
-                                            if (selectRefSecondPoint.current) {
-                                                selectRefSecondPoint.current.value = '';
+                                            updateLineParameter(line?.id, propE.X, propE.Y, propE.Z, line?.xCoordinateB, line?.yCoordinateB, line?.zCoordinateB);
+                                            const select = document.getElementById(`vector-${index}`);
+                                            if (select) {
+                                                select.value = '';
                                             }
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefVector.current?.value ? 1 : 0.4 }}
-                                        label={'Vector'}
+                                        extraStyle={{ flex: 1.5, opacity: dots.find(d => d.xCoordinate == line.xCoordinateA && d.yCoordinate == line.yCoordinateA && d.zCoordinate == line.zCoordinateA) ? 1 : 0.4 }}
+                                        label={'Point 1'}
                                         labelStyle={'center'}
                                     />
                                 </div>
                                 <div className='row row-2'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointX0 || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'pointX0', propE.value)}
+                                        value={line?.xCoordinateB || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'xCoordinateB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point X0'}
+                                        label={'X2'}
                                         labelStyle={'center stay'}
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointY0 || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'pointY0', propE.value)}
+                                        value={line?.yCoordinateB || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'yCoordinateB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point Y0'}
+                                        label={'Y2'}
                                         labelStyle={'center stay'}
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={line?.pointZ0 || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'pointZ0', propE.value)}
+                                        value={line?.zCoordinateB || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'zCoordinateB', propE.value)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point Z0'}
+                                        label={'Z2'}
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
-                                        reference={selectRefPoint}
+                                        id={`point-2-${index}`}
                                         list={dots}
-                                        value={line}
+                                        value={dots.find(d => d.xCoordinate == line.xCoordinateB && d.yCoordinate == line.yCoordinateB && d.zCoordinate == line.zCoordinateB)?.id}
                                         onValueChange={(propE) => {
-                                            updateLineParameter(line?.id, line?.parameterA, line?.parameterB, line?.parameterC, propE.X, propE.Y, propE.Z);
-                                            if (selectRefSecondPoint.current) {
-                                                selectRefSecondPoint.current.value = '';
+                                            updateLineParameter(line?.id, line?.xCoordinateA, line?.yCoordinateA, line?.zCoordinateA, propE.X, propE.Y, propE.Z);
+                                            const select = document.getElementById(`vector-${index}`);
+                                            if (select) {
+                                                select.value = '';
                                             }
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefPoint.current?.value ? 1 : 0.4 }}
-                                        label={'Point'}
+                                        extraStyle={{ flex: 1.5, opacity: dots.find(d => d.xCoordinate == line.xCoordinateB && d.yCoordinate == line.yCoordinateB && d.zCoordinate == line.zCoordinateB) ? 1 : 0.4 }}
+                                        label={'Point 2'}
                                         labelStyle={'center'}
                                     />
                                 </div>
                                 <div className='row row-3'>
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={Number(line?.pointX0) + Number(line?.parameterA) || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'parameterA', propE.value - line?.pointX0)}
+                                        value={Number(line?.xCoordinateB) - Number(line?.xCoordinateA) || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'xCoordinateB', propE.value + line?.xCoordinateA)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point X1'}
+                                        label={'Param A'}
                                         labelStyle={'center stay'}
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={Number(line?.pointY0) + Number(line?.parameterB) || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'parameterB', propE.value - line?.pointY0)}
+                                        value={Number(line?.yCoordinateB) - Number(line?.yCoordinateA) || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'yCoordinateB', propE.value + line?.yCoordinateA)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point Y1'}
+                                        label={'Param B'}
                                         labelStyle={'center stay'}
                                     />
                                     <MovingLabelInput
                                         type={'number'}
-                                        value={Number(line?.pointZ0) + Number(line?.parameterC) || 0}
-                                        onValueChange={(propE) => updateLine(line?.id, 'parameterC', propE.value - line?.pointZ0)}
+                                        value={Number(line?.zCoordinateB) - Number(line?.zCoordinateA) || 0}
+                                        onValueChange={(propE) => updateLine(line?.id, 'zCoordinateB', propE.value + line?.zCoordinateA)}
                                         extraClassName={''}
                                         extraStyle={{}}
-                                        label={'Point Z1'}
+                                        label={'Param C'}
                                         labelStyle={'center stay'}
                                     />
                                     <StyleLabelSelect
-                                        reference={selectRefSecondPoint}
-                                        list={dots}
-                                        value={line}
+                                        id={`vector-${index}`}
+                                        list={mergedCoordinates}
+                                        value={mergedCoordinates.find(m =>
+                                            (m.xCoordinate == (line.xCoordinateB - line.xCoordinateA) && m.yCoordinate == (line.yCoordinateB - line.yCoordinateA) && m.zCoordinate == (line.zCoordinateB - line.zCoordinateA))
+                                            || (m.xCoordinate == (line.xCoordinateA - line.xCoordinateB) && m.yCoordinate == (line.yCoordinateA - line.yCoordinateB) && m.zCoordinate == (line.zCoordinateA - line.zCoordinateB))
+                                        )?.id}
                                         onValueChange={(propE) => {
-                                            updateLineParameter(line?.id, propE.X - line?.pointX0, propE.Y - line?.pointY0, propE.Z - line?.pointZ0, line?.pointX0, line?.pointY0, line?.pointZ0);
-                                            if (selectRefVector.current) {
-                                                selectRefVector.current.value = '';
+                                            updateLineParameter(line?.id, line?.xCoordinateA, line?.yCoordinateA, line?.zCoordinateA, propE.X + line?.xCoordinateA, propE.Y + line?.yCoordinateA, propE.Z + line?.zCoordinateA);
+                                            const select = document.getElementById(`point-2-${index}`);
+                                            if (select) {
+                                                select.value = '';
                                             }
                                         }}
                                         extraClassName={''}
-                                        extraStyle={{ flex: 1.5, opacity: selectRefSecondPoint.current?.value ? 1 : 0.4 }}
-                                        label={'Second Point'}
+                                        extraStyle={{
+                                            flex: 1.5,
+                                            opacity: mergedCoordinates.find(m =>
+                                                (m.xCoordinate == (line.xCoordinateB - line.xCoordinateA) && m.yCoordinate == (line.yCoordinateB - line.yCoordinateA) && m.zCoordinate == (line.zCoordinateB - line.zCoordinateA))
+                                                || (m.xCoordinate == (line.xCoordinateA - line.xCoordinateB) && m.yCoordinate == (line.yCoordinateA - line.yCoordinateB) && m.zCoordinate == (line.zCoordinateA - line.zCoordinateB))
+                                            ) ? 1 : 0.4,
+                                        }}
+                                        label={'Vector'}
                                         labelStyle={'center'}
                                     />
                                 </div>

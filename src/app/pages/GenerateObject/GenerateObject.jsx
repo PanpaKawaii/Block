@@ -367,12 +367,12 @@ export default function GenerateObject({
                     {lines.map(line => {
                         const width = 2000;
                         const height = 20;
-                        const X = line.parameterA;
-                        const Y = line.parameterB;
-                        const Z = line.parameterC;
-                        const X0 = line.pointX0;
-                        const Y0 = line.pointY0;
-                        const Z0 = line.pointZ0;
+                        const X = line.xCoordinateB - line.xCoordinateA;
+                        const Y = line.yCoordinateB - line.yCoordinateA;
+                        const Z = line.zCoordinateB - line.zCoordinateA;
+                        const X0 = line.xCoordinateA;
+                        const Y0 = line.yCoordinateA;
+                        const Z0 = line.zCoordinateA;
                         const underY = Math.sqrt(X * X + Z * Z);
                         const vectorLength = Math.sqrt(X * X + Y * Y + Z * Z) || 0;
                         let xOz = Math.abs(Math.atan(X / (Z == 0 ? 0.000001 : Z)) * 180 / Math.PI);
