@@ -2,6 +2,65 @@ import React, { useEffect, useRef } from 'react';
 import CoordinateAxes from './CoordinateAxes/CoordinateAxes';
 import './GenerateObject.css';
 
+const transformMap = {
+    translateX: v => `translateX(${v}px)`,
+    translateY: v => `translateY(${v}px)`,
+    translateZ: v => `translateZ(${v}px)`,
+    rotateX: v => `rotateX(${v}deg)`,
+    rotateY: v => `rotateY(${v}deg)`,
+    rotateZ: v => `rotateZ(${v}deg)`,
+    scale: v => `scale(${v})`,
+};
+
+const actionsToKeyframes = (name, actions) => {
+    const frames = actions
+        ?.sort((a, b) => a.timeline - b.timeline)
+        ?.map(action => {
+            const transforms = [];
+            const styles = [];
+
+            action.steps.forEach(step => {
+                if (!step.visible) return;
+
+                if (transformMap[step.type]) {
+                    transforms.push(transformMap[step.type](step.value));
+                } else {
+                    styles.push(`${step.type}: ${step.value};`);
+                }
+            });
+
+            if (transforms.length) {
+                styles.unshift(`transform: ${transforms.join(' ')};`);
+            }
+
+            return `
+                ${action.timeline}% {
+                    ${styles.join('\n')}
+                }
+            `;
+        })
+        ?.join('\n');
+
+    return `
+        @keyframes ${name} {
+            ${frames}
+        }
+    `;
+};
+
+const applyKeyframes = css => {
+    let styleEl = document.getElementById('dynamic-face-keyframes');
+
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'dynamic-face-keyframes';
+        document.head.appendChild(styleEl);
+    }
+
+    styleEl.innerHTML = css;
+    console.log('innerHTML', styleEl.innerHTML);
+};
+
 export default function GenerateObject({
     faces,
     dots,
@@ -27,6 +86,11 @@ export default function GenerateObject({
         const { x, y } = rotation.current;
         objectRef.current.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
     };
+
+    useEffect(() => () => {
+        let styleEl = document.getElementById('dynamic-face-keyframes');
+        styleEl.innerHTML = '';
+    }, []);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -62,6 +126,20 @@ export default function GenerateObject({
         return d + ' Z';
     };
 
+    useEffect(() => {
+        const css = faces
+            .map(face =>
+                actionsToKeyframes(
+                    face?.animation?.name,
+                    face?.animation?.actions
+                )
+            )
+            .join('\n');
+
+        applyKeyframes(css);
+        console.log('Rerender');
+    }, [faces.map(f => f.animation?.actions)]);
+
     return (
         <div className='generate-object-container'>
             <div
@@ -84,6 +162,7 @@ export default function GenerateObject({
                 >
                     {faces.map(face => {
                         const styleObj = {};
+                        const anim = face.animation;
 
                         face.steps?.forEach(step => {
                             if ((step.type.startsWith('translate')
@@ -96,9 +175,19 @@ export default function GenerateObject({
                             }
                         });
 
-                        let testPath = `m 10 10 l 50 0 v 40 h -50 z`;
-                        testPath = `M 15 0 H 85 L 100 15 V 85 L 85 100 H 15 L 0 85 V 15 Z`;
-                        testPath = `M 10 0 H 90 A 10 10 0 0 1 100 10 V 90 A 10 10 0 0 1 90 100 H 10 A 10 10 0 0 1 0 90 V 10 A 10 10 0 0 1 10 0 Z`;
+                        styleObj.animation = `
+                            ${anim?.name}
+                            ${anim?.duration}s
+                            ${anim?.timingFunction}
+                            ${anim?.delay}s
+                            ${anim?.iterationCount}
+                            ${anim?.direction}
+                            ${anim?.fillMode}
+                        `
+
+                        // let testPath = `m 10 10 l 50 0 v 40 h -50 z`;
+                        // testPath = `M 15 0 H 85 L 100 15 V 85 L 85 100 H 15 L 0 85 V 15 Z`;
+                        // testPath = `M 10 0 H 90 A 10 10 0 0 1 100 10 V 90 A 10 10 0 0 1 90 100 H 10 A 10 10 0 0 1 0 90 V 10 A 10 10 0 0 1 10 0 Z`;
 
                         return face.visible == 1 ? (
                             <React.Fragment key={face.id}>

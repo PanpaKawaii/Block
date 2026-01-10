@@ -1,4 +1,25 @@
 .keyframes-controller-panel-container {
+    .grid-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+
+        .grid-col {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            cursor: pointer;
+
+            .btn {
+                width: 100%;
+                padding: 8px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
     .list {
         .card {
             padding: 12px !important;
@@ -13,6 +34,7 @@
                     &.expanse {
                         max-width: 200px;
                         transition: 0.6s ease;
+                        /* animation: abc 5s alternate; */
                     }
                 }
             }

@@ -118,35 +118,6 @@ export default function FaceController({
                 steps: [
                     { id: crypto.randomUUID(), type: 'translateX', value: '0', visible: 1 },
                 ],
-                animation: {
-                    id: crypto.randomUUID(),
-                    faceId: newId,
-                    name: 'faceMove',
-                    duration: '2s',
-                    timingFunction: 'ease-in-out',
-                    delay: '0s',
-                    iterationCount: 'infinite',
-                    direction: 'normal',
-                    fillMode: 'forwards',
-                    actions: [
-                        {
-                            id: crypto.randomUUID(),
-                            timeline: 0,
-                            steps: [
-                                { id: crypto.randomUUID(), type: 'translateX', value: '0px', visible: 1 },
-                                { id: crypto.randomUUID(), type: 'opacity', value: '1', visible: 1 },
-                            ]
-                        },
-                        {
-                            id: crypto.randomUUID(),
-                            timeline: 100,
-                            steps: [
-                                { id: crypto.randomUUID(), type: 'translateX', value: '200px', visible: 1 },
-                                { id: crypto.randomUUID(), type: 'opacity', value: '0.2', visible: 1 },
-                            ]
-                        }
-                    ]
-                }
             },
             ...prev,
         ]);
@@ -497,6 +468,7 @@ export default function FaceController({
                 showCoordinateAxes={showCoordinateAxes}
                 setShowCoordinateAxes={setShowCoordinateAxes}
                 openedFaceId={openedFaceId}
+                addFace={addFace}
                 lines={lines}
                 setLines={setLines}
                 selectedLineId={selectedLineId}

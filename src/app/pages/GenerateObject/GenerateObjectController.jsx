@@ -12,6 +12,91 @@ export default function GenerateObjectController() {
 
     // const [faces, setFaces] = useState([
     //     {
+    //         id: 'face-1',
+    //         shape: '0,0 200,0 200,200 0,200',
+    //         name: `Face 1`,
+    //         width: 200,
+    //         height: 200,
+    //         glow: 4,
+    //         nameSize: 12,
+    //         borderWidth: 2,
+    //         color: '#68FCFF33',
+    //         nameColor: '#80FCFFFF',
+    //         borderColor: '#68FCFFFF',
+    //         visible: 1,
+    //         nameVisible: 1,
+    //         borderVisible: 1,
+    //         glowVisible: 1,
+    //         animation: {
+    //             name: 'moveRight',
+    //             duration: '2s',
+    //             timingFunction: 'ease-in-out',
+    //             delay: '0s',
+    //             iterationCount: 'infinite',
+    //             direction: 'alternate',
+    //             fillMode: 'forwards',
+    //             actions: [
+    //                 {
+    //                     timeline: 0,
+    //                     steps: [
+    //                         { type: 'translateX', value: '0px', visible: 1 },
+    //                         { type: 'opacity', value: '1', visible: 1 },
+    //                     ],
+    //                 },
+    //                 {
+    //                     timeline: 100,
+    //                     steps: [
+    //                         { type: 'translateX', value: '200px', visible: 1 },
+    //                         { type: 'opacity', value: '0.3', visible: 1 },
+    //                     ],
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     {
+    //         id: 'face-2',
+    //         shape: '0,0 200,0 200,200 0,200',
+    //         name: `Face 2`,
+    //         width: 200,
+    //         height: 200,
+    //         glow: 4,
+    //         nameSize: 12,
+    //         borderWidth: 2,
+    //         color: '#68FCFF33',
+    //         nameColor: '#80FCFFFF',
+    //         borderColor: '#68FCFFFF',
+    //         visible: 1,
+    //         nameVisible: 1,
+    //         borderVisible: 1,
+    //         glowVisible: 1,
+    //         animation: {
+    //             name: 'scaleUp',
+    //             duration: '1.5s',
+    //             timingFunction: 'ease',
+    //             delay: '0s',
+    //             iterationCount: 'infinite',
+    //             direction: 'alternate',
+    //             fillMode: 'forwards',
+    //             actions: [
+    //                 {
+    //                     timeline: 0,
+    //                     steps: [
+    //                         { type: 'scale', value: '1', visible: 1 },
+    //                     ],
+    //                 },
+    //                 {
+    //                     timeline: 100,
+    //                     steps: [
+    //                         { type: 'scale', value: '1.5', visible: 1 },
+    //                     ],
+    //                 },
+    //             ],
+    //         },
+    //     },
+    // ]);
+
+    // const [faces, setFaces] = useState([
+    //     {
     //         id: crypto.randomUUID(),
     //         name: 'Front',
     //         steps: [
