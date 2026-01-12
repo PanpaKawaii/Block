@@ -8,7 +8,8 @@ export default function StyleLabelSelect({
     extraClassName = '',
     extraStyle = {},
     label = '',
-    labelStyle = ''
+    labelStyle = '',
+    disable = false
 }) {
     return (
         <div className='style-label-select-container' style={extraStyle}>
@@ -24,6 +25,7 @@ export default function StyleLabelSelect({
                     onValueChange({ X: X, Y: Y, Z: Z, value: val });
                 }}
                 className={`select ${extraClassName}`}
+                disabled={disable}
             >
                 <option value={''} className='option'>--</option>
                 {/* <option value={'Oxyz'} className='option'>O</option> */}

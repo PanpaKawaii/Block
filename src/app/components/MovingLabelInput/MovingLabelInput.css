@@ -77,4 +77,8 @@
             transform: translateX(calc(-100% - 8px));
         }
     }
+
+    input:disabled+.stay {
+        opacity: 0.4;
+    }
 }

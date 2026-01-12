@@ -7,7 +7,8 @@ export default function MovingLabelInput({
     extraClassName = '',
     extraStyle = {},
     label = '',
-    labelStyle = ''
+    labelStyle = '',
+    disable = false
 }) {
     return (
         <div className='moving-label-input-container' style={extraStyle}>
@@ -22,6 +23,7 @@ export default function MovingLabelInput({
                     onValueChange({ value: val })
                 }}
                 className={`input ${extraClassName}`}
+                disabled={disable}
             />
             <label htmlFor={label} className={labelStyle}>{label}</label>
         </div>

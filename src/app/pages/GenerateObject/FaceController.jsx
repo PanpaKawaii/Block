@@ -482,7 +482,7 @@ export default function FaceController({
                 hexRgbaToPercent={hexRgbaToPercent}
             />
 
-            <div className={`sub-face-controller-container face-dot-vector-function-controller-container card ${selectedFace ? 'size_2_1' : 'size_2_2'}`}>
+            <div className={`sub-face-controller-container face-dot-vector-function-controller-container card ${(selectedFace && toggleStepFunction !== 'keyframes') ? 'size_2_1' : 'size_2_2'}`}>
                 <div className='heading'>
                     <h2>Face Detail</h2>
                     <button className='btn-close' onClick={() => setSelectedFaceId(null)}><i className='fa-regular fa-circle-xmark' /></button>

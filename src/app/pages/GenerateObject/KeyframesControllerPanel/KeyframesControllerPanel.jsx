@@ -1,5 +1,7 @@
 import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
 import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
+import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
+import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './KeyframesControllerPanel.css';
 
 export default function KeyframesControllerPanel({
@@ -55,13 +57,24 @@ export default function KeyframesControllerPanel({
                         animation: {
                             id: crypto.randomUUID(),
                             name: crypto.randomUUID().split('-').join(''),
-                            duration: '2',
+                            duration: 2,
                             timingFunction: 'ease-in-out',
-                            delay: '0',
+                            delay: 0,
                             iterationCount: 'infinite',
                             direction: 'normal',
                             fillMode: 'forwards',
                             actions: [
+                                {
+                                    id: crypto.randomUUID(),
+                                    timeline: 50,
+                                    visible: 1,
+                                    steps: [
+                                        { id: crypto.randomUUID(), type: 'translateX', value: '0', visible: 1 },
+                                        { id: crypto.randomUUID(), type: 'rotateY', value: '0', visible: 1 },
+                                        { id: crypto.randomUUID(), type: 'scale', value: '0.6', visible: 1 },
+                                        { id: crypto.randomUUID(), type: 'opacity', value: '1', visible: 1 },
+                                    ]
+                                },
                                 {
                                     id: crypto.randomUUID(),
                                     timeline: 0,
@@ -99,6 +112,25 @@ export default function KeyframesControllerPanel({
                 const { animation, ...restFace } = face;
                 return restFace;
             })
+        );
+    };
+
+    const updateAnimation = (faceId, attribute, newValue) => {
+        setFaces((prev) =>
+            prev.map((face) =>
+                face.id === faceId
+                    ? {
+                        ...face,
+                        animation: {
+                            ...face.animation,
+                            [attribute]: (
+                                attribute == 'duration'
+                                || attribute == 'delay'
+                            ) ? Math.max(0, Number(newValue)) : newValue
+                        }
+                    }
+                    : face
+            )
         );
     };
 
@@ -184,8 +216,30 @@ export default function KeyframesControllerPanel({
     const SelectedAnimation = selectedFace?.animation;
     console.log('SelectedAnimation', SelectedAnimation);
 
+    const ListTimingFunction = [
+        { id: 'ease', name: 'Ease' },
+        { id: 'linear', name: 'Linear' },
+        { id: 'ease-in', name: 'Ease-in' },
+        { id: 'ease-out', name: 'Ease-out' },
+        { id: 'ease-in-out', name: 'Ease-in-out' },
+    ];
+    const ListIterationCount = [
+        { id: 'infinite', name: 'Infinite' },
+    ];
+    const ListDirection = [
+        { id: 'normal', name: 'Normal' },
+        { id: 'reverse', name: 'Reverse' },
+        { id: 'alternate', name: 'Alternate' },
+        { id: 'alternate-reverse', name: 'Alternate-reverse' },
+    ];
+    const ListFillMode = [
+        { id: 'forwards', name: 'Forwards' },
+        { id: 'backwards', name: 'Backwards' },
+        { id: 'both', name: 'Both' },
+    ];
+
     return (
-        <div className={`keyframes-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'keyframes' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
+        <div className={`keyframes-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'keyframes' ? 'size_1_1' : 'size_1_3'}`}>
             <div className='heading'>
                 <h2>KF Ctrler</h2>
                 <div className='control'>
@@ -200,92 +254,160 @@ export default function KeyframesControllerPanel({
                 </div>
             </div>
 
-            {selectedFace ?
-                <>
-                    <button className='btn'
-                        onClick={() => {
-                            setSelectedFaceId('');
-                        }}>
-                        <i className='fa-solid fa-chevron-left' />
-                    </button>
-
-                    {!SelectedAnimation ?
-                        <button className='btn' onClick={() => addAnimation(selectedFaceId)}><i className='fa-solid fa-plus' /></button>
-                        :
+            <div className='heading-btn'>
+                {selectedFace ?
+                    <>
                         <button className='btn'
                             onClick={() => {
-                                removeAnimationFromFace(selectedFaceId);
                                 setSelectedFaceId('');
                             }}>
-                            <i className='fa-solid fa-trash-can' />
+                            <i className='fa-solid fa-chevron-left' />
                         </button>
-                    }
-                </>
-                :
-                <div className='grid-row'>
-                    {faces.map((face) => (
-                        <div key={face.id} className='grid-col'>
+
+                        {!SelectedAnimation ?
+                            <button className='btn' onClick={() => addAnimation(selectedFaceId)}><i className='fa-solid fa-plus' /></button>
+                            :
                             <button className='btn'
                                 onClick={() => {
-                                    setSelectedFaceId(face.id);
+                                    removeAnimationFromFace(selectedFaceId);
+                                    setSelectedFaceId('');
                                 }}>
-                                {face.name}
+                                <i className='fa-solid fa-trash-can' />
                             </button>
-                        </div>
-                    ))}
-                </div>
-            }
+                        }
+                    </>
+                    :
+                    <div className='grid-row'>
+                        {faces.map((face) => (
+                            <div key={face.id} className='grid-col'>
+                                <button className='btn'
+                                    onClick={() => {
+                                        setSelectedFaceId(face.id);
+                                    }}>
+                                    {face.name}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                }
+            </div>
 
             {SelectedAnimation &&
-                <div className='list'>
-                    <div className='card'>{SelectedAnimation?.name}</div>
-                    <div className='card'>{SelectedAnimation?.duration}</div>
-                    <div className='card'>{SelectedAnimation?.timingFunction}</div>
-                    <div className='card'>{SelectedAnimation?.delay}</div>
-                    <div className='card'>{SelectedAnimation?.iterationCount}</div>
-                    <div className='card'>{SelectedAnimation?.direction}</div>
-                    <div className='card'>{SelectedAnimation?.fillMode}</div>
-                    {SelectedAnimation?.actions?.map((action, aIndex) => (
-                        <div key={action.id} className='card'>
-                            <div>{action.timeline}%</div>
-                            <input
-                                type='number' value={action.timeline}
-                                onChange={(e) => { }}
-                                className='input'
+                <div className='selected-animation'>
+                    <div className='animation-attribute'>
+                        <MovingLabelInput
+                            type={'text'}
+                            value={SelectedAnimation?.name || ''}
+                            onValueChange={(propE) => updateAnimation(selectedFace?.id, 'name', propE.value)}
+                            extraClassName={''}
+                            extraStyle={{}}
+                            label={'Name'}
+                            labelStyle={'left stay'}
+                            disable={true}
+                        />
+                        <div className='row row-1'>
+                            <MovingLabelInput
+                                type={'number'}
+                                value={SelectedAnimation?.duration || 0}
+                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'duration', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{}}
+                                label={'Duration'}
+                                labelStyle={'left stay'}
                             />
-                            <form className='steps'>
-                                {action?.steps?.map((step, sIndex) => (
-                                    <div key={step.id} className={`row ${step.visible == 0 ? 'invisible' : ''}`}>
-                                        <select
-                                            value={step.type}
-                                            onChange={(e) => updateStep(selectedFaceId, action.id, step.id, e.target.value, step.value, step.visible)}
-                                            className='select'
-                                        >
-                                            <option value='translateX' className='option'>Translate X</option>
-                                            <option value='translateY' className='option'>Translate Y</option>
-                                            <option value='translateZ' className='option'>Translate Z</option>
-                                            <option value='rotateX' className='option'>Rotate X</option>
-                                            <option value='rotateY' className='option'>Rotate Y</option>
-                                            <option value='rotateZ' className='option'>Rotate Z</option>
-                                            <option value='scale' className='option'>Scale</option>
-                                            <option value='opacity' className='option'>Opacity</option>
-                                        </select>
-
-                                        <input
-                                            type='number' value={step.value}
-                                            onChange={(e) => updateStep(selectedFaceId, action.id, step.id, step.type, e.target.value, step.visible)}
-                                            className={`input ${step.type}`}
-                                        />
-                                        <div className='btns'>
-                                            <button type='button' className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(selectedFaceId, action.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
-                                            <button type='button' className='btn-step' onClick={() => addStep(selectedFaceId, action.id, sIndex + 1)}><i className='fa-solid fa-plus' /></button>
-                                            <button type='button' className='btn-step remove-step' onClick={() => removeStep(selectedFaceId, action.id, step.id)}><i className='fa-solid fa-ban' /></button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </form>
+                            <MovingLabelInput
+                                type={'number'}
+                                value={SelectedAnimation?.delay || 0}
+                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'delay', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{}}
+                                label={'Delay'}
+                                labelStyle={'left stay'}
+                            />
                         </div>
-                    ))}
+                        <div className='row row-2'>
+                            <StyleLabelSelect
+                                list={ListTimingFunction}
+                                value={ListTimingFunction?.find(l => l.id == SelectedAnimation.timingFunction)?.id}
+                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'timingFunction', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
+                                label={'Timing Function'}
+                                labelStyle={'center'}
+                            />
+                            <StyleLabelSelect
+                                list={ListIterationCount}
+                                value={ListIterationCount?.find(l => l.id == SelectedAnimation.iterationCount)?.id}
+                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'iterationCount', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
+                                label={'Iteration Count'}
+                                labelStyle={'center'}
+                                disable={true}
+                            />
+                            <StyleLabelSelect
+                                list={ListDirection}
+                                value={ListDirection?.find(l => l.id == SelectedAnimation.direction)?.id}
+                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'direction', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
+                                label={'Direction'}
+                                labelStyle={'center'}
+                            />
+                            <StyleLabelSelect
+                                list={ListFillMode}
+                                value={ListFillMode?.find(l => l.id == SelectedAnimation.fillMode)?.id}
+                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'fillMode', propE.value)}
+                                extraClassName={''}
+                                extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
+                                label={'Fill Mode'}
+                                labelStyle={'center'}
+                            />
+                        </div>
+                    </div>
+
+                    <div className='list'>
+                        {SelectedAnimation?.actions?.map((action, aIndex) => (
+                            <div key={action.id} className='card'>
+                                <input
+                                    type='number' value={action.timeline}
+                                    onChange={(e) => { }}
+                                    className='input'
+                                />
+                                <form className='steps'>
+                                    {action?.steps?.map((step, sIndex) => (
+                                        <div key={step.id} className={`row ${step.visible == 0 ? 'invisible' : ''}`}>
+                                            <select
+                                                value={step.type}
+                                                onChange={(e) => updateStep(selectedFaceId, action.id, step.id, e.target.value, step.value, step.visible)}
+                                                className='select'
+                                            >
+                                                <option value='translateX' className='option'>Translate X</option>
+                                                <option value='translateY' className='option'>Translate Y</option>
+                                                <option value='translateZ' className='option'>Translate Z</option>
+                                                <option value='rotateX' className='option'>Rotate X</option>
+                                                <option value='rotateY' className='option'>Rotate Y</option>
+                                                <option value='rotateZ' className='option'>Rotate Z</option>
+                                                <option value='scale' className='option'>Scale</option>
+                                                <option value='opacity' className='option'>Opacity</option>
+                                            </select>
+
+                                            <input
+                                                type='number' value={step.value}
+                                                onChange={(e) => updateStep(selectedFaceId, action.id, step.id, step.type, e.target.value, step.visible)}
+                                                className={`input ${step.type}`}
+                                            />
+                                            <div className='btns'>
+                                                <button type='button' className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(selectedFaceId, action.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                                <button type='button' className='btn-step' onClick={() => addStep(selectedFaceId, action.id, sIndex + 1)}><i className='fa-solid fa-plus' /></button>
+                                                <button type='button' className='btn-step remove-step' onClick={() => removeStep(selectedFaceId, action.id, step.id)}><i className='fa-solid fa-ban' /></button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </form>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             }
         </div>
