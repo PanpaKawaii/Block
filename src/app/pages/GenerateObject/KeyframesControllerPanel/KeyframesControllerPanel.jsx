@@ -58,23 +58,12 @@ export default function KeyframesControllerPanel({
                             id: crypto.randomUUID(),
                             name: crypto.randomUUID().split('-').join(''),
                             duration: 2,
-                            timingFunction: 'ease-in-out',
+                            timingFunction: 'linear',
                             delay: 0,
                             iterationCount: 'infinite',
                             direction: 'normal',
                             fillMode: 'forwards',
                             actions: [
-                                {
-                                    id: crypto.randomUUID(),
-                                    timeline: 50,
-                                    visible: 1,
-                                    steps: [
-                                        { id: crypto.randomUUID(), type: 'translateX', value: '0', visible: 1 },
-                                        { id: crypto.randomUUID(), type: 'rotateY', value: '0', visible: 1 },
-                                        { id: crypto.randomUUID(), type: 'scale', value: '0.6', visible: 1 },
-                                        { id: crypto.randomUUID(), type: 'opacity', value: '1', visible: 1 },
-                                    ]
-                                },
                                 {
                                     id: crypto.randomUUID(),
                                     timeline: 0,
@@ -128,6 +117,75 @@ export default function KeyframesControllerPanel({
                                 || attribute == 'delay'
                             ) ? Math.max(0, Number(newValue)) : newValue
                         }
+                    }
+                    : face
+            )
+        );
+    };
+
+    const addAction = (faceId) => {
+        setFaces(prevFaces =>
+            prevFaces.map(face =>
+                face.id === faceId
+                    ? {
+                        ...face,
+                        animation: {
+                            ...face.animation,
+                            actions: [
+                                ...face.animation.actions,
+                                {
+                                    id: crypto.randomUUID(),
+                                    timeline: 50,
+                                    visible: 1,
+                                    steps: [
+                                        { id: crypto.randomUUID(), type: 'translateX', value: '0', visible: 1 },
+                                    ],
+                                },
+                            ],
+                        },
+                    }
+                    : face
+            )
+        );
+    };
+
+    const removeAction = (faceId, actionId) => {
+        const thisAction = faces
+            ?.flatMap(f => f.animation?.actions || [])
+            ?.find(a => a.id === actionId);
+        if (thisAction.timeline == 0 || thisAction.timeline == 100) return;
+        setFaces(prevFaces =>
+            prevFaces.map(face =>
+                face.id === faceId
+                    ? {
+                        ...face,
+                        animation: {
+                            ...face.animation,
+                            actions: face.animation.actions.filter((action) => action.id !== actionId),
+                        },
+                    }
+                    : face
+            )
+        );
+    };
+
+    const updateAction = (faceId, actionId, newTimeline, newVisible) => {
+        if (newTimeline == 0 || newTimeline == 100) return;
+        const thisAction = faces
+            ?.flatMap(f => f.animation?.actions || [])
+            ?.find(a => a.id === actionId);
+        if (thisAction.timeline == 0 || thisAction.timeline == 100) return;
+        setFaces(prevFaces =>
+            prevFaces.map(face =>
+                face.id === faceId
+                    ? {
+                        ...face,
+                        animation: {
+                            ...face.animation,
+                            actions: face.animation.actions.map((action) =>
+                                action.id === actionId ? { ...action, timeline: Math.max(1, Number(newTimeline)), visible: newVisible } : action
+                            ),
+                        },
                     }
                     : face
             )
@@ -255,8 +313,8 @@ export default function KeyframesControllerPanel({
             </div>
 
             <div className='heading-btn'>
-                {selectedFace ?
-                    <>
+                {selectedFaceId ?
+                    <div className='btns'>
                         <button className='btn'
                             onClick={() => {
                                 setSelectedFaceId('');
@@ -275,7 +333,7 @@ export default function KeyframesControllerPanel({
                                 <i className='fa-solid fa-trash-can' />
                             </button>
                         }
-                    </>
+                    </div>
                     :
                     <div className='grid-row'>
                         {faces.map((face) => (
@@ -298,7 +356,7 @@ export default function KeyframesControllerPanel({
                         <MovingLabelInput
                             type={'text'}
                             value={SelectedAnimation?.name || ''}
-                            onValueChange={(propE) => updateAnimation(selectedFace?.id, 'name', propE.value)}
+                            onValueChange={(propE) => updateAnimation(selectedFaceId, 'name', propE.value)}
                             extraClassName={''}
                             extraStyle={{}}
                             label={'Name'}
@@ -309,7 +367,7 @@ export default function KeyframesControllerPanel({
                             <MovingLabelInput
                                 type={'number'}
                                 value={SelectedAnimation?.duration || 0}
-                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'duration', propE.value)}
+                                onValueChange={(propE) => updateAnimation(selectedFaceId, 'duration', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{}}
                                 label={'Duration'}
@@ -318,7 +376,7 @@ export default function KeyframesControllerPanel({
                             <MovingLabelInput
                                 type={'number'}
                                 value={SelectedAnimation?.delay || 0}
-                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'delay', propE.value)}
+                                onValueChange={(propE) => updateAnimation(selectedFaceId, 'delay', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{}}
                                 label={'Delay'}
@@ -329,7 +387,7 @@ export default function KeyframesControllerPanel({
                             <StyleLabelSelect
                                 list={ListTimingFunction}
                                 value={ListTimingFunction?.find(l => l.id == SelectedAnimation.timingFunction)?.id}
-                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'timingFunction', propE.value)}
+                                onValueChange={(propE) => updateAnimation(selectedFaceId, 'timingFunction', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
                                 label={'Timing Function'}
@@ -338,7 +396,7 @@ export default function KeyframesControllerPanel({
                             <StyleLabelSelect
                                 list={ListIterationCount}
                                 value={ListIterationCount?.find(l => l.id == SelectedAnimation.iterationCount)?.id}
-                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'iterationCount', propE.value)}
+                                onValueChange={(propE) => updateAnimation(selectedFaceId, 'iterationCount', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
                                 label={'Iteration Count'}
@@ -348,7 +406,7 @@ export default function KeyframesControllerPanel({
                             <StyleLabelSelect
                                 list={ListDirection}
                                 value={ListDirection?.find(l => l.id == SelectedAnimation.direction)?.id}
-                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'direction', propE.value)}
+                                onValueChange={(propE) => updateAnimation(selectedFaceId, 'direction', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
                                 label={'Direction'}
@@ -357,7 +415,7 @@ export default function KeyframesControllerPanel({
                             <StyleLabelSelect
                                 list={ListFillMode}
                                 value={ListFillMode?.find(l => l.id == SelectedAnimation.fillMode)?.id}
-                                onValueChange={(propE) => updateAnimation(selectedFace?.id, 'fillMode', propE.value)}
+                                onValueChange={(propE) => updateAnimation(selectedFaceId, 'fillMode', propE.value)}
                                 extraClassName={''}
                                 extraStyle={{ flex: 1.5, opacity: true ? 1 : 0.4 }}
                                 label={'Fill Mode'}
@@ -368,12 +426,22 @@ export default function KeyframesControllerPanel({
 
                     <div className='list'>
                         {SelectedAnimation?.actions?.map((action, aIndex) => (
-                            <div key={action.id} className='card'>
-                                <input
-                                    type='number' value={action.timeline}
-                                    onChange={(e) => { }}
-                                    className='input'
-                                />
+                            <div key={action.id} className={`card ${action.visible == 0 ? 'invisible' : ''}`}>
+                                <div className='header'>
+                                    <MovingLabelInput
+                                        type={'number'}
+                                        value={action.timeline || 0}
+                                        onValueChange={(propE) => updateAction(selectedFaceId, action.id, propE.value, action.visible)}
+                                        extraClassName={''}
+                                        extraStyle={{}}
+                                        label={`Timeline: ${action.timeline}%`}
+                                        labelStyle={'left stay'}
+                                    />
+                                    <div className='btns'>
+                                        <button className={`btn-click ${action.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateAction(selectedFaceId, action.id, action.timeline, action.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
+                                        <button className='btn-click remove-click' onClick={() => removeAction(selectedFaceId, action.id)}><i className='fa-solid fa-trash-can' /></button>
+                                    </div>
+                                </div>
                                 <form className='steps'>
                                     {action?.steps?.map((step, sIndex) => (
                                         <div key={step.id} className={`row ${step.visible == 0 ? 'invisible' : ''}`}>
@@ -397,6 +465,7 @@ export default function KeyframesControllerPanel({
                                                 onChange={(e) => updateStep(selectedFaceId, action.id, step.id, step.type, e.target.value, step.visible)}
                                                 className={`input ${step.type}`}
                                             />
+
                                             <div className='btns'>
                                                 <button type='button' className={`btn-step ${step.visible == 1 ? 'visible-step' : ''}`} onClick={() => updateStep(selectedFaceId, action.id, step.id, step.type, step.value, step.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                                 <button type='button' className='btn-step' onClick={() => addStep(selectedFaceId, action.id, sIndex + 1)}><i className='fa-solid fa-plus' /></button>
@@ -407,6 +476,7 @@ export default function KeyframesControllerPanel({
                                 </form>
                             </div>
                         ))}
+                        <button className='btn btn-add' onClick={() => addAction(selectedFaceId)}><i className='fa-solid fa-plus' /></button>
                     </div>
                 </div>
             }

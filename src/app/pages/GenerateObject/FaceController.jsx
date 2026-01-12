@@ -93,7 +93,7 @@ export default function FaceController({
                 name: `Face ${prev.length + 1}`,
             }
         ]);
-        toggleOpenFace(newId);
+        setOpenedFaceId([newId]);
     };
 
     const addFace = () => {
@@ -121,7 +121,7 @@ export default function FaceController({
             },
             ...prev,
         ]);
-        toggleOpenFace(newId);
+        setOpenedFaceId([newId]);
     };
 
     const removeFace = (faceId) => {
@@ -367,7 +367,7 @@ export default function FaceController({
                                             </div>
                                         ))}
                                     </form>
-                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX', face.steps?.length - 1)}>ADD STEP</button>
+                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX', face.steps?.length - 1)}><i className='fa-solid fa-plus'/></button>
                                 </>
                             }
                         </div>

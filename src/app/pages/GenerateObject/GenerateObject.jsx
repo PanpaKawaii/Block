@@ -16,6 +16,7 @@ const actionsToKeyframes = (name, actions) => {
     const frames = actions
         ?.sort((a, b) => a.timeline - b.timeline)
         ?.map(action => {
+            if (!action.visible) return;
             const transforms = [];
             const styles = [];
 
@@ -128,16 +129,18 @@ export default function GenerateObject({
 
     useEffect(() => {
         const css = faces
-            .map(face =>
-                actionsToKeyframes(
+            ?.map(face => {
+                if (!face?.animation) return;
+                else return actionsToKeyframes(
                     face?.animation?.name,
                     face?.animation?.actions
                 )
+            }
             )
-            .join('\n');
+            ?.join('\n');
 
         applyKeyframes(css);
-        console.log('Rerender');
+        console.log('Rerender css');
     }, [faces.map(f => f.animation?.actions)]);
 
     return (
