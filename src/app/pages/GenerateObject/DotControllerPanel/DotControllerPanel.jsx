@@ -61,6 +61,7 @@ export default function DotControllerPanel({
             },
             ...prev,
         ]);
+        setOpenedDotId([newId]);
     };
 
     const removeDot = (dotId) => {

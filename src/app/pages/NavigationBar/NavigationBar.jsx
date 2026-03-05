@@ -4,7 +4,7 @@ import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import './NavigationBar.css';
 
 export default function NavigationBar() {
-    const { logout, user } = useAuth();
+    const { login, logout, user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     console.log('NavigationBar', location.pathname);
@@ -39,14 +39,25 @@ export default function NavigationBar() {
                             </div>
                         </li>
                     ))}
-                    <li>
-                        <div className='box' onClick={logout}>
-                            <button>
-                                <div className='face-text'><span>LOGOUT</span></div>
-                                <div className='face-icon'><i className={`fa-solid fa-right-to-bracket`} /></div>
-                            </button>
-                        </div>
-                    </li>
+                    {user?.id ?
+                        <li>
+                            <div className='box' onClick={logout}>
+                                <button>
+                                    <div className='face-text'><span>LOGOUT</span></div>
+                                    <div className='face-icon'><i className={`fa-solid fa-right-to-bracket`} /></div>
+                                </button>
+                            </div>
+                        </li>
+                        :
+                        <li>
+                            <div className='box' onClick={login}>
+                                <Link to='/login'>
+                                    <div className='face-text'><span>LOGIN</span></div>
+                                    <div className='face-icon'><i className='fa-solid fa-user' /></div>
+                                </Link>
+                            </div>
+                        </li>
+                    }
                 </ul>
             </div>
             <Outlet />

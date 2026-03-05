@@ -85,7 +85,7 @@ export default function SceneController({
                     </button>
                 </div>
                 <div className='form-group'>
-                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) + 60), 720)) }))}>
+                    <button type='button' className='btn odd' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) + 180), 720)) }))}>
                         <i className='fa-solid fa-rotate-left' />
                     </button>
                     <MovingLabelInput
@@ -97,7 +97,7 @@ export default function SceneController({
                         label={'Rotate'}
                         labelStyle={'center stay'}
                     />
-                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) - 60), 720)) }))}>
+                    <button type='button' className='btn even' onClick={() => setSceneStyle(p => ({ ...p, rotateZ: Math.max(-720, Math.min(Number(Number(p.rotateZ) - 180), 720)) }))}>
                         <i className='fa-solid fa-rotate-right' />
                     </button>
                 </div>

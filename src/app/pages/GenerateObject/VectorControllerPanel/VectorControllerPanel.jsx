@@ -63,6 +63,7 @@ export default function VectorControllerPanel({
             },
             ...prev,
         ]);
+        setOpenedVectorId([newId]);
     };
 
     const removeVector = (vectorId) => {

@@ -67,6 +67,7 @@ export default function LineControllerPanel({
             },
             ...prev,
         ]);
+        setOpenedLineId([newId]);
     };
 
     const removeLine = (lineId) => {
