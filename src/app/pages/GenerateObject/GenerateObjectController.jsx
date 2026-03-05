@@ -6,7 +6,12 @@ import GenerateObject from './GenerateObject';
 
 import { FACEs } from '../../../mocks/DatabaseSample';
 
-export default function GenerateObjectController() {
+export default function GenerateObjectController({
+    pFace = [],
+    pDot = [],
+    pVector = [],
+    pLine = [],
+}) {
     const location = useLocation();
     console.log('location.state', location.state);
 
@@ -115,16 +120,16 @@ export default function GenerateObjectController() {
 
     // const [blockId, setBlockId] = useState(location.state || crypto.randomUUID());
     // console.log('blockId', blockId);
-    const [faces, setFaces] = useState([]);
+    const [faces, setFaces] = useState(pFace);
     const [selectedFaceId, setSelectedFaceId] = useState(null);
     console.log('faces', faces);
-    const [dots, setDots] = useState([]);
+    const [dots, setDots] = useState(pDot);
     const [selectedDotId, setSelectedDotId] = useState(null);
     console.log('dots', dots);
-    const [vectors, setVectors] = useState([]);
+    const [vectors, setVectors] = useState(pVector);
     const [selectedVectorId, setSelectedVectorId] = useState(null);
     console.log('vectors', vectors);
-    const [lines, setLines] = useState([]);
+    const [lines, setLines] = useState(pLine);
     const [selectedLineId, setSelectedLineId] = useState(null);
     console.log('lines', lines);
 
