@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
-
-import { useLocation } from 'react-router-dom';
 import FaceController from './FaceController';
 import GenerateObject from './GenerateObject';
-
-import { FACEs } from '../../../mocks/DatabaseSample';
 
 export default function GenerateObjectController({
     pFace = [],
@@ -12,8 +8,8 @@ export default function GenerateObjectController({
     pVector = [],
     pLine = [],
 }) {
-    const location = useLocation();
-    console.log('location.state', location.state);
+    // const location = useLocation();
+    // console.log('location.state', location.state);
 
     // const [faces, setFaces] = useState([
     //     {
@@ -132,17 +128,6 @@ export default function GenerateObjectController({
     const [lines, setLines] = useState(pLine);
     const [selectedLineId, setSelectedLineId] = useState(null);
     console.log('lines', lines);
-
-    useEffect(() => {
-        // console.log('useEffect START');
-        // console.log('FACEs', FACEs);
-        const blockId = location.state;
-        // console.log('blockId', blockId);
-        const filteredFaces = FACEs?.filter(face => face.blockId == blockId);
-        setFaces(filteredFaces);
-        // console.log('filteredFaces', filteredFaces);
-        // console.log('useEffect END');
-    }, [location.state]);
 
     const [showCoordinateAxes, setShowCoordinateAxes] = useState([]);
     const [sceneStyle, setSceneStyle] = useState({
