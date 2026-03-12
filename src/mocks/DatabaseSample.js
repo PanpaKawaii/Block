@@ -1,5 +1,3 @@
-export const FACEs = [];
-
 export const USERs = [
     {
         "id": "2b158164-d176-4625-9057-4215f6610420",

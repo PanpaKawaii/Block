@@ -56,6 +56,7 @@
         transition: all 0.5s ease;
 
         li {
+            height: 74px;
             list-style: none;
             cursor: pointer;
 
@@ -154,15 +155,15 @@
                     text-shadow: 0 0 8px var(--border-glow);
                     box-sizing: border-box;
                 }
-            }
 
-            button {
-                padding: 0;
-                background-color: transparent;
+                button {
+                    padding: 0;
+                    background-color: transparent;
 
-                .face-text {
-                    margin: 0 !important;
-                    text-align: right;
+                    .face-text {
+                        margin: 0 !important;
+                        text-align: right;
+                    }
                 }
             }
 
