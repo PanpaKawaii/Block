@@ -14,7 +14,7 @@ export default function GenerateObjectController({
     // const [faces, setFaces] = useState([
     //     {
     //         id: 'face-1',
-    //         shape: '0,0 200,0 200,200 0,200',
+    //         shape: 'M 0 0 L 200 0 L 200 200 L 0 200 Z',
     //         name: `Face 1`,
     //         width: 200,
     //         height: 200,
@@ -56,7 +56,7 @@ export default function GenerateObjectController({
     //     },
     //     {
     //         id: 'face-2',
-    //         shape: '0,0 200,0 200,200 0,200',
+    //         shape: 'M 0 0 L 200 0 L 200 200 L 0 200 Z',
     //         name: `Face 2`,
     //         width: 200,
     //         height: 200,

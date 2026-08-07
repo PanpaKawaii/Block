@@ -91,6 +91,11 @@ export default function FaceController({
                 ...prev.find(face => face.id == faceId),
                 id: newId,
                 name: `Face ${prev.length + 1}`,
+                // name: 'Face',
+                steps: prev.find(face => face.id == faceId)?.steps?.map(step => ({
+                    ...step,
+                    id: crypto.randomUUID()
+                })) || [],
             }
         ]);
         setOpenedFaceId([newId]);
@@ -101,8 +106,9 @@ export default function FaceController({
         setFaces((prev) => [
             {
                 id: newId,
-                shape: '0,0 200,0 200,200 0,200',
+                shape: 'M 0 0 L 200 0 L 200 200 L 0 200 Z',
                 name: `Face ${prev.length + 1}`,
+                // name: 'Face',
                 width: 200,
                 height: 200,
                 glow: 4,
