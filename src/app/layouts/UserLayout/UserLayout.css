@@ -1,0 +1,7 @@
+.user-layout-container {
+    display: flex;
+
+    .main {
+        flex: 1;
+    }
+}

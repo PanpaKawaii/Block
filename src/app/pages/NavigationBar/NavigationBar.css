@@ -3,7 +3,7 @@
     border-right: 2px solid var(--border);
     box-shadow: 0 0 6px var(--border-glow), inset 0 0 6px var(--border-glow);
     box-sizing: border-box;
-    position: fixed !important;
+    position: relative;
     scrollbar-width: none;
     transition: all 0.5s ease;
     user-select: none;

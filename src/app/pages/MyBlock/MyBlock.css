@@ -1,11 +1,9 @@
 .my-block-container {
-    margin: 0 0 0 280px;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow-y: scroll !important;
 
     .content {
         /* max-width: 1200px;

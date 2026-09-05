@@ -1,0 +1,44 @@
+.login-face-container {
+    img {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+.reset-password-popup {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    /* Giới hạn chiều rộng cố định */
+    box-sizing: border-box;
+
+    .close-btn-pos {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .error-message {
+        color: #ff4d4f;
+        font-size: 13px;
+        margin-top: 10px;
+        /* Khoảng cách với input phía trên */
+        margin-bottom: 15px;
+        /* KHOẢNG CÁCH VỚI NÚT CẬP NHẬT */
+
+        word-wrap: break-word;
+        white-space: normal;
+        text-align: left;
+        line-height: 1.5;
+        display: block;
+        width: 100%;
+
+        /* Hiệu ứng rung nhẹ khi xuất hiện lỗi (tùy chọn) */
+        animation: fadeInError 0.3s ease;
+    }
+}
+
+@keyframes fadeInError {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
