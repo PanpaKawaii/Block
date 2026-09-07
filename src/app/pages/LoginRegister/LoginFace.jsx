@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { postData } from '../../../mocks/CallingAPI.js';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
-
 import './LoginFace.css';
 
 export default function LoginFace({

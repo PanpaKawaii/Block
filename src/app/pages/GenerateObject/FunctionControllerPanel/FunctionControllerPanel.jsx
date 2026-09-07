@@ -30,10 +30,13 @@ export default function FunctionControllerPanel({
     const [groupFacesDotsVectors, setGroupFacesDotsVectors] = useState([]);
 
     const crossProductVector = (AB, AC) => {
+        let x = (AB.y * AC.z) - (AC.y * AB.z);
+        let y = (AB.z * AC.x) - (AC.z * AB.x);
+        let z = (AB.x * AC.y) - (AC.x * AB.y);
         return {
-            x: (AB.y * AC.z) - (AC.y * AB.z),
-            y: (AB.z * AC.x) - (AC.z * AB.x),
-            z: (AB.x * AC.y) - (AC.x * AB.y),
+            x: x,
+            y: (x == 0 && z == 0) ? Math.abs(y) : y,
+            z: z,
         };
     };
 
@@ -613,7 +616,7 @@ export default function FunctionControllerPanel({
     return (
         <div className={`function-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'function' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Function  Ctrler</h2>
+                <h2>Function Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <CopyPasteButton data={faces} setData={setFaces} />

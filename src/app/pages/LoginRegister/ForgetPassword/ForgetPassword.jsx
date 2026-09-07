@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { postData } from '../../../../mocks/CallingAPI';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput';
 import StarsBackground from '../../../components/StarsBackground/StarsBackground';
-
 import './ForgetPassword.css';
 
 export default function ForgetPassword() {

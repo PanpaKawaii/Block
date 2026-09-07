@@ -142,7 +142,7 @@ export default function LineControllerPanel({
     return (
         <div className={`line-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'line' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Line  Ctrler</h2>
+                <h2>Line Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <CopyPasteButton data={lines} setData={setLines} />

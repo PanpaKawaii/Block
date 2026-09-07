@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import LoginRegister from '../../pages/LoginRegister/LoginRegister';
 import NavigationBar from '../../pages/NavigationBar/NavigationBar';
-
 import './UserLayout.css';
 
 export default function UserLayout() {

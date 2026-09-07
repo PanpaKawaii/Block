@@ -118,7 +118,7 @@ export default function VectorControllerPanel({
     return (
         <div className={`vector-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'vector' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Vector  Ctrler</h2>
+                <h2>Vector Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <CopyPasteButton data={vectors} setData={setVectors} />

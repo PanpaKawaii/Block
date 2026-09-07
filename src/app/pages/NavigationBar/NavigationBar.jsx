@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
-
 import './NavigationBar.css';
 
 export default function NavigationBar({

@@ -14,7 +14,6 @@ import KeyframesControllerPanel from './KeyframesControllerPanel/KeyframesContro
 import LineControllerPanel from './LineControllerPanel/LineControllerPanel.jsx';
 import VectorControllerPanel from './VectorControllerPanel/VectorControllerPanel.jsx';
 
-
 import './FaceController.css';
 
 export default function FaceController({
@@ -273,7 +272,7 @@ export default function FaceController({
 
             <div className={`face-controller-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'face' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
                 <div className='heading'>
-                    <h2>Face  Ctrler</h2>
+                    <h2>Face Ctrler</h2>
                     <div className='control'>
                         <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                         <CopyPasteButton data={faces} setData={setFaces} />

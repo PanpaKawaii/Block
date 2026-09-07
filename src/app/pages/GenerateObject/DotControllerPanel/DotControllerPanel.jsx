@@ -48,7 +48,8 @@ export default function DotControllerPanel({
                 xCoordinate: 0,
                 yCoordinate: 0,
                 zCoordinate: 0,
-                name: orderToAlphaDot(prev.length + 1),
+                // name: orderToAlphaDot(prev.length + 1),
+                name: orderToAlphaDot(1),
                 nameSize: 12,
                 xCoordinateName: 0,
                 yCoordinateName: 0,
@@ -95,21 +96,25 @@ export default function DotControllerPanel({
     };
 
     const orderToAlphaDot = (order) => {
-        order -= 1;
-        const letters = 26;
-        const charCode = 65 + (order % letters);
-        const suffix = Math.floor(order / letters);
+        let newName = '';
+        let num = Math.max(order - 1, 1);
 
-        const newName = String.fromCharCode(charCode) + (suffix === 0 ? '' : suffix);
+        while (num > 0) {
+            num--;
+            newName = String.fromCharCode(65 + (num % 26)) + newName;
+            num = Math.floor(num / 26);
+        }
+        console.log('newName', newName);
+
         if (dots.find(dot => dot.name == newName)) {
-            return orderToAlphaDot(order + 2);
+            return orderToAlphaDot(order + 1);
         } else return newName;
     };
 
     return (
         <div className={`dot-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'dot' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
             <div className='heading'>
-                <h2>Dot  Ctrler</h2>
+                <h2>Dot Ctrler</h2>
                 <div className='control'>
                     <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
                     <CopyPasteButton data={dots} setData={setDots} />

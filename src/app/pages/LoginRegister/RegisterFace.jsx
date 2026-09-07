@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { postData } from '../../../mocks/CallingAPI.js';
 import CheckValidation from './CheckValidation.jsx';
-
 import './RegisterFace.css';
 
 export default function RegisterFace({

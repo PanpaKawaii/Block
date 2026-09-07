@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchData } from '../../../mocks/CallingAPI';
 import { useAuth } from '../../hooks/AuthContext/AuthContext';
-
 import './MyBlock.css';
 
 export default function MyBlock() {

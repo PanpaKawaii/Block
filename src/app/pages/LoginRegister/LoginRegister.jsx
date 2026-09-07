@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import LoginFace from './LoginFace';
 import RegisterFace from './RegisterFace';
-
 import './LoginRegister.css';
 
 export default function LoginRegister({
