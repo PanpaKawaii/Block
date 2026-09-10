@@ -1,28 +1,23 @@
 import { useMemo, useState } from 'react';
-import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
-import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
+import ControlPanel from '../../../components/ControlPanel/ControlPanel.jsx';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './LineControllerPanel.css';
 
 export default function LineControllerPanel({
-    dots,
-    setFaces,
-    selectedFace,
-    vectors,
-    setVectors,
-    selectedVectorId,
-    setSelectedVectorId,
-    selectedVector,
-    toggleMenu,
-    toggleStepFunction,
-    collapseController,
-    swapController,
-    hexRgbaToPercent,
-    lines,
-    setLines,
-    selectedLineId,
-    setSelectedLineId
+    selectedFace = null,
+    dots = [],
+    vectors = [],
+    lines = [],
+    setLines = () => { },
+    selectedLineId = '',
+    setSelectedLineId = () => { },
+    selectedLine = null,
+    toggleMenu = false,
+    toggleStepFunction = '',
+    collapseController = () => { },
+    swapController = () => { },
+    hexRgbaToPercent = () => { }
 }) {
     const [openedLineId, setOpenedLineId] = useState([]);
     const toggleOpenLine = (lineId) => {
@@ -140,21 +135,17 @@ export default function LineControllerPanel({
     }, [dots, vectors]);
 
     return (
-        <div className={`line-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'line' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
-            <div className='heading'>
-                <h2>Line Ctrler</h2>
-                <div className='control'>
-                    <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <CopyPasteButton data={lines} setData={setLines} />
-                    <button className='btn' onClick={addLine}><i className='fa-solid fa-plus' /></button>
-                    <button className='btn btn-remove' onClick={() => setLines([])}><i className='fa-solid fa-trash-can' /></button>
-                    <ButtonList
-                        icon={'arrow-right-arrow-left'}
-                        onToggle={swapController}
-                    />
-                </div>
-            </div>
-
+        <ControlPanel
+            titleName={'Line Controller'}
+            extraClassName={'line-controller-panel-container'}
+            collapseMenu={toggleMenu}
+            size={toggleStepFunction == 'line' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}
+            collapseController={collapseController}
+            entity={lines}
+            setEntity={setLines}
+            addEntity={addLine}
+            swapController={swapController}
+        >
             <div className='list'>
                 {lines.map((line, index) => (
                     <div key={line.id} className={`card ${line.visible == 0 ? 'invisible' : ''} ${line.id == selectedLineId ? 'dash-box' : ''}`}>
@@ -166,15 +157,17 @@ export default function LineControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(line.color || '#FFFFFFFF') || 1 }}
                             />
-                            <MovingLabelInput
-                                type={'text'}
-                                value={line?.name || ''}
-                                onValueChange={(propE) => updateLine(line?.id, 'name', propE.value)}
-                                extraClassName={''}
-                                extraStyle={{}}
-                                label={'Name'}
-                                labelStyle={'left moving'}
-                            />
+                            <div className={`name-group ${(openedLineId.includes(line.id) || !toggleMenu) ? 'expanse' : ''}`}>
+                                <MovingLabelInput
+                                    type={'text'}
+                                    value={line?.name || ''}
+                                    onValueChange={(propE) => updateLine(line?.id, 'name', propE.value)}
+                                    extraClassName={''}
+                                    extraStyle={{}}
+                                    label={'Name'}
+                                    labelStyle={'left moving'}
+                                />
+                            </div>
                             <div className='btns'>
                                 <button className={`btn-click ${selectedLineId == line.id ? 'selected' : ''}`} onClick={() => toggleSelectLine(line.id)}><i className='fa-solid fa-gear' /></button>
                                 <button className={`btn-click ${openedLineId.includes(line.id) ? 'opened-select' : ''}`} onClick={() => toggleOpenLine(line.id)}><i className='fa-solid fa-hand' /></button>
@@ -336,6 +329,6 @@ export default function LineControllerPanel({
                     </div>
                 ))}
             </div>
-        </div>
+        </ControlPanel>
     )
 }
