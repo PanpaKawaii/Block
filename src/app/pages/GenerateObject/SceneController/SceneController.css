@@ -5,33 +5,23 @@
     width: fit-content;
     display: flex;
     align-items: center;
-    gap: 8px;
 
     .btn {
         height: 40px;
     }
 
     form {
+        padding: 0 8px;
         max-width: 800px;
         height: 60px;
         display: flex;
         align-items: center;
         gap: 8px;
         transition: all 0.5s ease;
-        overflow: hidden;
 
         &.collapsed {
             max-width: 0px;
             opacity: 0;
-
-            .btn-reset {
-                opacity: 0;
-                transition: all 0.5s ease;
-            }
-        }
-
-        .btn-reset {
-            transition: all 1s ease;
         }
 
         .form-group {
