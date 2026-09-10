@@ -1,0 +1,247 @@
+.control-panel-container {
+    width: fit-content;
+    max-width: 480px;
+    min-width: 480px;
+    box-sizing: border-box;
+    position: fixed;
+    border-radius: 20px;
+    transition: all 0.5s ease;
+
+    .line {
+        width: 100%;
+        height: 2px;
+        background: var(--border);
+        box-shadow: 0 0 6px var(--border-glow);
+    }
+
+    .title-name {
+        padding: 16px 32px;
+
+        h2 {
+            font-weight: 600;
+            transition: all 0.5s ease;
+        }
+    }
+
+    .control-btns {
+        padding: 8px;
+        display: flex;
+        gap: 8px;
+
+        .btn-collapsed {
+            padding: 0px;
+            background: var(--background-1);
+            transform: rotateZ(0deg);
+            transition: all 0.5s ease;
+        }
+
+        .json-output {
+            width: 40px;
+            height: 40px;
+        }
+
+        .btn {
+            width: 40px;
+            height: 40px;
+            padding: 0px;
+            border-radius: 6px;
+        }
+    }
+
+    .panel-content {
+        .list {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 0px;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            transition: all 0.5s ease;
+
+            .card {
+                position: relative;
+                border-radius: 12px;
+                padding: 8px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 8px;
+
+                    h3 {
+                        flex: 1;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .btns {
+                        display: flex;
+                        gap: 4px;
+
+                        .collapse-hidden {
+                            display: flex;
+                            gap: 4px;
+                            width: fit-content;
+                            max-width: 200px;
+                            min-width: 0px;
+                            overflow: hidden;
+                            transition: all 0.5s ease;
+                        }
+
+                        .btn-click {
+                            min-width: 28px;
+                            padding: 2px;
+                            background: transparent;
+                            font-size: 20px;
+                            color: var(--secondary);
+
+                            &.selected,
+                            &.opened-select,
+                            &.visible-select,
+                            &.show-coordinate-axes-select {
+                                color: var(--text);
+                                text-shadow: 0 0 8px var(--border-glow);
+                            }
+
+                            &.remove-click {
+                                color: var(--primary-error);
+                                text-shadow: 0 0 8px var(--border-glow-error);
+                            }
+                        }
+                    }
+                }
+
+                form {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 12px;
+
+                    &.steps {
+                        gap: 8px;
+
+                        .row {
+                            input {
+                                width: 0;
+                                flex: 1;
+                                text-align: center;
+                            }
+                        }
+                    }
+
+                    .row {
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 8px;
+
+                        select {
+                            height: 40px;
+                        }
+
+                        .btns {
+                            display: flex;
+                            gap: 4px;
+
+                            .btn-step {
+                                min-width: 28px;
+                                padding: 2px;
+                                background: transparent;
+                                font-size: 20px;
+                                color: var(--secondary);
+
+                                &.visible-step {
+                                    color: var(--text);
+                                    text-shadow: 0 0 8px var(--border-glow);
+                                }
+
+                                &.remove-step {
+                                    color: var(--primary-error);
+                                    text-shadow: 0 0 8px var(--border-glow-error);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .btn-add {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    &.collapsed {
+        max-width: 480px;
+        min-width: 0px;
+
+        .control-btns {
+            .btn-collapsed {
+                transform: rotateZ(180deg);
+            }
+        }
+
+        .panel-content {
+            .list {
+                .card {
+                    .header {
+                        .btns {
+                            .collapse-hidden {
+                                max-width: 0px;
+                                min-width: 0px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.size_1_1 {
+        height: 88vh;
+        top: 10vh;
+        right: 2vh;
+
+        .panel-content {
+            .list {
+                max-height: calc(88vh - 4px - 61px - 2px - 56px - 2px - 40px);
+            }
+        }
+    }
+
+    &.size_1_2 {
+        height: 56vh;
+        top: 10vh;
+        right: 2vh;
+
+        .panel-content {
+            .list {
+                max-height: calc(56vh - 4px - 61px - 2px - 56px - 2px - 40px);
+            }
+        }
+    }
+
+    &.size_1_3 {
+        height: 0vh;
+        right: 2vh;
+        top: 96vh;
+        padding: 0 20px;
+        opacity: 0;
+    }
+
+    &.size_1_4 {
+        height: 0vh;
+        top: 66vh;
+        right: 2vh;
+        padding: 0 20px;
+        opacity: 0;
+    }
+}

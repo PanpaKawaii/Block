@@ -16,7 +16,7 @@
         position: absolute;
         font-weight: bold;
         pointer-events: none;
-        transition: 0.2s ease;
+        transition: all 0.2s ease;
 
         &.error {
             color: var(--accent-error);

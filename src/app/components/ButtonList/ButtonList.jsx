@@ -2,7 +2,6 @@ import { useState } from 'react';
 import './ButtonList.css';
 
 export default function ButtonList({
-    icon,
     onToggle
 }) {
     const [show, setShow] = useState(false);
@@ -20,7 +19,7 @@ export default function ButtonList({
     };
     return (
         <div className='button-list-container'>
-            <button className='btn' onClick={() => setShow(p => !p)}><i className={`fa-solid fa-${icon}`} /></button>
+            <button className='btn' onClick={() => setShow(p => !p)}><i className='fa-solid fa-arrow-right-arrow-left' /></button>
             <div className='list-button'>
                 {show && ListSwapController?.map((item, index) => (
                     <button className='item' key={index} onClick={() => handleClick(item.value)}>

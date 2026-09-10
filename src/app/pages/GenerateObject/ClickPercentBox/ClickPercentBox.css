@@ -64,7 +64,7 @@
                 opacity: 0.4;
                 font-weight: bold;
                 padding: 0 4px;
-                transition: 0.2s ease;
+                transition: all 0.2s ease;
                 pointer-events: none;
             }
 
