@@ -1,31 +1,30 @@
 import { useMemo, useState } from 'react';
-import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
-import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
+import ControlPanel from '../../../components/ControlPanel/ControlPanel.jsx';
 import StyleLabelSelect from '../../../components/StyleLabelSelect/StyleLabelSelect.jsx';
 import './FunctionControllerPanel.css';
 
 export default function FunctionControllerPanel({
-    faces,
-    setFaces,
-    selectedFace,
-    selectedFaceId,
-    toggleSelectFace,
-    toggleOpenFace,
-    openedFaceId,
-    addFace,
-    removeFace,
-    updateFace,
-    vectors,
-    dots,
-    setDots,
-    setLines,
-    toggleMenu,
-    toggleStepFunction,
-    collapseController,
-    swapController,
-    hexRgbaToPercent,
-    handleShowCoordinateAxes,
-    showCoordinateAxes
+    faces = [],
+    setFaces = () => { },
+    selectedFace = null,
+    selectedFaceId = '',
+    toggleSelectFace = () => { },
+    toggleOpenFace = () => { },
+    openedFaceId = '',
+    addFace = () => { },
+    removeFace = () => { },
+    updateFace = () => { },
+    vectors = [],
+    dots = [],
+    setDots = () => { },
+    setLines = () => { },
+    toggleMenu = false,
+    toggleStepFunction = '',
+    collapseController = () => { },
+    swapController = () => { },
+    hexRgbaToPercent = () => { },
+    handleShowCoordinateAxes = () => { },
+    showCoordinateAxes = []
 }) {
     const [groupFacesDotsVectors, setGroupFacesDotsVectors] = useState([]);
 
@@ -253,9 +252,9 @@ export default function FunctionControllerPanel({
         // console.log('t3', t3);
         // console.log('s3', s3);
 
-        // const x = x1 + (a1 * (t1 || t2 || t3));
-        // const y = y1 + (b1 * (t1 || t2 || t3));
-        // const z = z1 + (c1 * (t1 || t2 || t3));
+        const x = x1 + (a1 * (t1 || t2 || t3));
+        const y = y1 + (b1 * (t1 || t2 || t3));
+        const z = z1 + (c1 * (t1 || t2 || t3));
 
         const point = {
             x: x1 + (a1 * (t1 || t2 || t3)),
@@ -289,12 +288,18 @@ export default function FunctionControllerPanel({
         //     ...prev,
         //     {
         //         id: crypto.randomUUID(),
-        //         parameterA: a2,
-        //         parameterB: b2,
-        //         parameterC: c2,
-        //         pointX0: x2,
-        //         pointY0: y2,
-        //         pointZ0: z2,
+        //         // parameterA: a2,
+        //         // parameterB: b2,
+        //         // parameterC: c2,
+        //         // pointX0: x2,
+        //         // pointY0: y2,
+        //         // pointZ0: z2,
+        //         xCoordinateA: x2,
+        //         yCoordinateA: y2,
+        //         zCoordinateA: z2,
+        //         xCoordinateB: x2 + a2,
+        //         yCoordinateB: y2 + b2,
+        //         zCoordinateB: z2 + c2,
         //         name: `Line ${prev.length + 1}`,
         //         nameSize: 12,
         //         xCoordinateName: 0,
@@ -475,12 +480,12 @@ export default function FunctionControllerPanel({
         //     ...prev,
         //     {
         //         id: crypto.randomUUID(),
-        //         parameterA: v.x,
-        //         parameterB: v.y,
-        //         parameterC: v.z,
-        //         pointX0: dotG.x,
-        //         pointY0: dotG.y,
-        //         pointZ0: dotG.z,
+        //         xCoordinateA: dotG.x,
+        //         yCoordinateA: dotG.y,
+        //         zCoordinateA: dotG.z,
+        //         xCoordinateB: dotG.x + v.x,
+        //         yCoordinateB: dotG.y + v.y,
+        //         zCoordinateB: dotG.z + v.z,
         //         name: `Line ${prev.length + 1}`,
         //         nameSize: 12,
         //         xCoordinateName: 0,
@@ -614,23 +619,19 @@ export default function FunctionControllerPanel({
     }, [dots, vectors]);
 
     return (
-        <div className={`function-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'function' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
-            <div className='heading'>
-                <h2>Function Ctrler</h2>
-                <div className='control'>
-                    <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <CopyPasteButton data={faces} setData={setFaces} />
-                    <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
-                    <button className='btn btn-remove' onClick={() => setFaces([])}><i className='fa-solid fa-trash-can' /></button>
-                    <ButtonList
-                        icon={'arrow-right-arrow-left'}
-                        onToggle={swapController}
-                    />
-                </div>
-            </div>
-
+        <ControlPanel
+            titleName={'Function Controller'}
+            extraClassName={'function-controller-panel-container'}
+            collapseMenu={toggleMenu}
+            size={toggleStepFunction == 'function' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}
+            collapseController={collapseController}
+            entity={faces}
+            setEntity={setFaces}
+            addEntity={addFace}
+            swapController={swapController}
+        >
             <div className='list'>
-                {faces.map((face, index) => (
+                {faces.map((face) => (
                     <div key={face.id} className={`card ${face.visible == 0 ? 'invisible' : ''} ${face.id == selectedFaceId ? 'dash-box' : ''}`}>
                         <div className='header'>
                             <input
@@ -799,6 +800,6 @@ export default function FunctionControllerPanel({
                     </div>
                 ))}
             </div>
-        </div >
+        </ControlPanel>
     )
 }

@@ -1,8 +1,6 @@
 .function-controller-panel-container {
     .list {
         .card {
-            padding: 12px !important;
-
             .row {
                 .selects {
                     flex: 3;
