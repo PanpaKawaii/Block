@@ -1,9 +1,8 @@
 import { useState } from 'react';
 // import { Link } from 'react-router-dom';
 // import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect.jsx';
-import ButtonList from '../../components/ButtonList/ButtonList.jsx';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
-import CopyPasteButton from '../../components/CopyPasteButton/CopyPasteButton.jsx';
+import ControlPanel from '../../components/ControlPanel/ControlPanel.jsx';
 import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
 import ClickPercentBox from './ClickPercentBox/ClickPercentBox.jsx';
 import SceneController from './SceneController/SceneController.jsx';
@@ -17,26 +16,26 @@ import VectorControllerPanel from './VectorControllerPanel/VectorControllerPanel
 import './FaceController.css';
 
 export default function FaceController({
-    faces,
-    setFaces,
-    dots,
-    setDots,
-    vectors,
-    setVectors,
-    sceneStyle,
-    setSceneStyle,
-    selectedFaceId,
-    setSelectedFaceId,
-    selectedDotId,
-    setSelectedDotId,
-    selectedVectorId,
-    setSelectedVectorId,
-    showCoordinateAxes,
-    setShowCoordinateAxes,
-    lines,
-    setLines,
-    selectedLineId,
-    setSelectedLineId
+    faces = [],
+    setFaces = () => { },
+    dots = [],
+    setDots = () => { },
+    vectors = [],
+    setVectors = () => { },
+    lines = [],
+    setLines = () => { },
+    sceneStyle = null,
+    setSceneStyle = () => { },
+    selectedFaceId = '',
+    setSelectedFaceId = () => { },
+    selectedDotId = '',
+    setSelectedDotId = () => { },
+    selectedVectorId = '',
+    setSelectedVectorId = () => { },
+    selectedLineId = '',
+    setSelectedLineId = () => { },
+    showCoordinateAxes = [],
+    setShowCoordinateAxes = () => { }
 }) {
     const handleShowCoordinateAxes = (faceId) => {
         setShowCoordinateAxes(prev => {
@@ -54,7 +53,7 @@ export default function FaceController({
         setOpenedFaceId([]);
     };
 
-    const [toggleMenu, setToggleMenu] = useState(true);
+    const [toggleMenu, setToggleMenu] = useState(false);
     const collapseController = () => {
         setToggleMenu(p => !p);
         setOpenedFaceId([]);
@@ -252,7 +251,7 @@ export default function FaceController({
         return value;
     };
 
-    const changeUUID = () => {
+    const changeAttribute = () => {
         setFaces(prev => prev.map((face, index) => ({
             ...face,
             id: crypto.randomUUID(),
@@ -270,23 +269,17 @@ export default function FaceController({
                 handleShowCoordinateAxes={handleShowCoordinateAxes}
             />
 
-            <div className={`face-controller-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'face' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
-                <div className='heading'>
-                    <h2>Face Ctrler</h2>
-                    <div className='control'>
-                        <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                        <CopyPasteButton data={faces} setData={setFaces} />
-                        <button className='btn' onClick={addFace}><i className='fa-solid fa-plus' /></button>
-                        <button className='btn btn-remove' onClick={() => setFaces([])}><i className='fa-solid fa-trash-can' /></button>
-                        <ButtonList
-                            icon={'arrow-right-arrow-left'}
-                            onToggle={swapController}
-                        />
-                    </div>
-                    {/* <button className='btn' onClick={changeUUID}><i className='fa-solid fa-file' /></button> */}
-                    {/* <Link to='/' state={'5fa8b8df-595a-4f13-b808-7f58b404dd87'}><button className='btn'>/</button></Link> */}
-                </div>
-
+            <ControlPanel
+                titleName={'Face Controller'}
+                extraClassName={'face-controller-container'}
+                collapseMenu={toggleMenu}
+                size={toggleStepFunction == 'face' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}
+                collapseController={collapseController}
+                entity={faces}
+                setEntity={setFaces}
+                addEntity={addFace}
+                swapController={swapController}
+            >
                 <div className='list'>
                     {faces.map((face) => (
                         <div key={face.id} className={`card ${face.visible == 0 ? 'invisible' : ''} ${face.id == selectedFaceId ? 'dash-box' : ''}`}>
@@ -372,16 +365,15 @@ export default function FaceController({
                                             </div>
                                         ))}
                                     </form>
-                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX', face.steps?.length - 1)}><i className='fa-solid fa-plus'/></button>
+                                    <button className='btn btn-add' onClick={() => addStep(face.id, 'translateX', face.steps?.length - 1)}><i className='fa-solid fa-plus' /></button>
                                 </>
                             }
                         </div>
                     ))}
                 </div>
-            </div>
+            </ControlPanel >
 
             <DotControllerPanel
-                setFaces={setFaces}
                 selectedFace={selectedFace}
                 dots={dots}
                 setDots={setDots}
@@ -396,9 +388,8 @@ export default function FaceController({
             />
 
             <VectorControllerPanel
-                dots={dots}
-                setFaces={setFaces}
                 selectedFace={selectedFace}
+                dots={dots}
                 vectors={vectors}
                 setVectors={setVectors}
                 selectedVectorId={selectedVectorId}
@@ -412,23 +403,19 @@ export default function FaceController({
             />
 
             <LineControllerPanel
-                dots={dots}
-                setFaces={setFaces}
                 selectedFace={selectedFace}
+                dots={dots}
                 vectors={vectors}
-                setVectors={setVectors}
-                selectedVectorId={selectedVectorId}
-                setSelectedVectorId={setSelectedVectorId}
-                selectedVector={selectedVector}
+                lines={lines}
+                setLines={setLines}
+                selectedLineId={selectedLineId}
+                selectedLine={selectedLine}
+                setSelectedLineId={setSelectedLineId}
                 toggleMenu={toggleMenu}
                 toggleStepFunction={toggleStepFunction}
                 collapseController={collapseController}
                 swapController={swapController}
                 hexRgbaToPercent={hexRgbaToPercent}
-                lines={lines}
-                setLines={setLines}
-                selectedLineId={selectedLineId}
-                setSelectedLineId={setSelectedLineId}
             />
 
             <FunctionControllerPanel
@@ -462,6 +449,8 @@ export default function FaceController({
                 setDots={setDots}
                 vectors={vectors}
                 setVectors={setVectors}
+                lines={lines}
+                setLines={setLines}
                 sceneStyle={sceneStyle}
                 setSceneStyle={setSceneStyle}
                 selectedFaceId={selectedFaceId}
@@ -470,14 +459,12 @@ export default function FaceController({
                 setSelectedDotId={setSelectedDotId}
                 selectedVectorId={selectedVectorId}
                 setSelectedVectorId={setSelectedVectorId}
+                selectedLineId={selectedLineId}
+                setSelectedLineId={setSelectedLineId}
                 showCoordinateAxes={showCoordinateAxes}
                 setShowCoordinateAxes={setShowCoordinateAxes}
                 openedFaceId={openedFaceId}
                 addFace={addFace}
-                lines={lines}
-                setLines={setLines}
-                selectedLineId={selectedLineId}
-                setSelectedLineId={setSelectedLineId}
                 selectedFace={selectedFace}
                 selectedDot={selectedDot}
                 toggleMenu={toggleMenu}

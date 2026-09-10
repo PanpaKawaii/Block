@@ -63,20 +63,20 @@ const applyKeyframes = css => {
 };
 
 export default function GenerateObject({
-    faces,
-    dots,
-    vectors,
-    lines,
-    selectedFaceId,
-    selectedDotId,
-    selectedVectorId,
-    selectedLineId,
-    setSelectedFaceId,
-    setSelectedDotId,
-    setSelectedVectorId,
-    setSelectedLineId,
-    sceneStyle,
-    showCoordinateAxes
+    faces = [],
+    dots = [],
+    vectors = [],
+    lines = [],
+    selectedFaceId = '',
+    selectedDotId = '',
+    selectedVectorId = '',
+    selectedLineId = '',
+    setSelectedFaceId = () => { },
+    setSelectedDotId = () => { },
+    setSelectedVectorId = () => { },
+    setSelectedLineId = () => { },
+    sceneStyle = {},
+    showCoordinateAxes = []
 }) {
     const containerRef = useRef(null);
     const objectRef = useRef(null);

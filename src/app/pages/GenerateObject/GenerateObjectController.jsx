@@ -164,6 +164,8 @@ export default function GenerateObjectController({
                 setDots={setDots}
                 vectors={vectors}
                 setVectors={setVectors}
+                lines={lines}
+                setLines={setLines}
                 sceneStyle={sceneStyle}
                 setSceneStyle={setSceneStyle}
                 selectedFaceId={selectedFaceId}
@@ -172,12 +174,10 @@ export default function GenerateObjectController({
                 setSelectedDotId={setSelectedDotId}
                 selectedVectorId={selectedVectorId}
                 setSelectedVectorId={setSelectedVectorId}
-                showCoordinateAxes={showCoordinateAxes}
-                setShowCoordinateAxes={setShowCoordinateAxes}
-                lines={lines}
-                setLines={setLines}
                 selectedLineId={selectedLineId}
                 setSelectedLineId={setSelectedLineId}
+                showCoordinateAxes={showCoordinateAxes}
+                setShowCoordinateAxes={setShowCoordinateAxes}
             />
         </>
     )
