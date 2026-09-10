@@ -1,22 +1,20 @@
 import { useState } from 'react';
-import ButtonList from '../../../components/ButtonList/ButtonList.jsx';
-import CopyPasteButton from '../../../components/CopyPasteButton/CopyPasteButton.jsx';
+import ControlPanel from '../../../components/ControlPanel/ControlPanel.jsx';
 import MovingLabelInput from '../../../components/MovingLabelInput/MovingLabelInput.jsx';
 import './DotControllerPanel.css';
 
 export default function DotControllerPanel({
-    setFaces,
-    selectedFace,
-    dots,
-    setDots,
-    selectedDotId,
-    setSelectedDotId,
-    selectedDot,
-    toggleMenu,
-    toggleStepFunction,
-    collapseController,
-    swapController,
-    hexRgbaToPercent
+    selectedFace = null,
+    dots = [],
+    setDots = () => { },
+    selectedDotId = '',
+    setSelectedDotId = () => { },
+    selectedDot = null,
+    toggleMenu = false,
+    toggleStepFunction = '',
+    collapseController = () => { },
+    swapController = () => { },
+    hexRgbaToPercent = () => { }
 }) {
     const [openedDotId, setOpenedDotId] = useState([]);
     const toggleOpenDot = (dotId) => {
@@ -112,21 +110,17 @@ export default function DotControllerPanel({
     };
 
     return (
-        <div className={`dot-controller-panel-container face-dot-vector-function-controller-container card ${toggleMenu ? '' : 'collapsed'} ${toggleStepFunction == 'dot' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}`}>
-            <div className='heading'>
-                <h2>Dot Ctrler</h2>
-                <div className='control'>
-                    <button className='btn btn-collapsed' onClick={collapseController}><i className='fa-solid fa-chevron-right' /></button>
-                    <CopyPasteButton data={dots} setData={setDots} />
-                    <button className='btn' onClick={addDot}><i className='fa-solid fa-plus' /></button>
-                    <button className='btn btn-remove' onClick={() => setDots([])}><i className='fa-solid fa-trash-can' /></button>
-                    <ButtonList
-                        icon={'arrow-right-arrow-left'}
-                        onToggle={swapController}
-                    />
-                </div>
-            </div>
-
+        <ControlPanel
+            titleName={'Dot Controller'}
+            extraClassName={'dot-controller-panel-container'}
+            collapseMenu={toggleMenu}
+            size={toggleStepFunction == 'dot' ? (selectedFace ? 'size_1_2' : 'size_1_1') : (selectedFace ? 'size_1_4' : 'size_1_3')}
+            collapseController={collapseController}
+            entity={dots}
+            setEntity={setDots}
+            addEntity={addDot}
+            swapController={swapController}
+        >
             <div className='list'>
                 {dots.map((dot) => (
                     <div key={dot.id} className={`card ${dot.visible == 0 ? 'invisible' : ''} ${dot.id == selectedDotId ? 'dash-box' : ''}`}>
@@ -138,7 +132,7 @@ export default function DotControllerPanel({
                                 className='input color-input'
                                 style={{ opacity: hexRgbaToPercent(dot.color || '#FFFFFFFF') || 1 }}
                             />
-                            <div className={`name-group ${(openedDotId.includes(dot.id) || toggleMenu) ? 'expanse' : ''}`}>
+                            <div className={`name-group ${(openedDotId.includes(dot.id) || !toggleMenu) ? 'expanse' : ''}`}>
                                 <MovingLabelInput
                                     type={'text'}
                                     value={dot?.name || ''}
@@ -197,6 +191,6 @@ export default function DotControllerPanel({
                     </div>
                 ))}
             </div>
-        </div>
+        </ControlPanel>
     )
 }
