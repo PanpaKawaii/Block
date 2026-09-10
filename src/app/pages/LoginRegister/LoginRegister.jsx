@@ -11,18 +11,18 @@ export default function LoginRegister({
     return (
         <div className='login-register-container'>
             <div className='login-register-modal-box' style={{ transform: `rotateY(${rotate}deg)` }}>
-                <div className={`face face-login ${rotate == 0 ? 'front' : 'back'}`}>
-                    <button onClick={() => onClose(false)} className='close-btn'><i className='fa-solid fa-xmark' /></button>
+                <div className={`face card face-login ${rotate == 0 ? 'front' : 'back'}`}>
+                    <button onClick={() => onClose(false)} className='btn-close'><i className='fa-regular fa-circle-xmark' /></button>
                     <LoginFace setRotate={setRotate} onClose={onClose} />
                 </div>
 
-                <div className={`face face-register ${rotate == -180 ? 'front' : 'back'}`}>
-                    <button onClick={() => onClose(false)} className='close-btn'><i className='fa-solid fa-xmark' /></button>
+                <div className={`face card face-register ${rotate == -180 ? 'front' : 'back'}`}>
+                    <button onClick={() => onClose(false)} className='btn-close'><i className='fa-regular fa-circle-xmark' /></button>
                     <RegisterFace setRotate={setRotate} />
                 </div>
 
                 {[...Array(8)].map((_, index) => (
-                    <div key={index} className={`face face-border f${index + 1}`}>
+                    <div key={index} className={`face card face-border f${index + 1}`}>
                         {/* Face-{index + 1} */}
                     </div>
                 ))}

@@ -9,33 +9,37 @@
             .radio-label {
                 flex: 1;
                 height: fit-content;
-                border: 2px solid var(--gray-3);
+                border: 2px solid var(--border);
                 box-sizing: border-box;
+                box-shadow: 0 0 6px var(--border-glow);
                 border-radius: 4px;
                 cursor: pointer;
                 overflow: hidden;
                 transition: all 0.2s ease;
 
-                &:active {
-                    border: 2px solid #2563eb;
-                }
-
                 .hidden-radio {
                     display: none;
 
                     &:checked+.radio-box {
-                        color: var(--text-primary);
                         font-weight: bold;
-                        background-color: #5b8fff80;
+                        background: #38BDF899;
                         transition: all 0.2s ease;
                     }
+                }
+
+                &:hover {
+                    background: #38BDF8;
+                    box-shadow: 0 0 12px #0EA5E9;
+                }
+
+                &:active {
+                    box-shadow: 0 0 20px #38BDF8;
                 }
 
                 .radio-box {
                     width: 100%;
                     padding: 8px;
-                    color: var(--text-primary);
-                    background-color: var(--gray-1);
+                    color: var(--accent);
                     display: inline-block;
                     cursor: pointer;
                     box-sizing: border-box;
@@ -43,10 +47,6 @@
                     text-align: center;
                     align-content: center;
                     transition: all 0.15s ease;
-
-                    &:hover {
-                        background-color: var(--gray-2);
-                    }
                 }
             }
         }
@@ -60,7 +60,7 @@
         right: 0;
         width: 100%;
         height: 100%;
-        background: #000000aa;
+        background: #00000080;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -118,11 +118,11 @@
                 font-weight: bold;
 
                 &.error-message {
-                    color: #ff4d4f;
+                    color: var(--primary-error);
                 }
 
                 &.success-message {
-                    color: #52c41a;
+                    color: var(--primary-success);
                 }
             }
 

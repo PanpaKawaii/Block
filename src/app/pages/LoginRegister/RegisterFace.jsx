@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { postData } from '../../../mocks/CallingAPI.js';
+import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
 import CheckValidation from './CheckValidation.jsx';
 import './RegisterFace.css';
 
@@ -10,14 +11,24 @@ export default function RegisterFace({
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const ResetRegisterInputs = () => {
-        var inputs = document.querySelectorAll('input');
-        inputs.forEach(function (input) {
-            input.value = '';
-        });
+        setEmail('');
+        setName('');
+        setPhone('');
+        setGender('');
+        setPassword('');
+        setConfirm('');
+
         setAccept(false);
         setRegisterError({ value: '', name: '' });
         setRegisterSuccess('');
     };
+
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
 
     const [loading, setLoading] = useState(false);
     const [accept, setAccept] = useState(false);
@@ -177,27 +188,53 @@ export default function RegisterFace({
 
     return (
         <div className='register-face-container'>
-            <h1>ĐĂNG KÝ</h1>
+            <h1>REGISTER</h1>
             <form onSubmit={handleSubmitRegister}>
                 <div className='form-group'>
-                    <input type='text' name='email' placeholder='' ref={refEmail} />
-                    <label htmlFor={'email'} style={{ color: registerError.name.includes('Email') && '#ff4d4f', }}>Email</label>
+                    <MovingLabelInput
+                        type={'text'}
+                        value={email || ''}
+                        onValueChange={(propE) => setEmail(propE.value)}
+                        extraClassName={`${registerError.name.includes('Email') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Email'}
+                        labelStyle={`left moving ${registerError.name.includes('Email') ? 'error' : ''}`}
+                        name={'email'}
+                        ref={refEmail}
+                    />
                 </div>
                 <div className='form-group'>
-                    <input type='text' name='name' placeholder='' />
-                    <label htmlFor={'name'} style={{ color: registerError.name.includes('Name') && '#ff4d4f', }}>Họ tên</label>
+                    <MovingLabelInput
+                        type={'text'}
+                        value={name || ''}
+                        onValueChange={(propE) => setName(propE.value)}
+                        extraClassName={`${registerError.name.includes('Name') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Name'}
+                        labelStyle={`left moving ${registerError.name.includes('Name') ? 'error' : ''}`}
+                        name={'name'}
+                    />
                 </div>
                 <div className='form-group'>
-                    <input type='text' name='phone' placeholder='' />
-                    <label htmlFor={'phone'} style={{ color: registerError.name.includes('Phone') && '#ff4d4f', }}>Số điện thoại</label>
+                    <MovingLabelInput
+                        type={'text'}
+                        value={phone || ''}
+                        onValueChange={(propE) => setPhone(propE.value)}
+                        extraClassName={`${registerError.name.includes('Phone') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Phone'}
+                        labelStyle={`left moving ${registerError.name.includes('Phone') ? 'error' : ''}`}
+                        name={'phone'}
+                    />
                 </div>
                 <div className='gender-group'>
-                    {['Nam', 'Nữ'].map((gender, index) => (
+                    {['Male', 'Female'].map((gender, index) => (
                         <label key={index} className='radio-label' style={{ border: registerError.name.includes('Gender') && '2px solid #ff4d4f', }} >
                             <input
                                 type='radio'
                                 name='gender'
                                 value={gender}
+                                onChange={(e) => setGender(e.target.value)}
                                 className='hidden-radio'
                             />
                             <span className='radio-box'>{gender}</span>
@@ -205,40 +242,55 @@ export default function RegisterFace({
                     ))}
                 </div>
                 <div className='form-group'>
-                    <input type='password' name='password' placeholder='' />
-                    <label htmlFor={'password'} style={{ color: registerError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
+                    <MovingLabelInput
+                        type={'password'}
+                        value={password || ''}
+                        onValueChange={(propE) => setPassword(propE.value)}
+                        extraClassName={`${registerError.name.includes('Password') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Password'}
+                        labelStyle={`left moving ${registerError.name.includes('Password') ? 'error' : ''}`}
+                        name={'password'}
+                    />
                 </div>
                 <div className='form-group'>
-                    <input type={passwordVisible ? 'text' : 'password'} name='confirm' placeholder='' />
-                    <label htmlFor={'confirm'} style={{ color: registerError.name.includes('Confirm') && '#ff4d4f', }}>Xác nhận mật khẩu</label>
+                    <MovingLabelInput
+                        type={passwordVisible ? 'text' : 'password'}
+                        value={confirm || ''}
+                        onValueChange={(propE) => setConfirm(propE.value)}
+                        extraClassName={`${registerError.name.includes('Confirm') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Confirm Password'}
+                        labelStyle={`left moving ${registerError.name.includes('Confirm') ? 'error' : ''}`}
+                        name={'confirm'}
+                    />
                     <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'} eye-btn`} onClick={() => setPasswordVisible(p => !p)} />
                 </div>
                 <div className='form-check'>
-                    <a href='https://docs.google.com/document/d/1UiDYYRMq2Ty5SJgOJQnF78aIiI11_Z2X/edit' className='provision' target='_blank'><b>ĐIỀU KHOẢN</b></a>
+                    <a href='https://docs.google.com/document/d/1UiDYYRMq2Ty5SJgOJQnF78aIiI11_Z2X/edit' className='provision' target='_blank'><b>PROVISIONS</b></a>
 
                     <div className='checkbox-container'>
                         <label style={{ borderBottom: (registerError.name.includes('Accept') && !accept) && '1px solid #ff4d4f', color: (registerError.name.includes('Accept') && !accept) && '#ff4d4f', }}>
                             <input type='checkbox' checked={accept} onChange={handleAccept} />
-                            Chấp nhận điều khoản
+                            Accept the provisions
                         </label>
                     </div>
                 </div>
 
                 {registerError.value && <div className='message error-message'>{registerError.value}</div>}
                 {registerSuccess && <div className='message success-message'>{registerSuccess}</div>}
-                {!registerError.value && !registerSuccess && <div className='message'></div>}
 
                 <div className='btn-box'>
-                    <button type='submit' className='btn-submit' disabled={!accept || loading}>
-                        {loading ? 'ĐANG XỬ LÝ...' : 'ĐĂNG KÝ'}
+                    <button type='submit' className='btn btn-submit' disabled={!accept || loading}>
+                        {loading ? 'PROCESSING...' : 'REGISTER'}
                     </button>
-                    <button type='reset' className='btn-reset' onClick={ResetRegisterInputs}>XÓA</button>
+                    <button type='reset' className='btn btn-reset' onClick={ResetRegisterInputs}>CLEAR</button>
                 </div>
             </form>
 
             <div className='link-box'>
-                <div className=''>Đã có tài khoản?</div>
-                <div className='link' onClick={() => setRotate(0)}>Đăng nhập ngay!</div>
+                <div className=''>Have an account?</div>
+                <div className='link' onClick={() => setRotate(0)}>Sign in now!</div>
             </div>
 
             {successSendOTP &&
@@ -246,10 +298,10 @@ export default function RegisterFace({
                     <div className='otp-container' onPaste={handlePaste}>
                         <button onClick={() => setSuccessSendOTP(false)} className='close-otp' disabled={loading}>
                             <i className='fa-solid fa-arrow-left' />
-                            <span>Quay lại</span>
+                            <span>Back</span>
                         </button>
 
-                        <h2>XÁC THỰC OTP</h2>
+                        <h2>VERIFY OTP</h2>
                         <div className='otp-inputs'>
                             {[...Array(6)].map((_, index) => (
                                 <input
@@ -277,7 +329,7 @@ export default function RegisterFace({
                             }}
                             disabled={loading}
                         >
-                            {loading ? 'Đang xác nhận...' : 'Xác nhận'}
+                            {loading ? 'VERIFYING...' : 'VERIFY'}
                         </button>
                     </div>
                 </div>

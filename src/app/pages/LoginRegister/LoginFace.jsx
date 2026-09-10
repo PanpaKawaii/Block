@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { postData } from '../../../mocks/CallingAPI.js';
+import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
 import { useAuth } from '../../hooks/AuthContext/AuthContext.jsx';
 import './LoginFace.css';
 
@@ -13,12 +14,13 @@ export default function LoginFace({
     const navigate = useNavigate();
 
     const ResetLoginInputs = () => {
-        var inputs = document.querySelectorAll('input');
-        inputs.forEach(function (input) {
-            input.value = '';
-        });
+        setEmail('');
+        setPassword('');
         setLoginError({ value: '', name: '' });
     };
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const [remember, setRemember] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -28,12 +30,12 @@ export default function LoginFace({
     const Login = async (Email, Password) => {
         if (!Email) {
             console.error('Invalid value');
-            setLoginError({ value: 'Vui lòng nhập email', name: 'Email' });
+            setLoginError({ value: 'Please enter your email', name: 'Email' });
             return;
         }
         if (!Password) {
             console.error('Invalid value');
-            setLoginError({ value: 'Vui lòng nhập mật khẩu', name: 'Password' });
+            setLoginError({ value: 'Please enter your password', name: 'Password' });
             return;
         }
 
@@ -50,8 +52,8 @@ export default function LoginFace({
             console.log('result', result);
 
             if (result?.user?.status == 0) {
-                console.error('Tài khoản này đã bị vô hiệu hóa');
-                setLoginError({ value: 'Tài khoản này đã bị vô hiệu hóa', name: 'Email, Password' });
+                console.error('This account has been disabled');
+                setLoginError({ value: 'This account has been disabled', name: 'Email, Password' });
                 return;
             }
 
@@ -63,7 +65,7 @@ export default function LoginFace({
             else if (result.user.roleName == 'Admin') navigate('/admin');
         } catch (error) {
             console.error('Login failed:', error);
-            setLoginError({ value: error?.data?.detail || 'Đăng nhập thất bại', name: 'Email, Password' });
+            setLoginError({ value: error?.data?.detail || 'Login failed', name: 'Email, Password' });
         } finally {
             setLoading(false);
         };
@@ -84,15 +86,31 @@ export default function LoginFace({
 
     return (
         <div className='login-face-container'>
-            <h1>ĐĂNG NHẬP</h1>
+            <h1>LOGIN</h1>
             <form onSubmit={handleSubmitLogin}>
                 <div className='form-group'>
-                    <input type='text' name='email' placeholder='' />
-                    <label htmlFor={'email'} style={{ color: loginError.name.includes('Email') && '#ff4d4f', }}>Email</label>
+                    <MovingLabelInput
+                        type={'text'}
+                        value={email || ''}
+                        onValueChange={(propE) => setEmail(propE.value)}
+                        extraClassName={`${loginError.name.includes('Email') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Email'}
+                        labelStyle={`left moving ${loginError.name.includes('Email') ? 'error' : ''}`}
+                        name={'email'}
+                    />
                 </div>
                 <div className='form-group'>
-                    <input type={passwordVisible ? 'text' : 'password'} name='password' placeholder='' />
-                    <label htmlFor={'password'} style={{ color: loginError.name.includes('Password') && '#ff4d4f', }}>Mật khẩu</label>
+                    <MovingLabelInput
+                        type={passwordVisible ? 'text' : 'password'}
+                        value={password || ''}
+                        onValueChange={(propE) => setPassword(propE.value)}
+                        extraClassName={`${loginError.name.includes('Password') ? 'error' : ''}`}
+                        extraStyle={{}}
+                        label={'Password'}
+                        labelStyle={`left moving ${loginError.name.includes('Password') ? 'error' : ''}`}
+                        name={'password'}
+                    />
                     <i className={`fa-solid fa-${passwordVisible ? 'eye-slash' : 'eye'} eye-btn`} onClick={() => setPasswordVisible(p => !p)} />
                 </div>
                 <div className='form-check'>
@@ -102,23 +120,22 @@ export default function LoginFace({
                             Lưu đăng nhập
                         </label> */}
                     </div>
-                    <Link to='forget-password' state={{ openLogin: 'false' }} className='forget-link'>Quên mật khẩu?</Link>
+                    <Link to='forget-password' state={{ openLogin: 'false' }} className='forget-link'>Forget password?</Link>
                 </div>
 
-                {loginError && <div className='message error-message'>{loginError.value}</div>}
-                {!loginError && <div className='message error-message'></div>}
+                {loginError.value && <div className='message error-message'>{loginError.value}</div>}
 
                 <div className='btn-box'>
-                    <button type='submit' className='btn-submit' disabled={loading}>
-                        {loading ? 'ĐANG XỬ LÝ...' : 'ĐĂNG NHẬP'}
+                    <button type='submit' className='btn btn-submit' disabled={loading}>
+                        {loading ? 'PROCESSING...' : 'LOGIN'}
                     </button>
-                    <button type='reset' className='btn-reset' onClick={ResetLoginInputs}>XÓA</button>
+                    <button type='reset' className='btn btn-reset' onClick={ResetLoginInputs}>CLEAR</button>
                 </div>
             </form>
-            <div className='other-method'>Hoặc</div>
+            <div className='other-method'>Or</div>
             <div className='link-box'>
-                <div>Chưa có tài khoản?</div>
-                <div className='link' onClick={() => setRotate(-180)}>Đăng ký ngay!</div>
+                <div>No account yet?</div>
+                <div className='link' onClick={() => setRotate(-180)}>Sign up now!</div>
             </div>
         </div>
     )
