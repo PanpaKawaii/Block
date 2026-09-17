@@ -25,7 +25,17 @@ export default function ControlPanel({
                 <CopyPasteButton data={entity} setData={setEntity} />
                 <button className='btn' onClick={addEntity}><i className='fa-solid fa-plus' /></button>
                 <button className='btn btn-remove' onClick={() => setEntity([])}><i className='fa-solid fa-trash-can' /></button>
-                <ButtonList onToggle={swapController} />
+                <ButtonList
+                    disabled={false}
+                    list={[
+                        { name: 'face', icon: '', onToggle: () => swapController('face'), disabled: false },
+                        { name: 'dot', icon: '', onToggle: () => swapController('dot'), disabled: false },
+                        { name: 'vector', icon: '', onToggle: () => swapController('vector'), disabled: false },
+                        { name: 'line', icon: '', onToggle: () => swapController('line'), disabled: false },
+                        { name: 'function', icon: '', onToggle: () => swapController('function'), disabled: false },
+                        { name: 'keyframes', icon: '', onToggle: () => swapController('keyframes'), disabled: false },
+                    ].filter(Boolean)}
+                />
             </div>
             {/* <button className='btn' onClick={changeAttribute}><i className='fa-solid fa-file' /></button> */}
             {/* <Link to='/' state={'5fa8b8df-595a-4f13-b808-7f58b404dd87'}><button className='btn'>/</button></Link> */}

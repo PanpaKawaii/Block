@@ -1,6 +1,7 @@
 import { useState } from 'react';
 // import { Link } from 'react-router-dom';
 // import StyleLabelSelect from '../../components/StyleLabelSelect/StyleLabelSelect.jsx';
+import ClickIconList from '../../components/ClickIconList/ClickIconList';
 import ColorInput from '../../components/ColorInput/ColorInput.jsx';
 import ControlPanel from '../../components/ControlPanel/ControlPanel.jsx';
 import MovingLabelInput from '../../components/MovingLabelInput/MovingLabelInput.jsx';
@@ -299,8 +300,18 @@ export default function FaceController({
                                         <button className={`btn-click ${face.visible == 1 ? 'visible-select' : ''}`} onClick={() => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1)}><i className='fa-solid fa-eye' /></button>
                                         <button className={`btn-click ${showCoordinateAxes.includes(face.id) ? 'show-coordinate-axes-select' : ''}`} onClick={() => handleShowCoordinateAxes(face.id)}><i className='fa-solid fa-location-crosshairs' /></button>
                                         <button className='btn-click' onClick={() => copyFace(face.id)}><i className='fa-solid fa-copy' /></button>
-                                        <button className='btn-click remove-click' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button>
+                                        {/* <button className='btn-click remove-click' onClick={() => removeFace(face.id)}><i className='fa-solid fa-trash-can' /></button> */}
                                     </div>
+                                    <ClickIconList
+                                        disabled={false}
+                                        list={[
+                                            (toggleMenu && { className: `btn-click ${openedFaceId.includes(face.id) ? 'opened-select' : ''}`, icon: 'fa-solid fa-hand', onToggle: () => toggleOpenFace(face.id), disabled: false }),
+                                            (toggleMenu && { className: `btn-click ${face.visible == 1 ? 'visible-select' : ''}`, icon: 'fa-solid fa-eye', onToggle: () => updateFace(face.id, 'visible', face.visible == 1 ? 0 : 1), disabled: false }),
+                                            (toggleMenu && { className: `btn-click ${showCoordinateAxes.includes(face.id) ? 'show-coordinate-axes-select' : ''}`, icon: 'fa-solid fa-location-crosshairs', onToggle: () => handleShowCoordinateAxes(face.id), disabled: false }),
+                                            (toggleMenu && { className: 'btn-click', icon: 'fa-solid fa-copy', onToggle: () => copyFace(face.id), disabled: false }),
+                                            { className: 'btn-click remove-click', icon: 'fa-solid fa-trash-can', onToggle: () => removeFace(face.id), disabled: false },
+                                        ].filter(Boolean)}
+                                    />
                                 </div>
                             </div>
 

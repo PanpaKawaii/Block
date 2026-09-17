@@ -248,7 +248,7 @@ video::-webkit-media-controls-play-button {
   }
 
   &:active {
-    background: #5cceff;
+    background: #5CCEFF;
     /* primary */
     box-shadow: 0 0 20px #38BDF8;
   }
