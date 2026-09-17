@@ -1,4 +1,6 @@
 .control-panel-container {
+    display: flex;
+    flex-direction: column;
     width: fit-content;
     max-width: 480px;
     min-width: 480px;
@@ -49,12 +51,16 @@
     }
 
     .panel-content {
+        flex: 1;
+        min-height: 0;
+
         .list {
+            height: 100%;
             padding: 20px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 0px;
             overflow-y: scroll;
             scrollbar-width: none;
             transition: all 0.5s ease;
@@ -209,24 +215,12 @@
         height: 88vh;
         top: 10vh;
         right: 2vh;
-
-        .panel-content {
-            .list {
-                max-height: calc(88vh - 4px - 61px - 2px - 56px - 2px - 40px);
-            }
-        }
     }
 
     &.size_1_2 {
         height: 56vh;
         top: 10vh;
         right: 2vh;
-
-        .panel-content {
-            .list {
-                max-height: calc(56vh - 4px - 61px - 2px - 56px - 2px - 40px);
-            }
-        }
     }
 
     &.size_1_3 {

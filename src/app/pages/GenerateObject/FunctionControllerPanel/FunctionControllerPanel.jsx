@@ -121,7 +121,7 @@ export default function FunctionControllerPanel({
         const fB = n.y;
         const fC = n.z;
         const fD = 0 - (fA * A.x + fB * A.y + fC * A.z);
-        const f = `x/(${((-1) * fD / fA)?.toFixed(3)}) + y/(${((-1) * fD / fB)?.toFixed(3)}) + z/(${((-1) * fD / fC)?.toFixed(3)}) (${((-1) * fD / fD)?.toFixed(3)}) = 0`;
+        const f = `x/(${((-1) * fD / fA)?.toFixed(2)}) + y/(${((-1) * fD / fB)?.toFixed(2)}) + z/(${((-1) * fD / fC)?.toFixed(2)}) (${((-1) * fD / fD)?.toFixed(2)}) = 0`;
         return f;
     };
 
@@ -470,7 +470,7 @@ export default function FunctionControllerPanel({
                 face.id === faceId
                     ? {
                         ...face,
-                        shape: `${face.width / 2 + d_AG_x},${face.height / 2 + d_AG_y} ${face.width / 2 + d_BG_x},${face.height / 2 + d_BG_y} ${face.width / 2 + d_CG_x},${face.height / 2 + d_CG_y}`,
+                        shape: `M ${(face.width / 2 + d_AG_x)?.toFixed(2)} ${(face.height / 2 + d_AG_y)?.toFixed(2)} L ${(face.width / 2 + d_BG_x)?.toFixed(2)} ${(face.height / 2 + d_BG_y)?.toFixed(2)} L ${(face.width / 2 + d_CG_x)?.toFixed(2)} ${(face.height / 2 + d_CG_y)?.toFixed(2)} Z`,
                     }
                     : face
             )
@@ -504,7 +504,7 @@ export default function FunctionControllerPanel({
                 face.id === faceId
                     ? {
                         ...face,
-                        shape: `0,0 ${face.width},0 ${face.width},${face.height} 0,${face.height}`,
+                        shape: `M 0 0 L ${face.width} 0 L ${face.width} ${face.height} L 0 ${face.height} Z`,
                     }
                     : face
             )
@@ -545,9 +545,9 @@ export default function FunctionControllerPanel({
             );
         const Oxyz = (underY == 0) ? 90 : Math.abs(Math.atan(Y / underY) * 180 / Math.PI);
 
-        return axe == 'y' ? xOz
-            : (axe == 'x' ? (Y >= 0 ? -Oxyz : Oxyz)
-                : (axe == 'z' ? 1 / vectorLength : 0));
+        return axe == 'y' ? (xOz)?.toFixed(2)
+            : (axe == 'x' ? (Y >= 0 ? (-Oxyz)?.toFixed(2) : (Oxyz)?.toFixed(2))
+                : (axe == 'z' ? (1 / vectorLength)?.toFixed(2) : 0));
     };
 
     const updateFaceEquation = (faceId, action) => {

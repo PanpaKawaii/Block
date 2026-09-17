@@ -1,4 +1,4 @@
-.face-dot-vector-function-controller-container {
+.setting-face-controller-container {
     overflow-y: scroll;
     scrollbar-width: none;
     width: fit-content;
@@ -9,17 +9,14 @@
     position: absolute;
     border-radius: 20px;
     transition: all 0.5s ease;
-}
 
-.sub-face-controller-container {
     .heading {
         margin: 0 0 20px;
         display: flex;
         align-items: center;
 
         h2 {
-            color: var(--text);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .btn-close {
@@ -115,9 +112,7 @@
             }
         }
     }
-}
 
-.face-dot-vector-function-controller-container {
     &.size_2_1 {
         height: 30vh;
         top: 68vh;
